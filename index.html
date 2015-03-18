@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SpotiPi - Rasberry Pi Spotify/S_NOS Emulator</title>
+
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1, user-scalable=no," />
+
+	<link rel="stylesheet" href="/css/icons.css"></head>
+	<link rel="stylesheet" href="/css/app.css"></head>
+	
+	<link href='http://fonts.googleapis.com/css?family=Nunito:300' rel='stylesheet' type='text/css'>
+
+	<!-- application code -->
+	<script src="/javascripts/library/require.js"></script>
+	<script src="/javascripts/main.js"></script>
+
+	<script type="x-template" id="tpl-header">
+		<h1>Spoti<span>Pi</span></h1>
+		<a class="rooms">ROOMS <span>&#x25bc;</span></a>
+		<a class="search icon-search"></a>
+		<a class="playlist icon-menu"></a>
+	</script>
+
+	<script type="x-template" id="tpl-artwork">
+		<h2>{{model.track.artist}}</h2>
+		<h3>{{model.track.name}}</h3>
+		<span class="icon-music"></span>
+	</script>
+
+	<script type="x-template" id="tpl-scrubber">
+		<span class="progress{{scrubberPosition}}"></span>
+	</script>	
+
+	<script type="x-template" id="tpl-controls">
+		<li><a class="previous icon-previous" href="#"></a></li>
+		<li class="middle">
+			<a class="play {{^playing}}icon-play{{/playing}}{{#playing}}icon-pause{{/playing}}" href="#"></a>
+		</li>
+		<li><a class="next icon-next" href="#"></a></li>
+	</script>	
+
+	<script type="x-template" id="tpl-playlist">
+		<div>
+			{{room.name}} / Tracks: {{room.playlist.length}}
+			<ul class="no-border" id="playlist-options">
+				<li class="control-shuffle icon-shuffle{{#if model.shuffle}} active{{/if}}"></li>
+				<li class="control-loop icon-loop{{#if model.loop}} active{{/if}}"></li>
+			</ul>
+		</div>
+		<ul class="scrollable">
+			{{#if playlist.length}}
+				{{#each playlist}}
+					<li>
+						<a class="track" href="javascript:void(0);" data-uri="{{uri}}">{{artist}} / {{name}}</a>
+					</li>
+				{{/each}}
+			{{else}}
+				<li class="disabled">No tracks in playlist.</li>
+			{{/if}}
+		</ul>
+	</script>
+
+	<script type="x-template" id="tpl-search">
+		<form>
+			<label>
+				<input 	id="master-search" 
+						type="text" 
+						autocomplete="off" 
+						placeholder="Search term or Spotify URI" 
+						value="{{searchTerm}}" />
+			</label>
+		</form>
+		<ul class="scrollable">
+			<!-- artists -->
+			<li class="result-artist subtitle icon-circle-down{{#unless artists.length}} disabled{{/unless}}">Artists {{#if artists.length}}({{artists.length}}){{/if}}</li>
+			{{#each artists}}
+				<li>
+					<a class="artist" href="javascript:void(0);" data-uri="{{id}}">
+						{{name}}
+						<img src="https://d3rt1990lpmkn.cloudfront.net/cover/{{portrait.0.small}}" />
+					</a>
+				</li>
+			{{/each}}
+
+			<!-- albums -->
+			<li class="result-album subtitle icon-circle-down{{#unless albums.length}} disabled{{/unless}}">Albums {{#if albums.length}}({{albums.length}}){{/if}}</li>
+			{{#each albums}}
+				<li>
+					<a class="album" href="javascript:void(0);" data-uri="{{id}}">
+						{{artist-name}} / {{name}}
+						<img src="https://d3rt1990lpmkn.cloudfront.net/cover/{{cover-small}}" />
+					</a>
+				</li>
+			{{/each}}
+
+			<!-- tracks -->
+			<li class="result-track subtitle icon-circle-down{{#unless tracks.length}} disabled{{/unless}}">Tracks {{#if tracks.length}}({{tracks.length}}){{/if}}</li>
+			{{#each tracks}}
+				<li>
+					<a class="track" href="javascript:void(0);" data-uri="{{id}}">
+						{{artist}} / {{title}}
+						<img src="https://d3rt1990lpmkn.cloudfront.net/cover/{{cover-small}}" />
+					</a>
+				</li>
+			{{/each}}
+		</ul>
+	</script>
+
+	<script type="x-template" id="tpl-rooms">
+		<p>Rooms ({{rooms.length}})</p>
+		<ul>
+			{{#each rooms}}
+				<li data-id="{{_id}}">
+					<label>Room:</label> {{name}} 
+					<span class="room-remove icon-cancel-circle"></span> 
+					<span class="playing {{#if playing}}icon-pause2{{/if}}{{^if playing}}icon-play2{{/if}}"></span>
+					<section class="now-playing {{^if playing}}paused{{/if}}" style="background-image:url('{{track.artwork}}');">
+						{{#if playlist.length}}
+							<p>{{track.artist}}</p>
+							<p>{{track.name}}</p>
+						{{/if}}
+						{{^if playlist.length}}
+							<p>Playlist is empty</p>
+						{{/if}}
+					</section>
+				</li>
+			{{/each}}
+		</ul>
+		<button class="room-add standard">
+			<span class="icon-home"></span>
+			Add Room
+		</button>
+	</script>	
+
+
+	<script type="x-template" id="tpl-floater">
+		<span class="close icon-cancel-circle">&nbsp;</span>
+		<ul>
+			{{#if options.playTrack}}<li><a>Play track</a></li>{{/if}}
+			{{#if options.playAlbum}}<li><a>Play album</a></li>{{/if}}
+			{{#if options.replaceQueue}}<li><a>Replace playlist</a></li>{{/if}}
+			{{#if options.cueTrack}}<li><a>Play Next</a></li>{{/if}}
+		</ul>
+	</script>
+</head>
+<body>
+	<div id="container"></div>
+</body>
+</html>
+

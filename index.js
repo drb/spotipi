@@ -45,10 +45,24 @@ io.on('connection', function(socket) {
 
 	console.log('A new client connected', socket.id);
 
+
+
 	function sendRooms () {
-		db.find({}, function(err, rooms){
-			socket.emit('rooms:updated', rooms);	
+		// all clients get alerted
+		db.find({}, function(err, rooms) {
+			io.emit('rooms:updated', rooms);	
 		});
+	}
+
+
+	function spotifyEnabled () {
+		return false;
+	}
+
+	function showError (message) {
+		socket.emit('error:generic', {
+			message: message
+		})
 	}
 
 	// 
@@ -145,7 +159,12 @@ io.on('connection', function(socket) {
 		// });
 	});
 
-	sendRooms();
+	if (spotifyEnabled()) {
+		sendRooms();	
+	} else {
+		showError("Application has no credentials.");
+	}
+	
 });
 
 // 

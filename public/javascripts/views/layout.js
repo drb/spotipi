@@ -16,7 +16,9 @@ define([
     // modal windows
     'views/modals/rooms',
     'views/modals/search',
-    'views/modals/playlist'
+    'views/modals/playlist',
+    // errors
+    'views/main/ui/alert'
 ], function (
     // dependencies
     $, _, Backbone, Handlebars,
@@ -34,7 +36,9 @@ define([
     // modal windows
     Rooms,
     Search,
-    Playlist
+    Playlist,
+    // errors 
+    ErrorMessage
 ) {
 
     'use strict';
@@ -65,6 +69,14 @@ define([
 
             socket.on('disconnect', function(conn) {
                 self.model.set('connected', false);
+            });
+
+
+            socket.on('error:generic', function (error){
+
+                var alert = self.subViews.alert;
+                alert.showError(error);
+                console.log(error);
             });
 
             // socket has recieved results
@@ -104,8 +116,11 @@ define([
                 rooms:      new Rooms(constr),
 
                 // custom control
-                floater:    new Floater(constr)
-			}
+                floater:    new Floater(constr),
+
+                // alerts
+                alert:      new ErrorMessage(constr)
+ 			}
 
 			// attach each subview
 			_.each(this.subViews, function(subView) {

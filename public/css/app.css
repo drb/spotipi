@@ -557,3 +557,40 @@ input {
 #scrubber.hidden {
   opacity: 0;
 }
+
+/* line 490, ../sass/app.scss */
+.alert {
+  box-sizing: border-box;
+  position: absolute;
+  width: 80%;
+  padding: 8px 18px;
+  left: 0;
+  right: 0;
+  top: 35%;
+  margin: 0 auto;
+  z-index: 200;
+  background-color: #333;
+  border-top: 4px solid #84bd00;
+}
+/* line 503, ../sass/app.scss */
+.alert.error {
+  border-top-color: #780000;
+}
+/* line 507, ../sass/app.scss */
+.alert span {
+  float: right;
+  margin: 10px -10px;
+  font-size: 17pt;
+}
+/* line 513, ../sass/app.scss */
+.alert p {
+  padding-top: 20px;
+  text-shadow: none;
+  color: #fff;
+}
+/* line 519, ../sass/app.scss */
+.alert button {
+  display: block;
+  margin: 10px auto 10px auto;
+  width: 100%;
+}

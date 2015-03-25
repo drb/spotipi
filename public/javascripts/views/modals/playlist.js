@@ -34,9 +34,9 @@ define([
             this.activeRoom;
             this.hidden = true;
 
-            this.listenTo(this.model, 'show:playlist',      this.show);
+            this.listenTo(this.model, 'show:playlist',          this.show);
             this.listenTo(this.model, 'show:rooms show:search', this.hide);
-            this.listenTo(this.model, 'rooms:updated', this.render);
+            this.listenTo(this.model, 'rooms:updated',          this.render);
         },
 
         /**

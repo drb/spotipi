@@ -22,16 +22,18 @@ define([
 
     	initialize: function (options) {
     		
-    		this.model = options.model;
+    		this.model    = options.model;
+
             this.listenTo(this.model, 'change:connected', this.render);
+            this.listenTo(this.model, 'rooms:updated', this.render);
     	},
 
     	render: function () {
 
     		var template = Handlebars.default.compile($('#tpl-header').text()),
-                connected = this.model.get('connected');
+                connected = this.model.get('connected')
 
-			this.$el.html(template({}));
+			this.$el.html(template({connected: connected, isReady: this.model.isReady()}));
 
             if (connected) {
                 this.$el.removeClass('disabled');
@@ -50,14 +52,14 @@ define([
 
     	playlist: function () {
 
-            if (this.model.get('connected')) {
+            if (this.model.isReady()) {
                 this.model.trigger('show:playlist');
             }
     	},
 
     	search: function () {
 
-            if (this.model.get('connected')) {
+            if (this.model.isReady()) {
                 this.model.trigger('show:search');
             }
     	},

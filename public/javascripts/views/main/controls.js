@@ -22,19 +22,20 @@ define([
     	initialize: function (options) {
 
     		this.model = options.model;
+            
             this.listenTo(this.model, 'change:playing', this.render);
             this.listenTo(this.model, 'change:connected', this.render);
+            this.listenTo(this.model, 'rooms:updated', this.render);
     	},
 
         //
     	render: function () {
 
-    		var template = Handlebars.default.compile($('#tpl-controls').text()),
-                connected = this.model.get('connected');
+    		var template = Handlebars.default.compile($('#tpl-controls').text());
 
 			this.$el.html(template(this.model.toJSON()));
 
-            if (connected) {
+            if (this.model.isReady()) {
                 this.$el.removeClass('disabled');
             } else {
                 this.$el.addClass('disabled');
@@ -45,6 +46,10 @@ define([
 
 
         togglePlay: function () {
+
+            if (!this.model.isReady()) {
+                return;
+            }
 
             this.model.set(
                 'playing', 

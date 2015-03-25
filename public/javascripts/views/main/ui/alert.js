@@ -16,11 +16,14 @@ define([
 
         events: {
             'click button.confirm': 'callbacks',
-            'click .close': 'close'
+            'click .close':         'close',
+            'click .alert':         'close'
         },
 
         //
     	initialize: function (config) {
+
+            this.model = config.model;
 
             this.message = {
                 message: ""
@@ -31,7 +34,7 @@ define([
         callbacks: function () {
 
             if (this.callback) {
-                this.callback();
+                this.model.trigger(this.callback, this);
             }
 
             this.close();
@@ -43,19 +46,25 @@ define([
             this.remove();
         },
 
-
+        //
         showError: function (error) {
 
             this.$el.addClass('error');
-            this.message = error;
+
+            this.message    = error.message;
+            this.callback   = error.config.callback;
+
             this.render();
         },
 
-
+        //
         showMessage: function (message) {
 
             this.$el.removeClass('error');
-            this.message = message;
+
+            this.message    = error.message;
+            this.callback   = error.config.callback;
+
             this.render();
         },
 
@@ -64,9 +73,11 @@ define([
 
     		var template = Handlebars.default.compile($('#tpl-alert').text());
             
-			this.$el.html(template({ message: this.message.message }));
+			this.$el.html(template({ message: this.message }));
             
-			$('body').append(this.$el);
+            if (this.message.length > 0) {
+                $('body').append(this.$el);    
+            }
     	}
     });
 });

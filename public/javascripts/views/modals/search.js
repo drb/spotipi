@@ -22,6 +22,7 @@ define([
 
     	events: {
     		'keyup input': 'delaySearch',
+
             // search results
             'click .track, .album, .artist': 'showOptions'
     	},
@@ -44,13 +45,16 @@ define([
         },
 
 
+        /**
+         *
+         */
         showOptions: function (el) {
 
             var options = {
-                    playTrack: 0,
-                    playAlbum: 0,
-                    cueTrack: 0,
-                    replaceQueue: 0,
+                    playTrack:      0,
+                    playAlbum:      0,
+                    cueTrack:       0,
+                    replaceQueue:   0
                 },
                 $el = $(el.currentTarget);
 
@@ -63,8 +67,6 @@ define([
                 options.replaceQueue = 1;
                 options.playAlbum = 1;
             }
-
-            console.log("show options", $el, options);
 
             this.model.trigger('show:floater', options);
         },
@@ -107,6 +109,7 @@ define([
 					eventType = 'search:spotify';
 				}
 
+                //
 				this.model.set({
 					'searching': true,
 					'searchTerm': searchTerm
@@ -125,7 +128,7 @@ define([
 					search: {},
 					'searchTerm': undefined, 
 					'searching': false
-				}, {unset: true});
+				}, { unset: true });
 
 				$('.search-placholder').text("No results.");	
 			}
@@ -138,10 +141,6 @@ define([
         		albums = 	this.restrict(results.albums[0].album, this.defaultResultLimit),
         		tracks = 	this.restrict(results.tracks[0].track, this.defaultResultLimit),
         		playlists = [];
-
-        	// console.log("artists", artists);
-        	// console.log("albums", albums);
-        	// console.log("tracls", tracks);
 
         	this.model.set({
                 'searching': false,

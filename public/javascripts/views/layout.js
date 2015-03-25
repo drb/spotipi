@@ -24,7 +24,7 @@ define([
     $, _, Backbone, Handlebars,
     // models
     PlayerModel,
-    //
+    // collections
     SearchCollection,
     RoomsCollection,
     // views
@@ -54,8 +54,6 @@ define([
 			// now playing 
     		this.model = new PlayerModel();
     		this.model.set({
-    			//
-                connected: false,
                 //
     			socket: socket,
                 //
@@ -71,12 +69,25 @@ define([
                 self.model.set('connected', false);
             });
 
+            // sets the redirect url
+            socket.on('config:init', function(config){
+                self.model.set(config);
+            });
 
+            //
             socket.on('error:generic', function (error){
 
                 var alert = self.subViews.alert;
                 alert.showError(error);
-                console.log(error);
+
+                console.error(error);
+                
+                // raise any events if set
+                // if (error.config && error.config.type) {
+                //     self.model.trigger(error.config.type);
+                // }
+                //console.log("show trigger");
+                //self.model.trigger('show:login');
             });
 
             // socket has recieved results

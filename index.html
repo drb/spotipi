@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="/css/app.css"></head>
 	
 	<link href='http://fonts.googleapis.com/css?family=Nunito:300' rel='stylesheet' type='text/css'>
+	<!-- <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'> -->
 
 	<!-- application code -->
 	<script src="/javascripts/library/require.js"></script>
@@ -18,8 +19,22 @@
 	<script type="x-template" id="tpl-header">
 		<h1>Spoti<span>Pi</span></h1>
 		<a class="rooms">ROOMS <span>&#x25bc;</span></a>
-		<a class="search icon-search"></a>
-		<a class="playlist icon-menu"></a>
+		<a class="search icon-search {{#unless isReady}}disabled{{/unless}}"></a>
+		<a class="playlist icon-menu {{#unless isReady}}disabled{{/unless}}"></a>
+	</script>
+
+	<script type="x-template" id="tpl-login">
+		<form id="form-user-login">
+			<fieldset>
+				<label for="username">
+					<input name="username" id="username" placeholder="Spotify Username" />
+				</label>
+				<label for="username">
+					<input name="username" id="username" placeholder="Spotify Username" />
+				</label>
+				<button>SEND</button>
+			</fieldset>
+		</form>
 	</script>
 
 	<script type="x-template" id="tpl-artwork">
@@ -137,18 +152,31 @@
 	<script type="x-template" id="tpl-floater">
 		<span class="close icon-cancel-circle">&nbsp;</span>
 		<ul>
-			{{#if options.playTrack}}<li><a>Play track</a></li>{{/if}}
-			{{#if options.playAlbum}}<li><a>Play album</a></li>{{/if}}
-			{{#if options.replaceQueue}}<li><a>Replace playlist</a></li>{{/if}}
-			{{#if options.cueTrack}}<li><a>Play Next</a></li>{{/if}}
+			{{#if options.playTrack}}
+				<li><a class="play-track">Play track</a></li>
+			{{/if}}
+
+			{{#if options.playAlbum}}
+				<li><a class="play-album">Play album</a></li>
+			{{/if}}
+
+			{{#if options.replaceQueue}}
+				<li><a class="replace-playlist">Replace playlist</a></li>
+			{{/if}}
+
+			{{#if options.cueTrack}}
+				<li><a class="queue-track">Play Next</a></li>
+			{{/if}}
 		</ul>
 	</script>
 
 
 	<script type="x-template" id="tpl-alert">
-		<span class="close icon-cancel-circle">&nbsp;</span>
-		<p>{{message}}</p>
-		<button class="confirm">OK</button>
+		<div class="alert-controls">
+			<!--<span class="close icon-cancel-circle">&nbsp;</span>-->
+			<p>{{message}}</p>
+			<button class="confirm">OK</button>
+		</div>
 	</script>
 </head>
 <body>

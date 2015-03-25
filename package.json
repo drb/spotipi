@@ -13,7 +13,9 @@
     "hjs": "~0.0.6",
     "morgan": "~1.5.1",
     "nedb": "^1.1.1",
+    "request": "^2.53.0",
     "serve-favicon": "~2.2.0",
+    "socket.io-session-middleware": "0.0.4",
     "xml2js": "^0.4.5"
   }
 }

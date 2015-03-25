@@ -60,6 +60,10 @@ header {
 			left: auto;
 			right: 13px;
 		}
+		&.disabled {
+			opacity: 0.3;
+			cursor: not-allowed !important;
+		}
 	}
 
 	a.rooms {
@@ -354,7 +358,13 @@ ul.controls {
 	}
 
 	&.disabled {
-		opacity: 0.5
+		li {
+			opacity: 0.3;
+			a{
+				cursor: not-allowed;
+			}	
+		}
+		
 	}
 }
 
@@ -364,10 +374,10 @@ ul.controls {
 	top: 100%;
 	left:0px;
 	right:0px;
-	transition: top 0.15s linear;
+	transition: bottom 0.15s linear, top 0.15s linear;
 	z-index: 120;
 	background-color: rgba(228, 228, 228, 1);
-	height: 50%;
+	height: auto;
 	box-sizing: border-box;
 	padding: 13px;
 	border-top: 2px solid $spotipi-green;
@@ -384,7 +394,8 @@ ul.controls {
 		}
 
 		&.btn2 {
-			top: 74%;
+			top: auto;
+			bottom: 0px; 
 		}
 	}
 
@@ -398,7 +409,7 @@ ul.controls {
 
 	ul {
 		padding:0px;
-		margin: 37px 0px;
+		margin: 37px 0px 10px 0px;
 
 		li {
 			box-sizing: border-box;
@@ -488,38 +499,57 @@ input {
 
 
 .alert {
-	box-sizing: border-box;
-	position:absolute;
-	width: 80%;
-	padding: 8px 18px;
-	left: 0;
-	right: 0;
-	top: 35%;
-	margin: 0 auto;
-	z-index: 200;
-	background-color: #333;
-	border-top: 4px solid $spotipi-green;
+
+	display:block;
+	position: absolute;
+	width:100%;
+	height:100%;
+	background-color: rgba(255, 255, 255, 0.6);
+	z-index:100;
+	top: 0px;
+	left: 0px;
+
+	.alert-controls {
+		box-sizing: border-box;
+		position:absolute;
+		width: 80%;
+		padding: 8px 18px;
+		left: 0;
+		right: 0;
+		top: 35%;
+		margin: 0 auto;
+		z-index: 200;
+		background-color: #333;
+		border: 1px solid darken(#999, 30%);
+		border-top: 4px solid $spotipi-green;
+
+		.error & {
+			border-top-color: #780000;
+		}
+
+		span {
+			float: right;
+			margin: 10px -10px;
+			font-size: 17pt;
+		}
+
+		p {
+			padding-bottom: 5px;
+			text-shadow: none;
+			color: #fff;
+		}
+
+		button {
+			display: block;
+			margin: 10px auto 10px auto;
+			width: 100%;
+		}
+	}
 
 	&.error {
-		border-top-color: #780000;
-	}
-
-	span {
-		float: right;
-		margin: 10px -10px;
-		font-size: 17pt;
-	}
-
-	p {
-		padding-top: 20px;
-		text-shadow: none;
-		color: #fff;
-	}
-
-	button {
-		display: block;
-		margin: 10px auto 10px auto;
-		width: 100%;
+		.alert-controls {
+			border-top-color: lighten(#780000, 20%);
+		}
 	}
 }
 

@@ -11,7 +11,10 @@ define([
          */
         defaults: {
 
-        	// socket connection to server
+            // socket connected?
+            connected: false,
+
+        	// actual socket connection to server
         	socket: null,
 
         	// is track playing?
@@ -38,6 +41,24 @@ define([
         initialize: function () {
 
             this.syncFromLocal();
+
+            this.listenTo(this, 'spotify:auth', this.startAuth);
+        },
+
+        isReady: function () {
+
+            var ready = (
+                this.get('connected') &&
+                (   !_.isNull(this.get('rooms')) &&
+                    this.get('rooms').length > 0
+                )
+            );
+
+            this.set('ready', ready);
+
+            console.log("ready", ready, this.get('connected'), this.get('rooms').length);
+
+            return ready;
         },
 
         getArtNowPlaying: function () {
@@ -66,6 +87,11 @@ define([
             }, this);
             
             return this;
+        },
+
+        startAuth: function () {
+
+            document.location = this.get('redirect');
         }
     });
 });

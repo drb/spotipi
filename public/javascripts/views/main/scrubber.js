@@ -24,6 +24,7 @@ define([
     	initialize: function (options) {
 
     		this.model = options.model;
+            
             this.listenTo(this.model, 'change:playing', this.toggle);
     	},
 

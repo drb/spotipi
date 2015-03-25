@@ -1,41 +1,38 @@
 /**
  *
  **/
-var express = require('express'),
-	app 	= express(),
-	path 	= require('path'),
-	server 	= require('http').Server(app),
-	port    = 3000,
-	io 		= require('socket.io')(server),
-	lame 	= require('lame'),
-	speaker = require('speaker'),
-	spotify = require('spotify-web'),
-	path 	= require('path'),
-	xml2js 	= require('xml2js'),
+var port    	= 3000,
+	express 	= require('express'),
+	app 		= express(),
+	path 		= require('path'),
+	server 		= require('http').Server(app),
+	io 			= require('socket.io')(server),
+	lame 		= require('lame'),
+	speaker 	= require('speaker'),
+	spotify 	= require('spotify-web'),
+	path 		= require('path'),
+	xml2js 		= require('xml2js'),
+
 	// persistent datastore with manual loading
-	datastore = require('nedb'), 
-	db 		= new datastore({ filename: 'db/datastore', autoload: true }),
-	//uri 	= 'spotify:track:6pIZ0u32c2Lku8PmCWtnMy',
-	// spotify credentials...
-	username = 'username',
-	password = 'password',
+	datastore 	= require('nedb'), 
+	databases 	= {},
+
 	// stream instances
 	stream, 
-	playing  = false,
-	stopping = false;
+	playing  	= false,
+	stopping 	= false,
 
+	redirect_url = '';
+
+/**
+ * Databases 
+ **/
+databases.zones = new datastore({ filename: 'db/zones', autoload: true }),
+databases.auth 	= new datastore({ filename: 'db/auth', autoload: true }),
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 server.listen(port);
-
-db.loadDatabase(function (err) {
-
-	if (err) console.log('error loading nedb', err);
-	else {
-		console.log('datastore is loaded');	
-	}
-});
 
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
@@ -45,38 +42,46 @@ io.on('connection', function(socket) {
 
 	console.log('A new client connected', socket.id);
 
+	function sendZones () {
 
-
-	function sendRooms () {
 		// all clients get alerted
-		db.find({}, function(err, rooms) {
+		databases.zones.find({}, function(err, rooms) {
 			io.emit('rooms:updated', rooms);	
 		});
 	}
 
+	function spotifyEnabled (callback) {
 
-	function spotifyEnabled () {
-		return false;
+		var authorized = databases.auth.findOne({}, callback);
 	}
 
-	function showError (message) {
+	function showError (message, config) {
+
+		//
 		socket.emit('error:generic', {
-			message: message
+			message: message,
+			config: config || {}
 		})
 	}
 
+	socket.emit('config:init', {
+		redirect: redirect_url
+	});
+
 	// 
 	socket.on('room:add', function (room) {
+
 		//
-		db.insert({name: room}, function (err, doc) {
-			sendRooms();
+		databases.zones.insert({name: room}, function (err, doc) {
+			sendZones();
 		});
 	});
 
 	socket.on('room:remove', function (id) {
+
 		//
-		db.remove({_id: id}, function (err) {
-			sendRooms();
+		databases.zones.remove({_id: id}, function (err) {
+			sendZones();
 		});
 	});
 
@@ -86,9 +91,10 @@ io.on('connection', function(socket) {
 
 			if (err) {
 				console.error(err);
+
 			} else {
 				
-				console.log('generic search', searchObj.term);
+				console.log('Generic search', searchObj.term);
 
 				// fire the search off - results returned as XML so pase it into JSON
 				spotify.search(searchObj.term, function(err, response) {
@@ -159,12 +165,53 @@ io.on('connection', function(socket) {
 		// });
 	});
 
-	if (spotifyEnabled()) {
-		sendRooms();	
-	} else {
-		showError("Application has no credentials.");
-	}
-	
+
+	socket.on('track:play', function(track) {
+		
+		console.log("playing");
+
+		var uri = track || 'spotify:track:6tdp8sdXrXlPV6AZZN2PE8';
+
+		spotify.login(username, password, function (err, spotify) {
+
+			if (err) throw err;
+
+			// first get a "Track" instance from the track URI
+			spotify.get(uri, function (err, track) {
+
+				if (err) {
+
+					console.log('Error playing');
+
+				} else {
+
+					console.log('Playing: %s - %s', track.artist[0].name, track.name);
+
+					// play() returns a readable stream of MP3 audio data
+					track.play()
+					.pipe(new lame.Decoder())
+					.pipe(new speaker())
+					.on('finish', function () {
+						spotify.disconnect();
+					});
+				}
+			});
+		});
+	});
+
+	spotifyEnabled(function(err, credentials) {
+
+		if (!err && credentials) {
+			// send rooms initially
+			sendZones();
+		} else {
+			//
+			showError("Application has no credentials. Click OK to setup your Spotify account.", {
+				callback: 'spotify:auth',
+				type: 'spotify:unauthed' 
+			});
+		}
+	});	
 });
 
 // 
@@ -172,19 +219,14 @@ io.on('connection', function(socket) {
 
 
 // spotifyClient.get(data.uri, function (err, track) {
-
 // 	    if (err) throw err;
-
 // 	    console.log('playing %s', track.name);
-
 // 	    io.emit("is:playing", {
 // 	    	artist: track.artist[0].name,
 // 	    	name: track.name,
 // 	    	album: track.album
 // 	    });
-
 // 	    stream = track.play();
-
 // 	    stream
 // 	    	.pipe(lame)
 // 	    	.pipe(speaker)

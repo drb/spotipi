@@ -23,9 +23,9 @@ define([
 
     		this.model = options.model;
             
-            this.listenTo(this.model, 'change:playing', this.render);
-            this.listenTo(this.model, 'change:connected', this.render);
-            this.listenTo(this.model, 'rooms:updated', this.render);
+            this.listenTo(this.model, 'change:playing',     this.render);
+            this.listenTo(this.model, 'change:connected',   this.render);
+            this.listenTo(this.model, 'rooms:updated',      this.render);
     	},
 
         //

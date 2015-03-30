@@ -17,6 +17,7 @@ define([
     'views/modals/rooms',
     'views/modals/search',
     'views/modals/playlist',
+    'views/modals/login',
     // errors
     'views/main/ui/alert'
 ], function (
@@ -37,6 +38,7 @@ define([
     Rooms,
     Search,
     Playlist,
+    Login,
     // errors 
     ErrorMessage
 ) {
@@ -79,15 +81,6 @@ define([
 
                 var alert = self.subViews.alert;
                 alert.showError(error);
-
-                console.error(error);
-                
-                // raise any events if set
-                // if (error.config && error.config.type) {
-                //     self.model.trigger(error.config.type);
-                // }
-                //console.log("show trigger");
-                //self.model.trigger('show:login');
             });
 
             // socket has recieved results
@@ -125,6 +118,7 @@ define([
 				search:     new Search(constr),
 				playlist:   new Playlist(constr),
                 rooms:      new Rooms(constr),
+                login:      new Login(constr),
 
                 // custom control
                 floater:    new Floater(constr),

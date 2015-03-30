@@ -30,9 +30,7 @@ define([
 
             ModalView.prototype.initialize.apply(this, arguments);
 
-            this.hidden = true;
-
-            this.listenTo(this.model, 'show:login', this.show);
+            this.listenTo(this.model, 'spotify:auth', this.show);
         },
 
         /**
@@ -57,7 +55,7 @@ define([
 
             this.$el
                 .empty()
-                .html(template(this.model.toJSON()));
+                .html(template({}));
 
             $('#container').append(this.$el);
         }

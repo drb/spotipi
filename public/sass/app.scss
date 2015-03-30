@@ -103,6 +103,13 @@ button {
 		background-color: $spotipi-green;
 		color: $white;
 	}
+	&.disabled {
+		background-color: $border-grey;
+		opacity: 0.8;
+		span {
+			display: none;
+		}
+	}
 }
 
 #container { 
@@ -311,16 +318,35 @@ form {
 	display: block;
 	text-align: center;
 	padding: 10px;
+	border: none;
 
-	input {
+	p {
+		padding: 4px 0px 4px 0px;
+
+		&.sub {
+			padding-top: 0px;
+			margin-top:0px; 
+			font-size: 0.8em;
+			color: $border-grey;
+		}
+	}
+
+	fieldset {
+		border: none;
+		padding: 0px;
+	}
+
+	input[type="textfield"],
+	input[type="password"] {
 		position: relative;
 		-webkit-box-sizing: border-box;
-		padding: 15px;
+		padding: 19px;
 		height: 20px;
 		width: 100%;
 		border-radius: 20px;
 		border:none;
 		outline: none;
+		margin: 7px 0px 15px 0px;
 	}
 }
 
@@ -437,7 +463,6 @@ ul.controls {
 }
 
 input {
-
 	position: relative;
 	padding:10px;
 	width: 300px;

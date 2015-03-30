@@ -31,10 +31,13 @@ define([
     	},
 
 
-        callbacks: function () {
+        callbacks: function (e) {
+
+            console.log(e.currentTarget);
 
             if (this.callback) {
-                this.model.trigger(this.callback, this);
+                console.log("doing callback", this.callback);
+                this.model.trigger(this.callback);
             }
 
             this.close();
@@ -78,6 +81,8 @@ define([
             if (this.message.length > 0) {
                 $('body').append(this.$el);    
             }
+
+            this.delegateEvents();
     	}
     });
 });

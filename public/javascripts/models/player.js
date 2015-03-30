@@ -41,8 +41,6 @@ define([
         initialize: function () {
 
             this.syncFromLocal();
-
-            this.listenTo(this, 'spotify:auth', this.startAuth);
         },
 
         isReady: function () {
@@ -87,11 +85,6 @@ define([
             }, this);
             
             return this;
-        },
-
-        startAuth: function () {
-
-            document.location = this.get('redirect');
         }
     });
 });

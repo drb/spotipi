@@ -26,13 +26,15 @@
 	<script type="x-template" id="tpl-login">
 		<form id="form-user-login">
 			<fieldset>
+				<p>Please supply your Spotify username and password (these are encrypted and not stored in plain text).</p>
+				<p class="sub">App-specific passwords will be supported in later versions.</p>
 				<label for="username">
-					<input name="username" id="username" placeholder="Spotify Username" />
+					<input type="textfield" name="username" id="username" placeholder="Spotify Username" />
 				</label>
 				<label for="username">
-					<input name="username" id="username" placeholder="Spotify Username" />
+					<input type="password" name="username" id="username" placeholder="Spotify Username" />
 				</label>
-				<button>SEND</button>
+				<button class="standard"><span class="icon-headphones"></span>SAVE DETAILS</button>
 			</fieldset>
 		</form>
 	</script>
@@ -142,10 +144,18 @@
 				</li>
 			{{/each}}
 		</ul>
-		<button class="room-add standard">
-			<span class="icon-home"></span>
-			Add Room
-		</button>
+		{{^if rooms.length}}
+			<button class="room-add standard">
+				<span class="icon-home"></span>
+				Add Room
+			</button>
+		{{/if}}
+		{{#if rooms.length}}
+			<button class="standard disabled">
+				<span class="icon-cancel-circle"></span>
+				1 Zone Maximum!
+			</button>
+		{{/if}}
 	</script>	
 
 

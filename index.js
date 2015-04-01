@@ -1,46 +1,57 @@
 /**
- *
+ * 
+ * 
+ * 
  **/
-var port    	= 3000,
-	express 	= require('express'),
-	app 		= express(),
-	path 		= require('path'),
-	server 		= require('http').Server(app),
-	io 			= require('socket.io')(server),
-	lame 		= require('lame'),
-	speaker 	= require('speaker'),
-	spotify 	= require('spotify-web'),
-	path 		= require('path'),
-	xml2js 		= require('xml2js'),
+var spotipi = (function(){
 
-	// persistent datastore with manual loading
-	datastore 	= require('nedb'), 
-	databases 	= {},
+	//
+	var port    	= 3000,
+		express 	= require('express'),
+		app 		= express(),
+		path 		= require('path'),
+		server 		= require('http').Server(app),
+		io 			= require('socket.io')(server),
+		lame 		= require('lame'),
+		speaker 	= require('speaker'),
+		spotify 	= require('spotify-web'),
+		path 		= require('path'),
+		xml2js 		= require('xml2js'),
+		rsa 		= require('node-rsa'),
 
-	// stream instances
-	stream, 
-	playing  	= false,
-	stopping 	= false,
+		// persistent datastore with manual loading
+		datastore 	= require('nedb'), 
+		databases 	= {},
 
-	redirect_url = '';
+		// encryption key
+		key 		= new rsa({b: 512}),
 
-/**
- * Databases 
- **/
-databases.zones = new datastore({ filename: 'db/zones', autoload: true }),
-databases.auth 	= new datastore({ filename: 'db/auth', autoload: true }),
+		// stream instances
+		socket,
+		stream, 
+		playing  	= false,
+		stopping 	= false;
 
-app.use(express.static(path.join(__dirname, 'public')));
 
-server.listen(port);
+	/**
+	 * init
+	 **/
+	function start () {
 
-app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
-});
+		databases.zones = new datastore({ filename: 'db/zones', autoload: true }),
+		databases.auth 	= new datastore({ filename: 'db/auth', 	autoload: true }),
 
-io.on('connection', function(socket) {
+		app.use(express.static(path.join(__dirname, 'public')));
 
-	console.log('A new client connected', socket.id);
+		app.get('/', function (req, res) {
+			res.sendFile(__dirname + '/index.html');
+		});
+
+		server.listen(port);
+
+		io.on('connection', connection);
+	}
+
 
 	function sendZones () {
 
@@ -61,308 +72,266 @@ io.on('connection', function(socket) {
 		socket.emit('error:generic', {
 			message: message,
 			config: config || {}
-		})
+		});
 	}
 
-	socket.emit('config:init', {
-		redirect: redirect_url
-	});
+	function getAuthByService(service, callback) {
 
-	// 
-	socket.on('room:add', function (room) {
+		var credentials,
+			auth;
 
-		//
-		databases.zones.insert({name: room}, function (err, doc) {
-			sendZones();
-		});
-	});
-
-	socket.on('room:remove', function (id) {
-
-		//
-		databases.zones.remove({_id: id}, function (err) {
-			sendZones();
-		});
-	});
-
-	socket.on('search:generic', function(searchObj) {
-
-		spotify.login(username, password, function (err, spotify) {
+		databases.auth.findOne({tag: service}, function(err, credentials) {
 
 			if (err) {
-				console.error(err);
-
+				callback(err);
 			} else {
-				
-				console.log('Generic search', searchObj.term);
 
-				// fire the search off - results returned as XML so pase it into JSON
-				spotify.search(searchObj.term, function(err, response) {
-
-					var parseString = xml2js.parseString;
-					
-					parseString(response, function (err, result) {
-
-						result = result.result;
-
-						socket.emit('search:results', {
-							artists: 	result.artists,
-							albums: 	result.albums,
-							tracks: 	result.tracks,
-							playlists: 	result.playlists
-						});
-
-						spotify.disconnect();
-					});
-				});
+				if (credentials && credentials.hasOwnProperty('auth')) {
+					auth = credentials.auth;
+					callback(null, auth);
+				} else {
+					callback('Could not find any stored credentials.', null);
+				}
 			}
 		});
-	});
+	}
+
+	function accountAdd (auth) {
+
+		var rsaKey = key.exportKey(),
+			encrypted = auth;//key.encrypt(JSON.stringify(auth), 'base64');
+			//decrypted = key.decrypt(encrypted, 'utf8');
+
+		// update or insert new account
+		databases.auth.update({ tag: 'spotify' }, { auth: encrypted, tag: 'spotify' }, { upsert: true }, function (err, doc) {
+
+			if (err) {
+				//
+				showError('Failed to add Spotify details.', {});
+			} else {
+				sendZones();
+			}
+		});
+	}
+
+	function zoneAdd (zone) {
+
+		databases.zones.insert({name: zone}, function (err, doc) {
+			sendZones();
+		});
+	}
+
+	function zoneRemove (zoneId) {
+
+		databases.zones.remove({_id: zoneId}, function (err) {
+			sendZones();
+		});
+	}
 
 
+	function searchGeneric (searchObj) {
 
-	socket.on('search:spotify', function(uri) {
+		getAuthByService('spotify', function(err, credentials) {
 
-		var type = spotify.uriType(uri.term);
-		// console.log('spotify uri', uri, type);
-		// first get a "Album" instance from the album URI
-		// spotify.get(uri, function (err, album) {
-		// 	if (err) throw err;
+			console.log('search:generic', credentials);
 
-		// 	// first get the Track instances for each disc
-		// 	var tracks = [];
-		// 	album.disc.forEach(function (disc) {
-		// 		if (!Array.isArray(disc.track)) return;
-		// 		tracks.push.apply(tracks, disc.track);
-		// 	});
-
-		// 	console.log(tracks.map(function(t){ return t.uri; }));
-
-		// 	function next () {
-
-		// 		var track = tracks.shift();
-
-		// 		if (!track) return spotify.disconnect();
-
-		// 		track.get(function (err) {
-
-		// 			if (err) throw err;
-
-		// 			console.log('Playing: %s - %s', track.artist[0].name, track.name);
-
-		// 			track.play()
-		// 				.on('error', function (err) {
-		// 				console.error(err.stack || err);
-		// 				next();
-		// 			})
-		// 			.pipe(new lame.Decoder())
-		// 			.pipe(new Speaker())
-		// 			.on('finish', next);
-		// 		});
-		// 	}
-		// 	next();
-
-		// });
-	});
-
-
-	socket.on('track:play', function(track) {
-		
-		console.log("playing");
-
-		var uri = track || 'spotify:track:6tdp8sdXrXlPV6AZZN2PE8';
-
-		spotify.login(username, password, function (err, spotify) {
-
-			if (err) throw err;
-
-			// first get a "Track" instance from the track URI
-			spotify.get(uri, function (err, track) {
+			spotify.login(credentials.username, credentials.password, function (err, spotify) {
 
 				if (err) {
-
-					console.log('Error playing');
+					console.error(err);
 
 				} else {
+					
+					console.log('Generic search', searchObj.term);
 
-					console.log('Playing: %s - %s', track.artist[0].name, track.name);
+					// fire the search off - results returned as XML so pase it into JSON
+					spotify.search(searchObj.term, function(err, response) {
 
-					// play() returns a readable stream of MP3 audio data
-					track.play()
-					.pipe(new lame.Decoder())
-					.pipe(new speaker())
-					.on('finish', function () {
-						spotify.disconnect();
+						var parseString = xml2js.parseString;
+						
+						parseString(response, function (err, result) {
+
+							result = result.result;
+
+							socket.emit('search:results', {
+								artists: 	result.artists,
+								albums: 	result.albums,
+								tracks: 	result.tracks,
+								playlists: 	result.playlists
+							});
+
+							spotify.disconnect();
+						});
 					});
 				}
 			});
 		});
-	});
+	}
 
-	spotifyEnabled(function(err, credentials) {
+	function playTrack() {
 
-		if (!err && credentials) {
-			// send rooms initially
-			sendZones();
-		} else {
-			//
-			showError("Application has no credentials. Click OK to setup your Spotify account.", {
-				callback: 'spotify:auth',
-				type: 'spotify:unauthed' 
+		getAuthByService('spotify', function(err, credentials) {
+
+			console.log("playing");
+
+			var uri = track || 'spotify:track:6tdp8sdXrXlPV6AZZN2PE8';
+
+			spotify.login(credentials.username, credentials.password, function (err, spotify) {
+
+				if (err) throw err;
+
+				// first get a "Track" instance from the track URI
+				spotify.get(uri, function (err, track) {
+
+					if (err) {
+
+						console.log('Error playing');
+
+					} else {
+
+						console.log('Playing: %s - %s', track.artist[0].name, track.name);
+
+						// play() returns a readable stream of MP3 audio data
+						track.play()
+						.pipe(new lame.Decoder())
+						.pipe(new speaker())
+						.on('finish', function () {
+							spotify.disconnect();
+						});
+					}
+				});
 			});
+		});
+	}
+	
+
+	function connection (sock) {
+
+		var routes = {
+			'account:add': 		accountAdd,
+			'room:add': 		zoneAdd,
+			'room:remove': 		zoneRemove,
+			'search:generic': 	searchGeneric,
+			'search:spotify': 	searchGeneric,
+			'track:play': 		playTrack
 		}
-	});	
-});
+
+		socket = sock;
+
+		console.log('A new client connected', socket.id);
+
+		// setup socket event listeners
+		for (var route in routes) {
+			if (routes.hasOwnProperty(route)) {
+		        socket.on(route, routes[route]);
+		    }
+		}
+
+		// check the application has some setup details
+		spotifyEnabled(function(err, credentials) {
+
+			if (!err && credentials) {
+				// send rooms initially
+				sendZones();
+			} else {
+				// modal links through to login page
+				showError("Application has no credentials. Click OK to setup your Spotify account.", {
+					callback: 'spotify:auth',
+					type: 'spotify:unauthed' 
+				});
+			}
+		});
+	}
+
+
+	return {
+		start: 		start,
+		showError: 	showError
+	}
+
+	// io.on('connection', function(socket) {
+
+	// 	socket.on('search:generic', function(searchObj) {
+
+	// 		spotify.login(username, password, function (err, spotify) {
+
+	// 			if (err) {
+	// 				console.error(err);
+
+	// 			} else {
+					
+	// 				console.log('Generic search', searchObj.term);
+
+	// 				// fire the search off - results returned as XML so pase it into JSON
+	// 				spotify.search(searchObj.term, function(err, response) {
+
+	// 					var parseString = xml2js.parseString;
+						
+	// 					parseString(response, function (err, result) {
+
+	// 						result = result.result;
+
+	// 						socket.emit('search:results', {
+	// 							artists: 	result.artists,
+	// 							albums: 	result.albums,
+	// 							tracks: 	result.tracks,
+	// 							playlists: 	result.playlists
+	// 						});
+
+	// 						spotify.disconnect();
+	// 					});
+	// 				});
+	// 			}
+	// 		});
+	// 	});
+
+
+
+	// 	socket.on('search:spotify', function(uri) {
+
+	// 		var type = spotify.uriType(uri.term);
+	// 		console.log('spotify uri', uri, type);
+	// 		first get a "Album" instance from the album URI
+	// 		spotify.get(uri, function (err, album) {
+	// 			if (err) throw err;
+
+	// 			// first get the Track instances for each disc
+	// 			var tracks = [];
+	// 			album.disc.forEach(function (disc) {
+	// 				if (!Array.isArray(disc.track)) return;
+	// 				tracks.push.apply(tracks, disc.track);
+	// 			});
+
+	// 			console.log(tracks.map(function(t){ return t.uri; }));
+
+	// 			function next () {
+
+	// 				var track = tracks.shift();
+
+	// 				if (!track) return spotify.disconnect();
+
+	// 				track.get(function (err) {
+
+	// 					if (err) throw err;
+
+	// 					console.log('Playing: %s - %s', track.artist[0].name, track.name);
+
+	// 					track.play()
+	// 						.on('error', function (err) {
+	// 						console.error(err.stack || err);
+	// 						next();
+	// 					})
+	// 					.pipe(new lame.Decoder())
+	// 					.pipe(new Speaker())
+	// 					.on('finish', next);
+	// 				});
+	// 			}
+	// 			next();
+
+	// 		});
+	// 	});
+	// });
+})();
 
 // 
-
-
-
-// spotifyClient.get(data.uri, function (err, track) {
-// 	    if (err) throw err;
-// 	    console.log('playing %s', track.name);
-// 	    io.emit("is:playing", {
-// 	    	artist: track.artist[0].name,
-// 	    	name: track.name,
-// 	    	album: track.album
-// 	    });
-// 	    stream = track.play();
-// 	    stream
-// 	    	.pipe(lame)
-// 	    	.pipe(speaker)
-// 	    	.on('finish', function () {
-// 	        	console.log("finished");
-// 		        lame.unpipe(speaker);
-// 		        speaker.end();
-// 		        stopping = false;
-// 		        playing = false;
-// 	      });
-//   	});
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-// var app = require('express')();
-// // var server = require('http').Server(app);
-// var io = require('socket.io')(server);
-// var http = require('http').Server(app);
-// var lame = require('lame');
-// var Speaker = require('speaker');
-// var Spotify = require('spotify-web');
-// var path = require('path');
-// var uri = 'spotify:track:6pIZ0u32c2Lku8PmCWtnMy';//process.argv[2] || 'spotify:track:6tdp8sdXrXlPV6AZZN2PE8';
-
-// app.use(express.static(path.join(__dirname, 'public')));
-
-// app.get('/', function(req, res){
-//   res.sendFile(path.join(__dirname, 'index.html'));
-// });
-
-// app.listen(3000);
-
-// var spotifyClient, stream, playing = false, stopping = false;
-
-// var lame = new lame.Decoder();
-// var speaker = new Speaker();
-
-// Spotify.login(username, password, function (err, spotify) {
-
-//   if (err) throw err;
-
-//   spotifyClient = spotify;
-// });
-
-// var serveStatic = require('serve-static');
-
-// app.get('/', function(req, res){
-//   res.sendFile('index.html');
-// });
-
-// io.on('connection', function(socket){
-
-//   console.log('a new user connected');
-
-//   	socket.on('stop:me', function () {
-
-//   		if (playing) {
-//   			if (stream) {
-// 		  		try {
-// 		  			stream.abort();	
-// 		  		} catch (e) {
-// 		  			console.error(e);
-// 		  		}
-// 		  	}
-//   		}
-
-//   		console.log('stopping...');
-//   		stopping = true;
-
-//   		if (stream) {
-// 	  		try {
-// 	  			stream.abort();
-// 	  		} catch (e) {
-// 	  			console.error(e);
-// 	  		}
-// 	  	}
-//   	});
-
-// 	socket.on('play:me', function(data) {
-
-// 		if (stopping) {
-// 			console.log("still stopping..");
-// 			return;
-// 		}
-
-// 	  	console.log("playing...", data);
-// 	  	playing = true;
-
-// 	  	if (stream) {
-// 	  		try {
-// 	  			stream.abort();	
-// 	  		} catch (e) {
-// 	  			console.error(e);
-// 	  		}
-// 	  	}
-
-// 	  	spotifyClient.get(data.uri, function (err, track) {
-
-// 		    if (err) throw err;
-
-// 		    console.log('playing %s', track.name);
-
-// 		    io.emit("is:playing", {
-// 		    	artist: track.artist[0].name,
-// 		    	name: track.name,
-// 		    	album: track.album
-// 		    });
-
-// 		    stream = track.play();
-
-// 		    stream
-// 		    	.pipe(lame)
-// 		    	.pipe(speaker)
-// 		    	.on('finish', function () {
-// 		        	console.log("finished");
-// 			        lame.unpipe(speaker);
-// 			        speaker.end();
-// 			        stopping = false;
-// 			        playing = false;
-// 		      });
-// 	  	});
-//   	});
-
-// });
-
-
-// http.listen(3000, function(){
-//   console.log('server is listening on *:3000');
-// });
+spotipi.start();

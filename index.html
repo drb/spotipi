@@ -24,17 +24,19 @@
 	</script>
 
 	<script type="x-template" id="tpl-login">
-		<form id="form-user-login">
+		<form id="form-user-login" method="post">
 			<fieldset>
 				<p>Please supply your Spotify username and password (these are encrypted and not stored in plain text).</p>
 				<p class="sub">App-specific passwords will be supported in later versions.</p>
 				<label for="username">
 					<input type="textfield" name="username" id="username" placeholder="Spotify Username" />
 				</label>
-				<label for="username">
-					<input type="password" name="username" id="username" placeholder="Spotify Username" />
+				<label for="password">
+					<input type="password" name="password" id="password" placeholder="Spotify Password" />
 				</label>
-				<button class="standard"><span class="icon-headphones"></span>SAVE DETAILS</button>
+				<button class="standard" id="save-credentials">
+					<span class="icon-spotify"></span>SAVE DETAILS
+				</button>
 			</fieldset>
 		</form>
 	</script>
@@ -42,7 +44,7 @@
 	<script type="x-template" id="tpl-artwork">
 		<h2>{{model.track.artist}}</h2>
 		<h3>{{model.track.name}}</h3>
-		<span class="icon-music"></span>
+		<span class="icon-spotify"></span>
 	</script>
 
 	<script type="x-template" id="tpl-scrubber">

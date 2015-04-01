@@ -1,5 +1,8 @@
 /* Variables */
-/* line 11, ../sass/app.scss */
+/**
+ * Styles the placeholder text colour using vendor prefixes
+ **/
+/* line 33, ../sass/app.scss */
 * {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -8,12 +11,12 @@
   user-select: none;
 }
 
-/* line 19, ../sass/app.scss */
+/* line 41, ../sass/app.scss */
 a, button {
   cursor: pointer;
 }
 
-/* line 23, ../sass/app.scss */
+/* line 45, ../sass/app.scss */
 body {
   padding: 0px;
   margin: 0px;
@@ -24,12 +27,12 @@ body {
   overflow: hidden;
 }
 
-/* line 33, ../sass/app.scss */
+/* line 55, ../sass/app.scss */
 header {
   position: relative;
   text-shadow: 1px 1px 0px black;
 }
-/* line 37, ../sass/app.scss */
+/* line 59, ../sass/app.scss */
 header h1 {
   margin: 0px;
   padding: 14px 0px 0px 12px;
@@ -37,33 +40,33 @@ header h1 {
   text-align: left;
   font-size: 28px;
 }
-/* line 43, ../sass/app.scss */
+/* line 65, ../sass/app.scss */
 header h1 span {
   color: #84bd00;
   font-style: italic;
 }
-/* line 49, ../sass/app.scss */
+/* line 71, ../sass/app.scss */
 header.disabled h1, header.disabled a {
   opacity: 0.3;
 }
-/* line 54, ../sass/app.scss */
+/* line 76, ../sass/app.scss */
 header a {
   font-size: 25px;
   position: absolute;
   top: 22px;
   right: 55px;
 }
-/* line 59, ../sass/app.scss */
+/* line 81, ../sass/app.scss */
 header a:last-child {
   left: auto;
   right: 13px;
 }
-/* line 63, ../sass/app.scss */
+/* line 85, ../sass/app.scss */
 header a.disabled {
   opacity: 0.3;
   cursor: not-allowed !important;
 }
-/* line 69, ../sass/app.scss */
+/* line 91, ../sass/app.scss */
 header a.rooms {
   position: absolute;
   width: 120px;
@@ -75,14 +78,14 @@ header a.rooms {
   text-align: center;
   letter-spacing: 0.5px;
 }
-/* line 79, ../sass/app.scss */
+/* line 101, ../sass/app.scss */
 header a.rooms span {
   padding: 0px;
   display: inline-block;
   font-size: 0.6em;
 }
 
-/* line 87, ../sass/app.scss */
+/* line 109, ../sass/app.scss */
 button {
   outline: none;
   border: none;
@@ -93,46 +96,46 @@ button {
   padding: 10px;
   display: inline-block;
 }
-/* line 96, ../sass/app.scss */
+/* line 118, ../sass/app.scss */
 button span {
   display: inline-block;
   margin: 0px 8px 0px 0px;
 }
-/* line 100, ../sass/app.scss */
+/* line 122, ../sass/app.scss */
 button.standard {
   margin: 0px auto 0px auto;
   width: 100%;
   background-color: #84bd00;
   color: white;
 }
-/* line 106, ../sass/app.scss */
+/* line 128, ../sass/app.scss */
 button.disabled {
   background-color: #636363;
   opacity: 0.8;
 }
-/* line 109, ../sass/app.scss */
+/* line 131, ../sass/app.scss */
 button.disabled span {
   display: none;
 }
 
-/* line 115, ../sass/app.scss */
+/* line 137, ../sass/app.scss */
 #container {
   margin: 0px auto 0px auto;
   overflow: none;
 }
 
-/* line 120, ../sass/app.scss */
+/* line 142, ../sass/app.scss */
 #rooms {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   padding: 9px;
   width: 100%;
 }
-/* line 125, ../sass/app.scss */
+/* line 147, ../sass/app.scss */
 #rooms ul {
   margin-bottom: 20px;
 }
-/* line 127, ../sass/app.scss */
+/* line 149, ../sass/app.scss */
 #rooms ul li {
   list-style-type: none;
   border: 3px solid #636363;
@@ -140,7 +143,7 @@ button.disabled span {
   padding: 6px;
   margin-bottom: 10px;
 }
-/* line 133, ../sass/app.scss */
+/* line 155, ../sass/app.scss */
 #rooms ul li section {
   padding: 0px;
   font-size: 0.9em;
@@ -152,27 +155,27 @@ button.disabled span {
   background-opacity: 0.2;
   padding: 0px;
 }
-/* line 143, ../sass/app.scss */
+/* line 165, ../sass/app.scss */
 #rooms ul li section p {
   padding: 0px;
   margin: 0px;
 }
-/* line 147, ../sass/app.scss */
+/* line 169, ../sass/app.scss */
 #rooms ul li section.paused {
   opacity: 0.4;
 }
-/* line 151, ../sass/app.scss */
+/* line 173, ../sass/app.scss */
 #rooms ul li label {
   font-style: italic;
 }
-/* line 154, ../sass/app.scss */
+/* line 176, ../sass/app.scss */
 #rooms ul li span {
   float: right;
   display: inline-block;
   margin-left: 10px;
 }
 
-/* line 163, ../sass/app.scss */
+/* line 185, ../sass/app.scss */
 #artwork {
   padding: 0px;
   position: absolute;
@@ -183,7 +186,7 @@ button.disabled span {
   background-position: center center;
   background-size: cover;
 }
-/* line 174, ../sass/app.scss */
+/* line 196, ../sass/app.scss */
 #artwork h2,
 #artwork h3 {
   margin: 10px 10px 0px 10px;
@@ -191,12 +194,12 @@ button.disabled span {
   display: table;
   color: #fff;
 }
-/* line 181, ../sass/app.scss */
+/* line 203, ../sass/app.scss */
 #artwork h2 {
   font-size: 35px;
   background-color: #84bd00;
 }
-/* line 186, ../sass/app.scss */
+/* line 208, ../sass/app.scss */
 #artwork h3 {
   clear: both;
   font-size: 27px;
@@ -205,38 +208,47 @@ button.disabled span {
   font-weight: 200;
   font-style: italic;
 }
-/* line 195, ../sass/app.scss */
+/* line 217, ../sass/app.scss */
 #artwork span {
   display: none;
 }
-/* line 199, ../sass/app.scss */
+/* line 221, ../sass/app.scss */
 #artwork.disabled {
   background-color: #999;
   background-image: none;
 }
-/* line 203, ../sass/app.scss */
+/* line 225, ../sass/app.scss */
 #artwork.disabled h2, #artwork.disabled h3 {
   display: none;
 }
-/* line 207, ../sass/app.scss */
+/* line 229, ../sass/app.scss */
 #artwork.disabled span {
-  position: absolute;
+  position: relative;
+  height: 100%;
   color: #666;
   text-align: center;
   text-shadow: 1px 1px 0px #ddd;
   width: 100%;
-  padding-top: 25%;
   font-size: 14em;
-  display: inline-block;
+  padding-left: 30px;
+  display: block;
+  box-sizing: border-box;
+}
+/* line 241, ../sass/app.scss */
+#artwork.disabled span:before {
+  height: auto;
+  position: relative;
+  top: 25%;
+  transform: translateY(-25%);
 }
 
-/* line 220, ../sass/app.scss */
+/* line 251, ../sass/app.scss */
 ul {
   margin: 0px;
   padding: 0px;
 }
 
-/* line 225, ../sass/app.scss */
+/* line 256, ../sass/app.scss */
 .modal {
   position: absolute;
   top: 60px;
@@ -248,18 +260,18 @@ ul {
   z-index: 100;
   overflow-y: scroll;
 }
-/* line 236, ../sass/app.scss */
+/* line 267, ../sass/app.scss */
 .modal.hidden {
   top: 100%;
 }
 
-/* line 242, ../sass/app.scss */
+/* line 273, ../sass/app.scss */
 #playlist,
 #search {
   display: block;
   text-align: center;
 }
-/* line 246, ../sass/app.scss */
+/* line 277, ../sass/app.scss */
 #playlist ul:not(.no-border) li,
 #search ul:not(.no-border) li {
   text-align: left;
@@ -270,35 +282,35 @@ ul {
   margin: 0px;
   border-bottom: 1px solid #636363;
 }
-/* line 254, ../sass/app.scss */
+/* line 285, ../sass/app.scss */
 #playlist ul:not(.no-border) li.subtitle,
 #search ul:not(.no-border) li.subtitle {
   color: #fff;
   font-weight: 400;
 }
-/* line 257, ../sass/app.scss */
+/* line 288, ../sass/app.scss */
 #playlist ul:not(.no-border) li.subtitle:not(.disabled),
 #search ul:not(.no-border) li.subtitle:not(.disabled) {
   border-bottom-color: #84bd00;
 }
-/* line 260, ../sass/app.scss */
+/* line 291, ../sass/app.scss */
 #playlist ul:not(.no-border) li.subtitle:before,
 #search ul:not(.no-border) li.subtitle:before {
   display: inline-block;
   position: absolute;
   right: 12px;
 }
-/* line 266, ../sass/app.scss */
+/* line 297, ../sass/app.scss */
 #playlist ul:not(.no-border) li.disabled,
 #search ul:not(.no-border) li.disabled {
   color: #666;
 }
-/* line 268, ../sass/app.scss */
+/* line 299, ../sass/app.scss */
 #playlist ul:not(.no-border) li.disabled.subtitle:before,
 #search ul:not(.no-border) li.disabled.subtitle:before {
   display: none;
 }
-/* line 272, ../sass/app.scss */
+/* line 303, ../sass/app.scss */
 #playlist ul:not(.no-border) li a,
 #search ul:not(.no-border) li a {
   display: block;
@@ -310,7 +322,7 @@ ul {
   text-overflow: ellipsis;
   width: calc(100% - 55px);
 }
-/* line 282, ../sass/app.scss */
+/* line 313, ../sass/app.scss */
 #playlist ul:not(.no-border) li a img,
 #search ul:not(.no-border) li a img {
   position: absolute;
@@ -319,7 +331,7 @@ ul {
   width: 26px;
 }
 
-/* line 294, ../sass/app.scss */
+/* line 325, ../sass/app.scss */
 #playlist div {
   text-align: left;
   box-sizing: border-box;
@@ -327,23 +339,23 @@ ul {
   padding: 0px 12px 8px 12px;
   border-bottom: 1px solid #636363;
 }
-/* line 300, ../sass/app.scss */
+/* line 331, ../sass/app.scss */
 #playlist div ul {
   display: inline-block;
   float: right;
 }
-/* line 303, ../sass/app.scss */
+/* line 334, ../sass/app.scss */
 #playlist div ul li {
   display: inline-block;
   padding: 1px 3px 1px 10px;
   font-size: 1.2em;
 }
-/* line 307, ../sass/app.scss */
+/* line 338, ../sass/app.scss */
 #playlist div ul li.active {
   color: #84bd00;
 }
 
-/* line 315, ../sass/app.scss */
+/* line 346, ../sass/app.scss */
 form {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -352,23 +364,23 @@ form {
   padding: 10px;
   border: none;
 }
-/* line 323, ../sass/app.scss */
+/* line 354, ../sass/app.scss */
 form p {
   padding: 4px 0px 4px 0px;
 }
-/* line 326, ../sass/app.scss */
+/* line 357, ../sass/app.scss */
 form p.sub {
   padding-top: 0px;
   margin-top: 0px;
   font-size: 0.8em;
   color: #636363;
 }
-/* line 334, ../sass/app.scss */
+/* line 365, ../sass/app.scss */
 form fieldset {
   border: none;
   padding: 0px;
 }
-/* line 340, ../sass/app.scss */
+/* line 371, ../sass/app.scss */
 form input[type="textfield"],
 form input[type="password"] {
   position: relative;
@@ -377,12 +389,38 @@ form input[type="password"] {
   height: 20px;
   width: 100%;
   border-radius: 20px;
-  border: none;
+  border: 1px solid #fff;
   outline: none;
   margin: 7px 0px 15px 0px;
 }
+/* line 382, ../sass/app.scss */
+form input[type="textfield"].error,
+form input[type="password"].error {
+  border: 1px solid red;
+  background-color: #ffdede;
+}
+/* line 19, ../sass/app.scss */
+form input[type="textfield"].error::-webkit-input-placeholder,
+form input[type="password"].error::-webkit-input-placeholder {
+  color: #f80000;
+}
+/* line 22, ../sass/app.scss */
+form input[type="textfield"].error:-moz-placeholder,
+form input[type="password"].error:-moz-placeholder {
+  color: #f80000;
+}
+/* line 25, ../sass/app.scss */
+form input[type="textfield"].error::-moz-placeholder,
+form input[type="password"].error::-moz-placeholder {
+  color: #f80000;
+}
+/* line 28, ../sass/app.scss */
+form input[type="textfield"].error:-ms-input-placeholder,
+form input[type="password"].error:-ms-input-placeholder {
+  color: #f80000;
+}
 
-/* line 353, ../sass/app.scss */
+/* line 390, ../sass/app.scss */
 ul.controls {
   left: 0px;
   position: absolute;
@@ -392,18 +430,18 @@ ul.controls {
   background-color: #000;
   width: 100%;
 }
-/* line 362, ../sass/app.scss */
+/* line 399, ../sass/app.scss */
 ul.controls li {
   display: inline-block;
   text-align: center;
   width: 25%;
   float: left;
 }
-/* line 367, ../sass/app.scss */
+/* line 404, ../sass/app.scss */
 ul.controls li.middle {
   width: 50%;
 }
-/* line 371, ../sass/app.scss */
+/* line 408, ../sass/app.scss */
 ul.controls li a {
   color: #fff;
   text-decoration: none;
@@ -412,21 +450,21 @@ ul.controls li a {
   height: 55px;
   font-size: 27px;
 }
-/* line 381, ../sass/app.scss */
+/* line 418, ../sass/app.scss */
 ul.controls li .stop,
 ul.controls li .play {
   color: #fff;
 }
-/* line 387, ../sass/app.scss */
+/* line 424, ../sass/app.scss */
 ul.controls.disabled li {
   opacity: 0.3;
 }
-/* line 389, ../sass/app.scss */
+/* line 426, ../sass/app.scss */
 ul.controls.disabled li a {
   cursor: not-allowed;
 }
 
-/* line 397, ../sass/app.scss */
+/* line 434, ../sass/app.scss */
 .floater {
   position: absolute;
   width: 100%;
@@ -441,24 +479,24 @@ ul.controls.disabled li a {
   padding: 13px;
   border-top: 2px solid #84bd00;
 }
-/* line 411, ../sass/app.scss */
+/* line 448, ../sass/app.scss */
 .floater.active {
   top: 50%;
 }
-/* line 414, ../sass/app.scss */
+/* line 451, ../sass/app.scss */
 .floater.active.btn0 {
   top: 100%;
 }
-/* line 418, ../sass/app.scss */
+/* line 455, ../sass/app.scss */
 .floater.active.btn1 {
   top: 80%;
 }
-/* line 422, ../sass/app.scss */
+/* line 459, ../sass/app.scss */
 .floater.active.btn2 {
   top: auto;
   bottom: 0px;
 }
-/* line 428, ../sass/app.scss */
+/* line 465, ../sass/app.scss */
 .floater span.close {
   display: inline-block;
   position: absolute;
@@ -466,12 +504,12 @@ ul.controls.disabled li a {
   color: #333;
   font-size: 18pt;
 }
-/* line 436, ../sass/app.scss */
+/* line 473, ../sass/app.scss */
 .floater ul {
   padding: 0px;
   margin: 37px 0px 10px 0px;
 }
-/* line 440, ../sass/app.scss */
+/* line 477, ../sass/app.scss */
 .floater ul li {
   box-sizing: border-box;
   list-style-type: none;
@@ -485,18 +523,18 @@ ul.controls.disabled li a {
   border-radius: 24px;
   text-align: center;
 }
-/* line 452, ../sass/app.scss */
+/* line 489, ../sass/app.scss */
 .floater ul li:last-child {
   margin-bottom: 0px;
 }
-/* line 456, ../sass/app.scss */
+/* line 493, ../sass/app.scss */
 .floater ul li a {
   text-transform: uppercase;
   color: inherit;
   padding: 0px;
 }
 
-/* line 465, ../sass/app.scss */
+/* line 502, ../sass/app.scss */
 input {
   position: relative;
   padding: 10px;
@@ -504,7 +542,7 @@ input {
   display: block;
 }
 
-/* line 472, ../sass/app.scss */
+/* line 509, ../sass/app.scss */
 #scrubber {
   position: absolute;
   width: 100%;
@@ -513,7 +551,7 @@ input {
   background-color: rgba(0, 0, 0, 0.65);
   transition: opacity 0.2s linear;
 }
-/* line 480, ../sass/app.scss */
+/* line 517, ../sass/app.scss */
 #scrubber span {
   position: relative;
   margin: 13px;
@@ -523,7 +561,7 @@ input {
   background-color: rgba(255, 255, 255, 0.8);
   box-shadow: inset -1px -1px 2px 0px rgba(0, 0, 0, 0.3);
 }
-/* line 489, ../sass/app.scss */
+/* line 526, ../sass/app.scss */
 #scrubber span:before {
   content: "";
   display: inline-block;
@@ -536,67 +574,67 @@ input {
   border-radius: 10px;
   transition: right 0.1s ease-in-out;
 }
-/* line 502, ../sass/app.scss */
+/* line 539, ../sass/app.scss */
 #scrubber span.progress0:before {
   left: -5px;
   right: auto;
 }
-/* line 507, ../sass/app.scss */
+/* line 544, ../sass/app.scss */
 #scrubber span.progress100:before {
   left: auto;
   right: 0%;
 }
-/* line 513, ../sass/app.scss */
+/* line 550, ../sass/app.scss */
 #scrubber span.progress10:before {
   left: auto;
   right: calc(90% - 10px);
 }
-/* line 513, ../sass/app.scss */
+/* line 550, ../sass/app.scss */
 #scrubber span.progress20:before {
   left: auto;
   right: calc(80% - 10px);
 }
-/* line 513, ../sass/app.scss */
+/* line 550, ../sass/app.scss */
 #scrubber span.progress30:before {
   left: auto;
   right: calc(70% - 10px);
 }
-/* line 513, ../sass/app.scss */
+/* line 550, ../sass/app.scss */
 #scrubber span.progress40:before {
   left: auto;
   right: calc(60% - 10px);
 }
-/* line 513, ../sass/app.scss */
+/* line 550, ../sass/app.scss */
 #scrubber span.progress50:before {
   left: auto;
   right: calc(50% - 10px);
 }
-/* line 513, ../sass/app.scss */
+/* line 550, ../sass/app.scss */
 #scrubber span.progress60:before {
   left: auto;
   right: calc(40% - 10px);
 }
-/* line 513, ../sass/app.scss */
+/* line 550, ../sass/app.scss */
 #scrubber span.progress70:before {
   left: auto;
   right: calc(30% - 10px);
 }
-/* line 513, ../sass/app.scss */
+/* line 550, ../sass/app.scss */
 #scrubber span.progress80:before {
   left: auto;
   right: calc(20% - 10px);
 }
-/* line 513, ../sass/app.scss */
+/* line 550, ../sass/app.scss */
 #scrubber span.progress90:before {
   left: auto;
   right: calc(10% - 10px);
 }
-/* line 520, ../sass/app.scss */
+/* line 557, ../sass/app.scss */
 #scrubber.hidden {
   opacity: 0;
 }
 
-/* line 526, ../sass/app.scss */
+/* line 563, ../sass/app.scss */
 .alert {
   display: block;
   position: absolute;
@@ -607,7 +645,7 @@ input {
   top: 0px;
   left: 0px;
 }
-/* line 537, ../sass/app.scss */
+/* line 574, ../sass/app.scss */
 .alert .alert-controls {
   box-sizing: border-box;
   position: absolute;
@@ -622,29 +660,29 @@ input {
   border: 1px solid #4d4d4d;
   border-top: 4px solid #84bd00;
 }
-/* line 551, ../sass/app.scss */
+/* line 588, ../sass/app.scss */
 .error .alert .alert-controls {
   border-top-color: #780000;
 }
-/* line 555, ../sass/app.scss */
+/* line 592, ../sass/app.scss */
 .alert .alert-controls span {
   float: right;
   margin: 10px -10px;
   font-size: 17pt;
 }
-/* line 561, ../sass/app.scss */
+/* line 598, ../sass/app.scss */
 .alert .alert-controls p {
   padding-bottom: 5px;
   text-shadow: none;
   color: #fff;
 }
-/* line 567, ../sass/app.scss */
+/* line 604, ../sass/app.scss */
 .alert .alert-controls button {
   display: block;
   margin: 10px auto 10px auto;
   width: 100%;
 }
-/* line 575, ../sass/app.scss */
+/* line 612, ../sass/app.scss */
 .alert.error .alert-controls {
   border-top-color: #de0000;
 }

@@ -20,7 +20,8 @@ define([
         id:         'login',
 
         events: {
-            'click .login':   'setCredentials'
+            'click #save-credentials':   'setCredentials',
+            'focus input':               'resetErrors'
         },
 
         /*
@@ -30,7 +31,16 @@ define([
 
             ModalView.prototype.initialize.apply(this, arguments);
 
+            this.listenTo(this.model, 'show:rooms', this.hide);
             this.listenTo(this.model, 'spotify:auth', this.show);
+
+            this.delegateEvents();
+        },
+
+
+        resetErrors: function (el) {
+
+            $(el.currentTarget).removeClass('error');
         },
 
         /**
@@ -38,12 +48,30 @@ define([
          */
         setCredentials: function (el) {
 
-            var form    = $('#form-user-login', this.$el).serializeArray().map(function(x) { data[x.name] = x.value; }),
-                socket  = this.model.get('socket');
+            var username    = $('#username').val(),
+                password    = $('#password').val(),
+                data        = {
+                    username: username, 
+                    password: password
+                },
+                socket      = this.model.get('socket');
 
-            console.log("form", form);
+            if (username.length === 0 || password.length === 0) {
 
-            socket.emit('login', form);
+                if (username.length === 0) {
+                    $('#username').addClass('error').blur();
+                }
+
+                if (password.length === 0) {
+                    $('#password').addClass('error').blur();
+                }
+
+            } else {
+                
+                socket.emit('account:add', data);    
+            }
+
+            return false;
         },
 
         /**

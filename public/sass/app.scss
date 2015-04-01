@@ -7,6 +7,28 @@ $spotipi-green: 		rgb(132, 189, 0);
 $border-grey: 			#636363;
 $white: 				#fff;
 $std-font: 				'Nunito', sans-serif; 
+$error-red:				#780000;
+
+/**
+ * Styles the placeholder text colour using vendor prefixes
+ **/
+@mixin placeholderText ($color) {
+
+    $color: lighten($color, 25%);
+
+    &::-webkit-input-placeholder{
+        color: $color;
+    }
+    &:-moz-placeholder{
+        color: $color;
+    }
+    &::-moz-placeholder{
+        color: $color;
+    }
+    &:-ms-input-placeholder{
+        color: $color;
+    }
+}
 
 * {
 	-webkit-user-select: none;
@@ -205,14 +227,23 @@ button {
 		}
 
 		span {
-			position: absolute;
+			position: relative;
+			height: 100%;
 			color: #666;
 			text-align: center;
 			text-shadow: 1px 1px 0px #ddd;			
 			width: 100%;
-			padding-top: 25%;
 			font-size: 14em;
-			display: inline-block;
+			padding-left:30px;
+			display: block;
+			box-sizing: border-box;
+
+			&:before {
+				height: auto;
+				position: relative;
+  				top: 25%;
+  				transform: translateY(-25%);
+			}
 		}
 	}
 }
@@ -344,9 +375,15 @@ form {
 		height: 20px;
 		width: 100%;
 		border-radius: 20px;
-		border:none;
+		border:1px solid #fff;;
 		outline: none;
 		margin: 7px 0px 15px 0px;
+
+		&.error {
+			@include placeholderText($error-red);
+			border: 1px solid red;
+			background-color: lighten($error-red, 70%);
+		}
 	}
 }
 
@@ -549,7 +586,7 @@ input {
 		border-top: 4px solid $spotipi-green;
 
 		.error & {
-			border-top-color: #780000;
+			border-top-color: $error-red;
 		}
 
 		span {
@@ -577,4 +614,6 @@ input {
 		}
 	}
 }
+
+
 

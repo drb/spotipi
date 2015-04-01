@@ -81,6 +81,8 @@ define([
 
                 var alert = self.subViews.alert;
                 alert.showError(error);
+
+                console.log('shoinw genrric', error);
             });
 
             // socket has recieved results

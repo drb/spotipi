@@ -180,29 +180,8 @@ var spotipi = (function(){
 		});
 	}
 
-	// searchGeneric({term: 'oasis'});
 
 	function playTrack(uri) {
-
-		// spotify.login('valerie-23', 'zysK3Ed8cEnck9i', function (err, instance) {
-				
-		// 	  if (err) throw err;
-
-		// 	  // first get a "Track" instance from the track URI
-		// 	  instance.get('spotify:track:6tdp8sdXrXlPV6AZZN2PE8', function (err, track) {
-		// 	    if (err) throw err;
-		// 	    console.log('Playing: %s - %s', track.artist[0].name, track.name);
-
-		// 	    // play() returns a readable stream of MP3 audio data
-		// 	    track.play()
-		// 	      .pipe(new lame.Decoder())
-		// 	      .pipe(new speaker())
-		// 	      .on('finish', function () {
-		// 	        instance.disconnect();
-		// 	      });
-
-		// 	  });
-		// 	});
 
 		getAuthByService('spotify', function(err, credentials) {
 
@@ -219,7 +198,6 @@ var spotipi = (function(){
 
 						if (err) {
 
-							console.error('Error playing %s', err);
 							showError(err.toString(), {});
 
 						} else {
@@ -285,88 +263,6 @@ var spotipi = (function(){
 		showError: 	showError
 	}
 
-	// io.on('connection', function(socket) {
-
-	// 	socket.on('search:generic', function(searchObj) {
-
-	// 		spotify.login(username, password, function (err, spotify) {
-
-	// 			if (err) {
-	// 				console.error(err);
-
-	// 			} else {
-					
-	// 				console.log('Generic search', searchObj.term);
-
-	// 				// fire the search off - results returned as XML so pase it into JSON
-	// 				spotify.search(searchObj.term, function(err, response) {
-
-	// 					var parseString = xml2js.parseString;
-						
-	// 					parseString(response, function (err, result) {
-
-	// 						result = result.result;
-
-	// 						socket.emit('search:results', {
-	// 							artists: 	result.artists,
-	// 							albums: 	result.albums,
-	// 							tracks: 	result.tracks,
-	// 							playlists: 	result.playlists
-	// 						});
-
-	// 						spotify.disconnect();
-	// 					});
-	// 				});
-	// 			}
-	// 		});
-	// 	});
-
-
-
-	// 	socket.on('search:spotify', function(uri) {
-
-	// 		var type = spotify.uriType(uri.term);
-	// 		console.log('spotify uri', uri, type);
-	// 		first get a "Album" instance from the album URI
-	// 		spotify.get(uri, function (err, album) {
-	// 			if (err) throw err;
-
-	// 			// first get the Track instances for each disc
-	// 			var tracks = [];
-	// 			album.disc.forEach(function (disc) {
-	// 				if (!Array.isArray(disc.track)) return;
-	// 				tracks.push.apply(tracks, disc.track);
-	// 			});
-
-	// 			console.log(tracks.map(function(t){ return t.uri; }));
-
-	// 			function next () {
-
-	// 				var track = tracks.shift();
-
-	// 				if (!track) return spotify.disconnect();
-
-	// 				track.get(function (err) {
-
-	// 					if (err) throw err;
-
-	// 					console.log('Playing: %s - %s', track.artist[0].name, track.name);
-
-	// 					track.play()
-	// 						.on('error', function (err) {
-	// 						console.error(err.stack || err);
-	// 						next();
-	// 					})
-	// 					.pipe(new lame.Decoder())
-	// 					.pipe(new Speaker())
-	// 					.on('finish', next);
-	// 				});
-	// 			}
-	// 			next();
-
-	// 		});
-	// 	});
-	// });
 })();
 
 // 

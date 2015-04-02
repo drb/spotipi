@@ -35,11 +35,10 @@ define([
             //
 			this.$el.html(template({model:this.model.toJSON()}));
             
-
-            if (connected && 0) {
+            if (connected && this.model.get('track')) {
                 this.$el.removeClass('disabled');
                 this.$el.css({
-                    'background-image': 'url("' + this.model.getArtNowPlaying().path + '")'
+                    'background-image': 'url("' + this.model.getArtNowPlaying().uri + '")'
                 });
             } else {
                 this.$el.addClass('disabled');

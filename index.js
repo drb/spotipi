@@ -13,30 +13,35 @@ var spotipi = (function(){
 		server 		= require('http').Server(app),
 		io 			= require('socket.io')(server),
 		lame 		= require('lame'),
-		speaker 	= require('speaker'),
-		spotify 	= require('spotify-web'),
-		path 		= require('path'),
-		xml2js 		= require('xml2js'),
 		request 	= require('request'), 
 
+		// libs
+		Datastore 	= require('nedb'), 
+		Speaker 	= require('speaker'),
+		Spotify 	= require('spotify-web'),
+
 		// persistent datastore with manual loading
-		datastore 	= require('nedb'), 
 		databases 	= {},
 
-		// stream instances
+		// socket & stream instances
 		socket,
-		stream, 
-		playing  	= false,
-		stopping 	= false;
+		stream,
+
+		speakerOutput = null,
+		nowPlaying = {
+			uri: false
+		};
 
 
 	/**
-	 * init
+	 * start
+	 *
+	 * kicks off the application
 	 **/
 	function start () {
 
-		databases.zones = new datastore({ filename: 'db/zones', autoload: true }),
-		databases.auth 	= new datastore({ filename: 'db/auth', 	autoload: true }),
+		databases.zones = new Datastore({ filename: 'db/zones', autoload: true }),
+		databases.auth 	= new Datastore({ filename: 'db/auth', 	autoload: true }),
 
 		app.use(express.static(path.join(__dirname, 'public')));
 
@@ -54,6 +59,44 @@ var spotipi = (function(){
 	}
 
 
+	/**
+	 * setupSpeaker
+	 *
+	 * setsup the local speaker on the device
+	 **/
+	function setupSpeaker () {
+
+		if (speakerOutput) {
+			return;
+		}
+
+		speakerOutput = new Speaker({
+			channels: 	2,
+			bitDepth: 	16,
+			sampleRate: 44100
+		});
+
+		speakerOutput.on('flush', function() {
+			console.log("flushing...");
+		});
+
+		speakerOutput.on('close', function() {
+			console.log("closed...");
+			// send track back to client
+			socket.emit("track:stop");
+			// kill the speaker instance
+			speakerOutput = null;
+			// start the next track, if there is one
+			getMediaStream();
+		});
+	}
+
+
+	/**
+	 * sendZones
+	 *
+	 * returns the configured zones
+	 **/
 	function sendZones () {
 
 		// all clients get alerted
@@ -62,24 +105,43 @@ var spotipi = (function(){
 		});
 	}
 
+
+	/**
+	 * spotifyEnabled
+	 *
+	 * returns the configured zones
+	 **/
 	function spotifyEnabled (callback) {
 
-		var authorized = databases.auth.findOne({}, callback);
+		databases.auth.findOne({}, callback);
 	}
 
+
+	/**
+	 * showError
+	 *
+	 * sends error to connected client
+	 **/
 	function showError (message, config) {
 
 		//
-		socket.emit('error:generic', {
-			message: message,
-			config: config || {}
-		});
+		if (socket) {
+			socket.emit('error:generic', {
+				message: message,
+				config: config || {}
+			});	
+		}
 	}
 
+
+	/**
+	 * getAuthByService
+	 *
+	 * returns the configured credentials for the tagged service
+	 **/
 	function getAuthByService(service, callback) {
 
-		var credentials,
-			auth;
+		var credentials;
 
 		databases.auth.findOne({tag: service}, function(err, credentials) {
 
@@ -88,8 +150,7 @@ var spotipi = (function(){
 			} else {
 
 				if (credentials && credentials.hasOwnProperty('auth')) {
-					auth = credentials.auth;
-					callback(null, auth);
+					callback(null, credentials.auth);
 				} else {
 					callback('Could not find any stored credentials.', null);
 				}
@@ -97,6 +158,12 @@ var spotipi = (function(){
 		});
 	}
 
+
+	/**
+	 * accountAdd
+	 *
+	 * adds a spotify account to the local database
+	 **/
 	function accountAdd (auth) {
 
 		var encrypted = auth;
@@ -105,7 +172,6 @@ var spotipi = (function(){
 		databases.auth.update({ tag: 'spotify' }, { auth: encrypted, tag: 'spotify' }, { upsert: true }, function (err, doc) {
 
 			if (err) {
-				//
 				showError('Failed to add Spotify details.', {});
 			} else {
 				sendZones();
@@ -113,6 +179,12 @@ var spotipi = (function(){
 		});
 	}
 
+
+	/**
+	 * zoneAdd
+	 *
+	 * add a new zone/room
+	 **/
 	function zoneAdd (zone) {
 
 		databases.zones.insert({name: zone}, function (err, doc) {
@@ -120,6 +192,12 @@ var spotipi = (function(){
 		});
 	}
 
+
+	/**
+	 * zoneRemove
+	 *
+	 * remove a configured zone
+	 **/
 	function zoneRemove (zoneId) {
 
 		databases.zones.remove({_id: zoneId}, function (err) {
@@ -128,10 +206,14 @@ var spotipi = (function(){
 	}
 
 
+	/**
+	 * searchGeneric
+	 *
+	 * searches artists, tracks and playlists with the supplied search term
+	 **/
 	function searchGeneric (searchObj) {
 
-		//https://api.spotify.com/v1/search?q=oasis&type=track
-		var requests 	= 0;
+		var requests 	= 0,
 			types  		= ['track', 'artist', 'playlist'],
 			lookup 		= {
 				uri: 'https://api.spotify.com/v1/search',
@@ -140,17 +222,17 @@ var spotipi = (function(){
 				},
 				json: true,
 				qs: {
-					q: searchObj.term,
-					type: false,
-					limit: 8,
+					q: 		searchObj.term,
+					limit: 	searchObj.limit,
+					type: 	false,
 					offset: 0
 				}
 			},
 			results = {
-				artist: [],
-				album: [],
-				track: [],
-				playlist: []
+				artist: 	[],
+				album: 		[],
+				track: 		[],
+				playlist: 	[]
 			};
 
 		types.forEach(function(type){
@@ -158,7 +240,7 @@ var spotipi = (function(){
 			// set lookup type
 			lookup.qs.type = type;
 
-			// do lookup
+			// do lookups
 			request(lookup, function(err, response, body) {
 
 				requests++;
@@ -173,22 +255,29 @@ var spotipi = (function(){
 					} catch (e) {
 						console.error(e);
 					}
-					
 				}
 			});
-
 		});
 	}
 
 
-	function playTrack(uri) {
+	/**
+	 * getMediaStream
+	 *
+	 * connects to spotify services and returns a streamable track
+	 * we pipe this to the speaker instance
+	 **/
+	function getMediaStream() {
+
+		var uri = nowPlaying.uri;
 
 		getAuthByService('spotify', function(err, credentials) {
+
+			setupSpeaker();
 
 			spotify.login(credentials.username, credentials.password, function (err, instance) {
 
 				if (err) {
-
 					//
 					showError(err.toString(), {});
 				} else {
@@ -202,12 +291,19 @@ var spotipi = (function(){
 
 						} else {
 
-							console.log('Playing: %s - %s', track.artist[0].name, track.name);
+							try {
+								console.log('Playing: %s - %s', track.artist[0].name, track.name);	
+							} catch (e) {
+								console.error(e);
+							}
+
+							// send track back to client
+							socket.emit("track:play", track);
 
 							// play() returns a readable stream of MP3 audio data
 							track.play()
 							.pipe(new lame.Decoder())
-							.pipe(new speaker())
+							.pipe(speakerOutput)
 							.on('finish', function () {
 								instance.disconnect();
 							});
@@ -217,6 +313,35 @@ var spotipi = (function(){
 			});
 		});
 	}
+
+
+	function playTrack(uri) {
+
+		console.log("playing track", uri);
+
+		setupSpeaker();
+
+		nowPlaying.uri = uri;
+
+		if (speakerOutput) {
+			speakerOutput.end();
+		} else {
+			getMediaStream();
+		}
+	}
+
+
+	function stopTrack() {
+
+		console.log("stopping track...");
+
+		nowPlaying.uri = false;
+
+		if (speakerOutput) {
+			speakerOutput.end();
+		}
+	}
+
 	
 
 	function connection (sock) {
@@ -227,12 +352,13 @@ var spotipi = (function(){
 			'room:remove': 		zoneRemove,
 			'search:generic': 	searchGeneric,
 			'search:spotify': 	searchGeneric,
-			'track:play': 		playTrack
-		}
+			'track:play': 		playTrack,
+			'track:stop': 		stopTrack
+		};
 
 		socket = sock;
 
-		console.log('A new client connected', socket.id);
+		// console.log('A new client connected', socket.id);
 
 		// setup socket event listeners
 		for (var route in routes) {
@@ -261,9 +387,18 @@ var spotipi = (function(){
 	return {
 		start: 		start,
 		showError: 	showError
-	}
+	};
 
 })();
 
-// 
+// start the app
 spotipi.start();
+
+var foo;
+var ass;
+
+// catch errors outside of the application
+process.on('uncaughtException', function(err) {
+	console.error("uncaught", err);
+	spotipi.showError(err.toString());
+});

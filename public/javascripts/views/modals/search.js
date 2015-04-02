@@ -39,9 +39,7 @@ define([
             this.listenTo(this.model,   'show:search', 	    this.show);
             this.listenTo(this.model,   'search:results',   this.foundResults);
             this.listenTo(this.model,   'change:search', 	this.render);
-
-            //
-            this.listenTo(this.model, 'show:playlist show:rooms', this.hide);
+            this.listenTo(this.model,   'show:playlist show:rooms track:play', this.hide);
         },
 
 
@@ -104,7 +102,8 @@ define([
 		**/
         doSearch: function (searchTerm) {
 
-        	var eventType = 'search:generic';
+        	var eventType = 'search:generic',
+                limit = this.defaultResultLimit;
 
             if (this.model.get('searching') === true) {
                 return;
@@ -127,7 +126,8 @@ define([
 				// emit search
 				this.model.get('socket').emit(
 					eventType, {
-						term: searchTerm
+						term: searchTerm,
+                        limit: limit
 					}
 				);
 
@@ -146,11 +146,9 @@ define([
 
         foundResults: function (results) {
 
-            console.log(results);
-
-        	var artists = 	results.artist,//this.restrict(results.artists[0].artist, this.defaultResultLimit),
-        		albums = 	results.album,//this.restrict(results.albums[0].album, this.defaultResultLimit),
-        		tracks = 	results.track,//this.restrict(results.tracks[0].track, this.defaultResultLimit),
+        	var artists = 	results.artist,
+        		albums = 	results.album,
+        		tracks = 	results.track,
         		playlists = results.playlist;
 
         	this.model.set({
@@ -172,22 +170,6 @@ define([
         },
 
 
-        restrict: function (array, limit) {
-
-        	var yielded = [],
-        		offset = 0;
-
-        	_.each(array, function(obj) {
-
-        		if ((offset+1) <= limit) {
-        			yielded.push(obj);	
-        		}
-        		
-        		offset += 1;
-        	});
-
-        	return yielded;
-        },
 
         /**
          *

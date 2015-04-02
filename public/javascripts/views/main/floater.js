@@ -45,6 +45,8 @@ define([
                 socket  = this.model.get('socket'),
                 tag     = this.options.tag;
 
+            console.log(tag);
+
             switch (action) {
                 case 'play-track':
                     socket.emit('track:play', tag);
@@ -59,6 +61,8 @@ define([
                     socket.emit('album:queue', tag);
                     break;
             }
+
+            this.hide();
         },
 
 

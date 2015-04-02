@@ -31,7 +31,7 @@ define([
     	render: function () {
 
     		var template = Handlebars.default.compile($('#tpl-header').text()),
-                connected = this.model.get('connected')
+                connected = this.model.get('connected');
 
 			this.$el.html(template({connected: connected, isReady: this.model.isReady()}));
 
@@ -46,7 +46,7 @@ define([
 
         toggleDisabled: function () {
 
-            render();
+            this.render();
         },
 
 

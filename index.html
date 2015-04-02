@@ -42,7 +42,7 @@
 	</script>
 
 	<script type="x-template" id="tpl-artwork">
-		<h2>{{model.track.artist}}</h2>
+		<h2>{{model.track.artist.0.name}}</h2>
 		<h3>{{model.track.name}}</h3>
 		<span class="icon-spotify"></span>
 	</script>
@@ -54,7 +54,7 @@
 	<script type="x-template" id="tpl-controls">
 		<li><a class="previous icon-previous" href="#"></a></li>
 		<li class="middle">
-			<a class="play {{^playing}}icon-play{{/playing}}{{#playing}}icon-pause{{/playing}}" href="#"></a>
+			<a class="play {{^playing}}icon-play{{/playing}}{{#playing}}icon-stop{{/playing}}" href="#"></a>
 		</li>
 		<li><a class="next icon-next" href="#"></a></li>
 	</script>	
@@ -121,7 +121,7 @@
 			{{#each tracks}}
 				<li>
 					<a class="track" href="javascript:void(0);" data-uri="{{uri}}">
-						{{artists.0.name}} / {{name}} <span class="explicit">{{#explicit}}EXPLICIT{{/explicit}}</span>
+						{{artists.0.name}} / {{name}} {{#explicit}}<span class="explicit">EXPLICIT</span>{{/explicit}}
 						<img src="{{album.images.2.url}}" />
 					</a>
 				</li>

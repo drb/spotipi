@@ -100,6 +100,11 @@ define([
                 self.model.trigger('rooms:updated');
             });
 
+            socket.on('track:play', function(track) {
+                console.log(track);
+                self.model.set('track', track);
+            });
+
 			// default constructor for sub views
     		constr = {
     			model: this.model

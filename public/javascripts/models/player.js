@@ -31,11 +31,7 @@ define([
             search:     null,
 
         	// currently playing information
-        	track: {
-        		artwork: [{
-        			path: false
-        		}]
-        	}
+        	track: false
         },
 
         initialize: function () {
@@ -60,7 +56,11 @@ define([
         getArtNowPlaying: function () {
 
         	var track = this.get('track');
-        	return track.artwork[0];
+
+            if (!track) {
+                return {};
+            }
+        	return track.album.cover[0];
         },
 
         syncFromLocal: function () {

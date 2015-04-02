@@ -84,42 +84,57 @@
 		<form>
 			<label>
 				<input 	id="master-search" 
-						type="text" 
+						type="textfield" 
 						autocomplete="off" 
 						placeholder="Search term or Spotify URI" 
 						value="{{searchTerm}}" />
 			</label>
 		</form>
 		<ul class="scrollable">
+
 			<!-- artists -->
 			<li class="result-artist subtitle icon-circle-down{{#unless artists.length}} disabled{{/unless}}">Artists {{#if artists.length}}({{artists.length}}){{/if}}</li>
 			{{#each artists}}
 				<li>
-					<a class="artist" href="javascript:void(0);" data-uri="{{id}}">
+					<a class="artist" href="javascript:void(0);" data-uri="{{uri}}">
 						{{name}}
-						<img src="https://d3rt1990lpmkn.cloudfront.net/cover/{{portrait.0.small}}" />
+						<img src="{{images.3.url}}" />
 					</a>
 				</li>
 			{{/each}}
+
 
 			<!-- albums -->
 			<li class="result-album subtitle icon-circle-down{{#unless albums.length}} disabled{{/unless}}">Albums {{#if albums.length}}({{albums.length}}){{/if}}</li>
 			{{#each albums}}
 				<li>
-					<a class="album" href="javascript:void(0);" data-uri="{{id}}">
+					<a class="album" href="javascript:void(0);" data-uri="{{uri}}">
 						{{artist-name}} / {{name}}
 						<img src="https://d3rt1990lpmkn.cloudfront.net/cover/{{cover-small}}" />
 					</a>
 				</li>
 			{{/each}}
 
+
 			<!-- tracks -->
 			<li class="result-track subtitle icon-circle-down{{#unless tracks.length}} disabled{{/unless}}">Tracks {{#if tracks.length}}({{tracks.length}}){{/if}}</li>
 			{{#each tracks}}
 				<li>
-					<a class="track" href="javascript:void(0);" data-uri="{{id}}">
-						{{artist}} / {{title}}
-						<img src="https://d3rt1990lpmkn.cloudfront.net/cover/{{cover-small}}" />
+					<a class="track" href="javascript:void(0);" data-uri="{{uri}}">
+						{{artists.0.name}} / {{name}} <span class="explicit">{{#explicit}}EXPLICIT{{/explicit}}</span>
+						<img src="{{album.images.2.url}}" />
+					</a>
+				</li>
+			{{/each}}
+
+
+			<!-- playlist -->
+			<li class="result-track subtitle icon-circle-down{{#unless playlists.length}} disabled{{/unless}}">Playlists {{#if playlist.length}}({{playlists.length}}){{/if}}</li>
+			{{#each playlists}}
+				<li>
+					<a class="track" href="javascript:void(0);" data-uri="{{uri}}">
+						{{name}}
+						<img src="{{images.0.url}}" />
 					</a>
 				</li>
 			{{/each}}

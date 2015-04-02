@@ -30,6 +30,7 @@ define([
             this.options    = {};
 
             this.listenTo(this.model, 'show:floater', this.show);
+            this.listenTo(this.model, 'show:error', this.hide);
     	},
 
 
@@ -39,22 +40,23 @@ define([
         **/
         passThru: function (el) {
 
-            var button = el.currentTarget,
-                action = button.className,
-                socket = this.model.get('socket');
+            var button  = el.currentTarget,
+                action  = button.className,
+                socket  = this.model.get('socket'),
+                tag     = this.options.tag;
 
             switch (action) {
                 case 'play-track':
-                    socket.emit('track:play', null);
+                    socket.emit('track:play', tag);
                     break;
                 case 'queue-track':
-                    socket.emit('track:queue', null);
+                    socket.emit('track:queue', tag);
                     break;
                 case 'play-album':
-                    socket.emit('album:play', null);
+                    socket.emit('album:play', tag);
                     break;
                 case 'replace-playlist':
-                    socket.emit('album:queue', null);
+                    socket.emit('album:queue', tag);
                     break;
             }
         },
@@ -85,6 +87,7 @@ define([
         show: function (options) {
             
             this.options = options;
+
             this.render();
             this.$el.addClass('active');
         },

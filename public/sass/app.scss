@@ -296,6 +296,12 @@ ul {
 			}
 			&.disabled {
 				color: #666;
+				&:after {
+					float: right;
+					content: "No results";
+					padding-right:22px;
+					opacity: 0.7;
+				}
 				&.subtitle:before{
 					display:none;
 				}

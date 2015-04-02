@@ -54,8 +54,6 @@ define([
 
             this.set('ready', ready);
 
-            console.log("ready", ready, this.get('connected'), this.get('rooms').length);
-
             return ready;
         },
 

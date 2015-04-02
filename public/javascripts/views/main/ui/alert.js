@@ -33,8 +33,6 @@ define([
 
         callbacks: function (e) {
 
-            console.log(e.currentTarget);
-
             if (this.callback) {
                 console.log("doing callback", this.callback);
                 this.model.trigger(this.callback);
@@ -52,11 +50,16 @@ define([
         //
         showError: function (error) {
 
+            console.log("adding error", error);
+
             this.$el.addClass('error');
 
-            this.message    = error.message;
-            this.callback   = error.config.callback;
+            this.message = error.message || 'Foo';
 
+            if (error.config && error.config.callback) {
+                this.callback = error.config.callback;    
+            }
+            
             this.render();
         },
 

@@ -78,11 +78,9 @@ define([
 
             //
             socket.on('error:generic', function (error){
-
                 var alert = self.subViews.alert;
+                self.model.trigger('show:error');
                 alert.showError(error);
-
-                console.log('shoinw genrric', error);
             });
 
             // socket has recieved results

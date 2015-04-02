@@ -56,7 +56,8 @@ define([
                     cueTrack:       0,
                     replaceQueue:   0
                 },
-                $el = $(el.currentTarget);
+                $el = $(el.currentTarget),
+                tag = $el.attr('data-uri');
 
             if ($el.hasClass('track')) {
                 options.playTrack = 1;
@@ -68,7 +69,15 @@ define([
                 options.playAlbum = 1;
             }
 
-            this.model.trigger('show:floater', options);
+            if ($el.hasClass('artist')) {
+                
+            }
+
+            if (!_.isEmpty(options)) {
+                options.tag = tag;
+                this.model.trigger('show:floater', options);    
+            }
+            
         },
         
 
@@ -86,7 +95,7 @@ define([
 
         	this.delaySearch = setTimeout(function() {
         		self.doSearch(searchTerm);
-        	}, 300);
+        	}, 600);
         },
 
 
@@ -137,10 +146,12 @@ define([
 
         foundResults: function (results) {
 
-        	var artists = 	this.restrict(results.artists[0].artist, this.defaultResultLimit),
-        		albums = 	this.restrict(results.albums[0].album, this.defaultResultLimit),
-        		tracks = 	this.restrict(results.tracks[0].track, this.defaultResultLimit),
-        		playlists = [];
+            console.log(results);
+
+        	var artists = 	results.artist,//this.restrict(results.artists[0].artist, this.defaultResultLimit),
+        		albums = 	results.album,//this.restrict(results.albums[0].album, this.defaultResultLimit),
+        		tracks = 	results.track,//this.restrict(results.tracks[0].track, this.defaultResultLimit),
+        		playlists = results.playlist;
 
         	this.model.set({
                 'searching': false,

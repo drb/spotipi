@@ -17,14 +17,11 @@ var spotipi = (function(){
 		spotify 	= require('spotify-web'),
 		path 		= require('path'),
 		xml2js 		= require('xml2js'),
-		rsa 		= require('node-rsa'),
+		request 	= require('request'), 
 
 		// persistent datastore with manual loading
 		datastore 	= require('nedb'), 
 		databases 	= {},
-
-		// encryption key
-		key 		= new rsa({b: 512}),
 
 		// stream instances
 		socket,
@@ -50,6 +47,10 @@ var spotipi = (function(){
 		server.listen(port);
 
 		io.on('connection', connection);
+
+		require('dns').lookup(require('os').hostname(), function (err, add, fam) {
+			console.log('Point a browser to http://' + add + ':' + port);
+		});
 	}
 
 
@@ -98,9 +99,7 @@ var spotipi = (function(){
 
 	function accountAdd (auth) {
 
-		var rsaKey = key.exportKey(),
-			encrypted = auth;//key.encrypt(JSON.stringify(auth), 'base64');
-			//decrypted = key.decrypt(encrypted, 'utf8');
+		var encrypted = auth;
 
 		// update or insert new account
 		databases.auth.update({ tag: 'spotify' }, { auth: encrypted, tag: 'spotify' }, { upsert: true }, function (err, doc) {
@@ -131,75 +130,112 @@ var spotipi = (function(){
 
 	function searchGeneric (searchObj) {
 
-		getAuthByService('spotify', function(err, credentials) {
+		//https://api.spotify.com/v1/search?q=oasis&type=track
+		var requests 	= 0;
+			types  		= ['track', 'artist', 'playlist'],
+			lookup 		= {
+				uri: 'https://api.spotify.com/v1/search',
+				headers: {
+					'Accept': 'application/json'
+				},
+				json: true,
+				qs: {
+					q: searchObj.term,
+					type: false,
+					limit: 8,
+					offset: 0
+				}
+			},
+			results = {
+				artist: [],
+				album: [],
+				track: [],
+				playlist: []
+			};
 
-			console.log('search:generic', credentials);
+		types.forEach(function(type){
 
-			spotify.login(credentials.username, credentials.password, function (err, spotify) {
+			// set lookup type
+			lookup.qs.type = type;
 
-				if (err) {
-					console.error(err);
+			// do lookup
+			request(lookup, function(err, response, body) {
 
-				} else {
+				requests++;
+
+				if (!err) {
+					results[type] = body[type + 's'].items;
+				}
+
+				if (requests === types.length) {
+					try {
+						socket.emit('search:results', results);	
+					} catch (e) {
+						console.error(e);
+					}
 					
-					console.log('Generic search', searchObj.term);
-
-					// fire the search off - results returned as XML so pase it into JSON
-					spotify.search(searchObj.term, function(err, response) {
-
-						var parseString = xml2js.parseString;
-						
-						parseString(response, function (err, result) {
-
-							result = result.result;
-
-							socket.emit('search:results', {
-								artists: 	result.artists,
-								albums: 	result.albums,
-								tracks: 	result.tracks,
-								playlists: 	result.playlists
-							});
-
-							spotify.disconnect();
-						});
-					});
 				}
 			});
+
 		});
 	}
 
-	function playTrack() {
+	// searchGeneric({term: 'oasis'});
+
+	function playTrack(uri) {
+
+		// spotify.login('valerie-23', 'zysK3Ed8cEnck9i', function (err, instance) {
+				
+		// 	  if (err) throw err;
+
+		// 	  // first get a "Track" instance from the track URI
+		// 	  instance.get('spotify:track:6tdp8sdXrXlPV6AZZN2PE8', function (err, track) {
+		// 	    if (err) throw err;
+		// 	    console.log('Playing: %s - %s', track.artist[0].name, track.name);
+
+		// 	    // play() returns a readable stream of MP3 audio data
+		// 	    track.play()
+		// 	      .pipe(new lame.Decoder())
+		// 	      .pipe(new speaker())
+		// 	      .on('finish', function () {
+		// 	        instance.disconnect();
+		// 	      });
+
+		// 	  });
+		// 	});
 
 		getAuthByService('spotify', function(err, credentials) {
 
-			console.log("playing");
+			spotify.login(credentials.username, credentials.password, function (err, instance) {
 
-			var uri = track || 'spotify:track:6tdp8sdXrXlPV6AZZN2PE8';
+				if (err) {
 
-			spotify.login(credentials.username, credentials.password, function (err, spotify) {
+					//
+					showError(err.toString(), {});
+				} else {
 
-				if (err) throw err;
+					// first get a "Track" instance from the track URI
+					instance.get(uri, function (err, track) {
 
-				// first get a "Track" instance from the track URI
-				spotify.get(uri, function (err, track) {
+						if (err) {
 
-					if (err) {
+							console.error('Error playing %s', err);
+							showError(err.toString(), {});
 
-						console.log('Error playing');
+						} else {
 
-					} else {
+							console.log('Playing: %s - %s', track.artist[0].name, track.name);
 
-						console.log('Playing: %s - %s', track.artist[0].name, track.name);
-
-						// play() returns a readable stream of MP3 audio data
-						track.play()
-						.pipe(new lame.Decoder())
-						.pipe(new speaker())
-						.on('finish', function () {
-							spotify.disconnect();
-						});
-					}
-				});
+							// play() returns a readable stream of MP3 audio data
+							track.play()
+							.pipe(new lame.Decoder())
+							.pipe(new speaker())
+							.on('finish', function () {
+								instance.disconnect();
+							});
+						}
+					});
+				}
 			});
 		});
 	}

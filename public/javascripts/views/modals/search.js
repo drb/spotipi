@@ -39,7 +39,7 @@ define([
             this.listenTo(this.model,   'show:search', 	    this.show);
             this.listenTo(this.model,   'search:results',   this.foundResults);
             this.listenTo(this.model,   'change:search', 	this.render);
-            this.listenTo(this.model,   'show:playlist show:rooms track:play', this.hide);
+            this.listenTo(this.model,   'show:playlist show:rooms track:play show:home', this.hide);
         },
 
 

@@ -39,6 +39,19 @@ define([
             this.syncFromLocal();
         },
 
+        /**
+         * triggerAndEmit
+         *
+         * triggers and socket.emits the same event with the same data
+         */
+        triggerAndEmit: function (evt, data) {
+
+            var socket = this.get('socket');
+
+            socket.emit(evt, data);
+            this.trigger(evt, data);
+        },
+
         isReady: function () {
 
             var ready = (

@@ -12,6 +12,7 @@ define([
     return Backbone.View.extend({
 
     	events: {
+            'click h1.home':       'home',
     		'click a.playlist':   'playlist',
     		'click a.search':     'search',
             'click a.rooms':      'rooms'
@@ -47,6 +48,11 @@ define([
         toggleDisabled: function () {
 
             this.render();
+        },
+
+
+        home: function() {
+            this.model.trigger('show:home');
         },
 
 

@@ -414,7 +414,7 @@ form input[type="password"] {
   border: 1px solid #fff;
   outline: none;
   margin: 7px 0px 15px 0px;
-  font-size: 1.2em;
+  font-size: 0.9em;
 }
 /* line 401, ../sass/app.scss */
 form input[type="textfield"].error,

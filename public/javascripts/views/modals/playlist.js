@@ -34,9 +34,10 @@ define([
             this.activeRoom;
             this.hidden = true;
 
-            this.listenTo(this.model, 'show:playlist',          this.show);
-            this.listenTo(this.model, 'show:rooms show:search', this.hide);
-            this.listenTo(this.model, 'rooms:updated',          this.render);
+            this.listenTo(this.model, 'show:playlist',                      this.show);
+            this.listenTo(this.model, 'show:rooms show:search show:home',   this.hide);
+            this.listenTo(this.model, 'rooms:updated playlist:updated',     this.render);
+            this.listenTo(this.model, 'track:play',                         this.addToList);
         },
 
         /**
@@ -52,6 +53,18 @@ define([
                 .html(template({model: this.model.toJSON(), room: playlist}));
 
             $('#container').append(this.$el);
+        },
+
+
+        addToList: function (track) {
+
+            // grab the active room and get the playlist
+            var playlist = this.model.get('rooms').findWhere({selected: true});
+
+            if (playlist) {
+                playlist.add(track);
+                this.render();
+            }
         },
 
 

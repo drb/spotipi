@@ -45,20 +45,18 @@ define([
                 socket  = this.model.get('socket'),
                 tag     = this.options.tag;
 
-            console.log(tag);
-
             switch (action) {
                 case 'play-track':
-                    socket.emit('track:play', tag);
+                    this.model.triggerAndEmit('track:play', tag);
                     break;
                 case 'queue-track':
-                    socket.emit('track:queue', tag);
+                    this.model.triggerAndEmit('track:queue', tag);
                     break;
                 case 'play-album':
-                    socket.emit('album:play', tag);
+                    this.model.triggerAndEmit('album:play', tag);
                     break;
                 case 'replace-playlist':
-                    socket.emit('album:queue', tag);
+                    this.model.triggerAndEmit('album:queue', tag);
                     break;
             }
 

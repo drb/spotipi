@@ -23,7 +23,8 @@ define([
         events: {
             'click .room-add':              'addRoom',
             'click .room-remove':           'removeRoom',
-            'click section.now-playing':    'selectRoom'
+            'click section.now-playing':    'selectRoom',
+            'click .room-edit':             'editRoom'
         },
 
 
@@ -34,12 +35,27 @@ define([
 
     		this.model = config.model;
 
-            this.listenTo(this.model, 'change:connected',           this.render);
-            this.listenTo(this.model, 'show:rooms',                 this.show);
-            this.listenTo(this.model, 'show:playlist show:search',  this.hide);
+            this.listenTo(this.model, 'change:connected',                       this.render);
+            this.listenTo(this.model, 'show:rooms',                             this.show);
+            this.listenTo(this.model, 'show:playlist show:search show:home',    this.hide);
 
             this.listenTo(this.model.get('rooms'), 'add remove reset', this.render);
     	},
+
+
+        editRoom: function (el) {
+
+            var name    = el.currentTarget.parentNode.getAttribute('data-name'),
+                id      = el.currentTarget.parentNode.getAttribute('data-id'),
+                newName = prompt('What do you want to call your room/zone?', name);
+
+            if (newName) {
+
+                this.model
+                    .get('socket')
+                    .emit('room:edit', {id: id, name: newName});
+            } 
+        },
 
 
         /**
@@ -88,7 +104,7 @@ define([
                 //
                 this.model
                     .syncToLocal()
-                    .trigger('rooms:updated')
+                    .trigger('rooms:updated');
 
                 this.hide();
             }

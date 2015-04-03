@@ -396,7 +396,7 @@ form {
 		border:1px solid #fff;;
 		outline: none;
 		margin: 7px 0px 15px 0px;
-		font-size: 1.2em;
+		font-size: 0.9em;
 
 		&.error {
 			@include placeholderText($error-red);

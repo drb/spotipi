@@ -143,7 +143,7 @@ var spotipi = (function(){
 
 		var credentials;
 
-		databases.auth.findOne({tag: service}, function(err, credentials) {
+		databases.auth.findOne({ tag: service }, function(err, credentials) {
 
 			if (err) {
 				callback(err);
@@ -204,6 +204,24 @@ var spotipi = (function(){
 			sendZones();
 		});
 	}
+
+
+
+	/**
+	 * zoneEdit
+	 *
+	 * edit a configured zone
+	 **/
+	function zoneEdit (zoneData) {
+
+		var _id 	= zoneData.id,
+			name 	= zoneData.name;
+
+		databases.zones.update({_id: _id}, {name: name}, function (err) {
+			sendZones();
+		});
+	}
+
 
 
 	/**
@@ -315,6 +333,11 @@ var spotipi = (function(){
 	}
 
 
+	/**
+	 * playTrack
+	 *
+	 * ewfkjbwfekjbwefkj
+	 **/
 	function playTrack(uri) {
 
 		console.log("playing track", uri);
@@ -329,6 +352,8 @@ var spotipi = (function(){
 			getMediaStream();
 		}
 	}
+
+
 
 
 	function stopTrack() {
@@ -350,6 +375,7 @@ var spotipi = (function(){
 			'account:add': 		accountAdd,
 			'room:add': 		zoneAdd,
 			'room:remove': 		zoneRemove,
+			'room:edit': 		zoneEdit,
 			'search:generic': 	searchGeneric,
 			'search:spotify': 	searchGeneric,
 			'track:play': 		playTrack,
@@ -357,8 +383,6 @@ var spotipi = (function(){
 		};
 
 		socket = sock;
-
-		// console.log('A new client connected', socket.id);
 
 		// setup socket event listeners
 		for (var route in routes) {
@@ -383,19 +407,15 @@ var spotipi = (function(){
 		});
 	}
 
-
+	// only expose these methods
 	return {
 		start: 		start,
 		showError: 	showError
 	};
-
 })();
 
 // start the app
 spotipi.start();
-
-var foo;
-var ass;
 
 // catch errors outside of the application
 process.on('uncaughtException', function(err) {

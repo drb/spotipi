@@ -72,12 +72,12 @@ define([
             });
 
             // sets the redirect url
-            socket.on('config:init', function(config){
+            socket.on('config:init', function(config) {
                 self.model.set(config);
             });
 
             //
-            socket.on('error:generic', function (error){
+            socket.on('error:generic', function (error) {
                 var alert = self.subViews.alert;
                 self.model.trigger('show:error');
                 alert.showError(error);
@@ -130,7 +130,7 @@ define([
 
                 // alerts
                 alert:      new ErrorMessage(constr)
- 			}
+ 			};
 
 			// attach each subview
 			_.each(this.subViews, function(subView) {

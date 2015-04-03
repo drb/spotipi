@@ -10,14 +10,13 @@
 	<link rel="stylesheet" href="/css/app.css"></head>
 	
 	<link href='http://fonts.googleapis.com/css?family=Nunito:300' rel='stylesheet' type='text/css'>
-	<!-- <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700' rel='stylesheet' type='text/css'> -->
 
 	<!-- application code -->
 	<script src="/javascripts/library/require.js"></script>
 	<script src="/javascripts/main.js"></script>
 
 	<script type="x-template" id="tpl-header">
-		<h1>Spoti<span>Pi</span></h1>
+		<h1 class="home">Spoti<span>Pi</span></h1>
 		<a class="rooms">ROOMS <span>&#x25bc;</span></a>
 		<a class="search icon-search {{#unless isReady}}disabled{{/unless}}"></a>
 		<a class="playlist icon-menu {{#unless isReady}}disabled{{/unless}}"></a>
@@ -26,7 +25,7 @@
 	<script type="x-template" id="tpl-login">
 		<form id="form-user-login" method="post">
 			<fieldset>
-				<p>Please supply your Spotify username and password (these are encrypted and not stored in plain text).</p>
+				<p>Please supply your Spotify username and password.</p>
 				<p class="sub">App-specific passwords will be supported in later versions.</p>
 				<label for="username">
 					<input type="textfield" name="username" id="username" placeholder="Spotify Username" />
@@ -145,8 +144,8 @@
 		<p>Rooms ({{rooms.length}})</p>
 		<ul>
 			{{#each rooms}}
-				<li data-id="{{_id}}">
-					<label>Room:</label> {{name}} 
+				<li data-id="{{_id}}" data-name="{{name}}">
+					<label class="room-edit">{{name}}</label>
 					<span class="room-remove icon-cancel-circle"></span> 
 					<span class="playing {{#if playing}}icon-pause2{{/if}}{{^if playing}}icon-play2{{/if}}"></span>
 					<section class="now-playing {{^if playing}}paused{{/if}}" style="background-image:url('{{track.artwork}}');">

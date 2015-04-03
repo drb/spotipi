@@ -101,8 +101,11 @@ define([
             });
 
             socket.on('track:play', function(track) {
-                console.log(track);
-                self.model.set('track', track);
+                self.model.set({'track': track, 'playing': true});
+            });
+
+            socket.on('track:stop', function() {
+                self.model.set('playing', false);
             });
 
 			// default constructor for sub views

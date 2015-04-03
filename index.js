@@ -1,11 +1,12 @@
 /**
- * 
- * 
- * 
+ * SpotiPi
+ *
+ * Start script with `node index.js` and connect to the service
+ * with a device, pointing to the IP and port displayed when the 
+ * service comes up.
  **/
 var spotipi = (function(){
 
-	//
 	var port    	= 3000,
 		express 	= require('express'),
 		app 		= express(),
@@ -29,7 +30,8 @@ var spotipi = (function(){
 
 		speakerOutput = null,
 		nowPlaying = {
-			uri: false
+			uri: false,
+			track: false
 		};
 
 
@@ -70,6 +72,8 @@ var spotipi = (function(){
 			return;
 		}
 
+		var self = this;
+
 		speakerOutput = new Speaker({
 			channels: 	2,
 			bitDepth: 	16,
@@ -77,15 +81,18 @@ var spotipi = (function(){
 		});
 
 		speakerOutput.on('flush', function() {
-			console.log("flushing...");
+			// console.log("flushing...");
 		});
 
 		speakerOutput.on('close', function() {
-			console.log("closed...");
+			// console.log("closed...");
+
 			// send track back to client
-			socket.emit("track:stop");
+			io.emit("track:stop");
+
 			// kill the speaker instance
 			speakerOutput = null;
+
 			// start the next track, if there is one
 			getMediaStream();
 		});
@@ -103,6 +110,20 @@ var spotipi = (function(){
 		databases.zones.find({}, function(err, rooms) {
 			io.emit('rooms:updated', rooms);	
 		});
+	}
+
+
+
+	/**
+	 * sendNowPlaying
+	 *
+	 * returns the track that is curently playing for any newly connected sockets
+	 **/
+	function sendNowPlaying () {
+
+		if (nowPlaying.track) {
+			socket.emit('track:play', nowPlaying.track);
+		}
 	}
 
 
@@ -166,10 +187,8 @@ var spotipi = (function(){
 	 **/
 	function accountAdd (auth) {
 
-		var encrypted = auth;
-
 		// update or insert new account
-		databases.auth.update({ tag: 'spotify' }, { auth: encrypted, tag: 'spotify' }, { upsert: true }, function (err, doc) {
+		databases.auth.update({ tag: 'spotify' }, { auth: auth, tag: 'spotify' }, { upsert: true }, function (err, doc) {
 
 			if (err) {
 				showError('Failed to add Spotify details.', {});
@@ -227,7 +246,7 @@ var spotipi = (function(){
 	/**
 	 * searchGeneric
 	 *
-	 * searches artists, tracks and playlists with the supplied search term
+	 * searches artists, tracks and playlists with the supplied search term and limit
 	 **/
 	function searchGeneric (searchObj) {
 
@@ -242,7 +261,7 @@ var spotipi = (function(){
 				qs: {
 					q: 		searchObj.term,
 					limit: 	searchObj.limit,
-					type: 	false,
+					type: 	null,
 					offset: 0
 				}
 			},
@@ -253,20 +272,24 @@ var spotipi = (function(){
 				playlist: 	[]
 			};
 
+		// loop through the search types
 		types.forEach(function(type){
 
 			// set lookup type
 			lookup.qs.type = type;
 
-			// do lookups
+			// do api lookups
 			request(lookup, function(err, response, body) {
 
 				requests++;
+
+				console.log("got %s results for %s", type, searchObj.term);
 
 				if (!err) {
 					results[type] = body[type + 's'].items;
 				}
 
+				// have all requests completed? doesn't matter if they errored
 				if (requests === types.length) {
 					try {
 						socket.emit('search:results', results);	
@@ -289,11 +312,16 @@ var spotipi = (function(){
 
 		var uri = nowPlaying.uri;
 
+		if (!uri) {
+			io.emit('track:stop');
+			return;
+		}
+
 		getAuthByService('spotify', function(err, credentials) {
 
 			setupSpeaker();
 
-			spotify.login(credentials.username, credentials.password, function (err, instance) {
+			Spotify.login(credentials.username, credentials.password, function (err, instance) {
 
 				if (err) {
 					//
@@ -316,7 +344,10 @@ var spotipi = (function(){
 							}
 
 							// send track back to client
-							socket.emit("track:play", track);
+							io.emit("track:play", track);
+
+							// reference to playing track
+							nowPlaying.track = track;
 
 							// play() returns a readable stream of MP3 audio data
 							track.play()
@@ -336,7 +367,7 @@ var spotipi = (function(){
 	/**
 	 * playTrack
 	 *
-	 * ewfkjbwfekjbwefkj
+	 * attempt to play the requested track
 	 **/
 	function playTrack(uri) {
 
@@ -355,12 +386,17 @@ var spotipi = (function(){
 
 
 
-
+	/**
+	 * stopTrack
+	 *
+	 * attempt to stop the track
+	 **/
 	function stopTrack() {
 
 		console.log("stopping track...");
 
 		nowPlaying.uri = false;
+		nowPlaying.track = false;
 
 		if (speakerOutput) {
 			speakerOutput.end();
@@ -368,7 +404,12 @@ var spotipi = (function(){
 	}
 
 	
-
+	/**
+	 * connection
+	 *
+	 * fired when a new socket connects - all events that can be listened to are set in the
+	 * routes object next to their callback
+	 **/
 	function connection (sock) {
 
 		var routes = {
@@ -397,6 +438,7 @@ var spotipi = (function(){
 			if (!err && credentials) {
 				// send rooms initially
 				sendZones();
+				sendNowPlaying();
 			} else {
 				// modal links through to login page
 				showError("Application has no credentials. Click OK to setup your Spotify account.", {
@@ -419,6 +461,6 @@ spotipi.start();
 
 // catch errors outside of the application
 process.on('uncaughtException', function(err) {
-	console.error("uncaught", err);
+	console.log(err);
 	spotipi.showError(err.toString());
 });

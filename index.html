@@ -97,13 +97,13 @@
 				<li>
 					<a class="artist" href="javascript:void(0);" data-uri="{{uri}}">
 						{{name}}
-						<img src="{{images.3.url}}" />
+						{{#if images.2.url}}<img src="{{images.2.url}}" />{{/if}}
 					</a>
 				</li>
 			{{/each}}
 
 
-			<!-- albums -->
+			<!-- albums
 			<li class="result-album subtitle icon-circle-down{{#unless albums.length}} disabled{{/unless}}">Albums {{#if albums.length}}({{albums.length}}){{/if}}</li>
 			{{#each albums}}
 				<li>
@@ -112,7 +112,7 @@
 						<img src="https://d3rt1990lpmkn.cloudfront.net/cover/{{cover-small}}" />
 					</a>
 				</li>
-			{{/each}}
+			{{/each}} -->
 
 
 			<!-- tracks -->
@@ -147,7 +147,7 @@
 				<li data-id="{{_id}}" data-name="{{name}}">
 					<label class="room-edit">{{name}}</label>
 					<span class="room-remove icon-cancel-circle"></span> 
-					<span class="playing {{#if playing}}icon-pause2{{/if}}{{^if playing}}icon-play2{{/if}}"></span>
+					<!--<span class="playing {{#if playing}}icon-pause2{{/if}}{{^if playing}}icon-play2{{/if}}"></span>-->
 					<section class="now-playing {{^if playing}}paused{{/if}}" style="background-image:url('{{track.artwork}}');">
 						{{#if playlist.length}}
 							<p>{{track.artist}}</p>

@@ -62,7 +62,7 @@ define([
             var playlist = this.model.get('rooms').findWhere({selected: true});
 
             if (playlist) {
-                playlist.add(track);
+                playlist.get('playlist').add(track);
                 this.render();
             }
         },

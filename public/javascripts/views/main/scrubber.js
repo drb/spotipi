@@ -62,11 +62,11 @@ define([
 
             var playing = this.model.get('playing');
 
-            if (playing) {
-                this.$el.removeClass('hidden');
-            } else {
-                this.$el.addClass('hidden');
-            }
+            // if (playing) {
+            //     this.$el.removeClass('hidden');
+            // } else {
+            //     this.$el.addClass('hidden');
+            // }
         }
 
     });

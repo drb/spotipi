@@ -300,12 +300,15 @@ ul {
 				&:after {
 					float: right;
 					content: "No results";
-					padding-right:22px;
+					padding-right:23px;
 					opacity: 0.7;
 				}
 				&.subtitle:before{
 					display:none;
 				}
+			}
+			&:last-child {
+				border-bottom: none;
 			}
 			a {
 				display: block;

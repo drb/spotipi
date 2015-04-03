@@ -28,7 +28,10 @@ var spotipi = (function(){
 		socket,
 		stream,
 
-		speakerOutput = null,
+		// speaker instance
+		speakerOutput,
+
+		// local cache of the track playing now
 		nowPlaying = {
 			uri: false,
 			track: false
@@ -42,21 +45,27 @@ var spotipi = (function(){
 	 **/
 	function start () {
 
-		databases.zones = new Datastore({ filename: 'db/zones', autoload: true }),
-		databases.auth 	= new Datastore({ filename: 'db/auth', 	autoload: true }),
+		// setup databases 
+		databases.zones 	= new Datastore({ filename: 'db/zones', 	autoload: true }),
+		databases.auth 		= new Datastore({ filename: 'db/auth', 		autoload: true }),
+		databases.playlists = new Datastore({ filename: 'db/playlists', autoload: true }),
 
+		// sets the public directory so we can load the scripts
 		app.use(express.static(path.join(__dirname, 'public')));
 
+		// single route
 		app.get('/', function (req, res) {
 			res.sendFile(__dirname + '/index.html');
 		});
 
 		server.listen(port);
 
+		// when a ne client connects, set up the connection listeners
 		io.on('connection', connection);
 
+		// attempts to output an ip address clients can connect to
 		require('dns').lookup(require('os').hostname(), function (err, add, fam) {
-			console.log('Point a browser to http://' + add + ':' + port);
+			console.log('Point a browser at http://' + add + ':' + port);
 		});
 	}
 
@@ -99,16 +108,28 @@ var spotipi = (function(){
 	}
 
 
-	/**
-	 * sendZones
-	 *
-	 * returns the configured zones
-	 **/
+	
 	function sendZones () {
 
-		// all clients get alerted
+		// all clients get sent updated rooms
 		databases.zones.find({}, function(err, rooms) {
-			io.emit('rooms:updated', rooms);	
+			io.emit('rooms:updated', rooms);
+		});
+
+		
+	}
+
+
+	/**
+	 * sendPlaylists
+	 *
+	 * returns the playlists in bulk
+	 **/
+	function sendPlaylists () {
+
+		// all clients get sent updated playlists
+		databases.playlists.find({}, function(err, playlists) {
+			io.emit('playlists:updated', playlists);
 		});
 	}
 
@@ -438,7 +459,10 @@ var spotipi = (function(){
 			if (!err && credentials) {
 				// send rooms initially
 				sendZones();
+				// send the track playing now, if any
 				sendNowPlaying();
+				// send the playlists
+				sendPlaylists();
 			} else {
 				// modal links through to login page
 				showError("Application has no credentials. Click OK to setup your Spotify account.", {

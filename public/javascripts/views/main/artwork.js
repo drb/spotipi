@@ -37,7 +37,7 @@ define([
             
             if (connected && this.model.get('track')) {
                 this.$el.removeClass('disabled');
-                this.$el.css({
+                this.$el.find('.cover').css({
                     'background-image': 'url("' + this.model.getArtNowPlaying().uri + '")'
                 });
             } else {

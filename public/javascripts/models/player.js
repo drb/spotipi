@@ -17,9 +17,6 @@ define([
         	// actual socket connection to server
         	socket: null,
 
-        	// is track playing?
-        	playing: false,
-
             // shuffle mode on?
             shuffle: false,
 
@@ -96,6 +93,22 @@ define([
             }, this);
             
             return this;
+        },
+
+
+        updatePlaylist: function (data) {
+
+            var zoneId      = data.zoneId,
+                items       = data.items,
+                playlist    = this.rooms.get(zoneId)
+                                        .get('playlist');
+
+            if (playlist) {
+                playlist.reset();
+                playlist.add(items);
+
+                this.emit('rooms:updated');
+            }
         }
     });
 });

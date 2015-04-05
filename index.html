@@ -4,7 +4,7 @@
 	<title>SpotiPi - Rasberry Pi Spotify/S_NOS Emulator</title>
 
 	<meta name="apple-mobile-web-app-capable" content="yes" />
-	<meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1, user-scalable=no," />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, minimal-ui" />
 
 	<link rel="stylesheet" href="/css/icons.css"></head>
 	<link rel="stylesheet" href="/css/app.css"></head>
@@ -28,7 +28,7 @@
 				<p>Please supply your Spotify username and password.</p>
 				<p class="sub">App-specific passwords will be supported in later versions.</p>
 				<label for="username">
-					<input type="textfield" name="username" id="username" placeholder="Spotify Username" />
+					<input type="text" name="username" id="username" placeholder="Spotify Username" />
 				</label>
 				<label for="password">
 					<input type="password" name="password" id="password" placeholder="Spotify Password" />
@@ -43,7 +43,12 @@
 	<script type="x-template" id="tpl-artwork">
 		<h2>{{model.track.artist.0.name}}</h2>
 		<h3>{{model.track.name}}</h3>
-		<span class="icon-spotify"></span>
+		{{^if model.track}}
+			<span class="icon-spotify"></span>
+		{{/if}}
+		{{#if model.track}}
+			<div class="cover" data-artwork="{{model.track.album.cover.0.uri}}"></div>
+		{{/if}}
 	</script>
 
 	<script type="x-template" id="tpl-scrubber">
@@ -51,11 +56,11 @@
 	</script>	
 
 	<script type="x-template" id="tpl-controls">
-		<li><a class="previous icon-previous" href="#"></a></li>
+		<li><a class="previous icon-previous disabled" href="#"></a></li>
 		<li class="middle">
-			<a class="play {{^playing}}icon-play{{/playing}}{{#playing}}icon-stop{{/playing}}" href="#"></a>
+			<a class="play {{^track}}icon-play{{/track}}{{#track}}icon-stop{{/track}}" href="#"></a>
 		</li>
-		<li><a class="next icon-next" href="#"></a></li>
+		<li><a class="next icon-next disabled" href="#"></a></li>
 	</script>	
 
 	<script type="x-template" id="tpl-playlist">
@@ -81,13 +86,13 @@
 
 	<script type="x-template" id="tpl-search">
 		<form>
-			<label>
+			<fieldset>
 				<input 	id="master-search" 
-						type="textfield" 
+						type="text" 
 						autocomplete="off" 
 						placeholder="Search term or Spotify URI" 
 						value="{{searchTerm}}" />
-			</label>
+			</fieldset>
 		</form>
 		<ul class="scrollable">
 

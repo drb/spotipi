@@ -18,6 +18,9 @@ define([
     	},
 
     	/**
+         * show
+         *
+         * show the modal - scrolls content back to top
          */
         show: function (trigger) {
 
@@ -28,6 +31,8 @@ define([
             }
 
             this.hidden = !this.hidden;
+
+            $(this.$el).animate({ scrollTop: 0 }, "fast");
         },
 
 

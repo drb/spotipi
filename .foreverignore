@@ -2,3 +2,8 @@ db/*
 db/
 *.json
 *.xml
+*.scss
+*.css
+*.scssc
+.sass-cache/
+.sass-cache/*

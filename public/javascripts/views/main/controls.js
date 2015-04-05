@@ -24,7 +24,6 @@ define([
     		this.model = options.model;
             
             this.listenTo(this.model, 'change:track',       this.render);
-            this.listenTo(this.model, 'change:playing',     this.render);
             this.listenTo(this.model, 'change:connected',   this.render);
             this.listenTo(this.model, 'rooms:updated',      this.render);
     	},
@@ -54,14 +53,9 @@ define([
                 return;
             }
 
-            if (this.model.get('track')) {
+            if (this.model.get('track') !== false) {
                 message = 'stop';
-                this.model.set({'track': false});
             }
-
-            this.model.set({
-                'playing': !this.model.get('playing')
-            });
 
             // track:play or track:stop
             this.model

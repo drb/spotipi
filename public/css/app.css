@@ -2,15 +2,6 @@
 /**
  * Styles the placeholder text colour using vendor prefixes
  **/
-/* line 33, ../sass/app.scss */
-* {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -o-user-select: none;
-  user-select: none;
-}
-
 /* line 41, ../sass/app.scss */
 a, button {
   cursor: pointer;
@@ -189,39 +180,55 @@ button.disabled span {
 /* line 196, ../sass/app.scss */
 #artwork h2,
 #artwork h3 {
-  margin: 10px 10px 0px 10px;
+  margin: 0px 0px 0px 0px;
   padding: 8px;
-  display: table;
   color: #fff;
 }
-/* line 203, ../sass/app.scss */
+/* line 204, ../sass/app.scss */
 #artwork h2 {
-  font-size: 35px;
-  background-color: #84bd00;
-}
-/* line 208, ../sass/app.scss */
-#artwork h3 {
-  clear: both;
-  font-size: 25px;
+  font-size: 28px;
+  border-top: 3px solid #84bd00;
   background-color: rgba(0, 0, 0, 0.75);
+}
+/* line 211, ../sass/app.scss */
+#artwork h3 {
+  border-top: 1px solid #333;
+  border-bottom: 2px solid #fff;
+  clear: both;
+  font-size: 21px;
+  background-color: rgba(0, 0, 0, 0.65);
   margin-top: 0px;
   font-weight: 200;
   font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-/* line 217, ../sass/app.scss */
+/* line 225, ../sass/app.scss */
 #artwork span {
   display: none;
 }
-/* line 221, ../sass/app.scss */
+/* line 229, ../sass/app.scss */
+#artwork .cover {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 10px;
+  display: block;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: contain;
+}
+/* line 240, ../sass/app.scss */
 #artwork.disabled {
   background-color: #999;
   background-image: none;
 }
-/* line 225, ../sass/app.scss */
+/* line 244, ../sass/app.scss */
 #artwork.disabled h2, #artwork.disabled h3 {
   display: none;
 }
-/* line 229, ../sass/app.scss */
+/* line 248, ../sass/app.scss */
 #artwork.disabled span {
   position: relative;
   height: 100%;
@@ -234,7 +241,7 @@ button.disabled span {
   display: block;
   box-sizing: border-box;
 }
-/* line 241, ../sass/app.scss */
+/* line 260, ../sass/app.scss */
 #artwork.disabled span:before {
   height: auto;
   position: relative;
@@ -242,13 +249,13 @@ button.disabled span {
   transform: translateY(-25%);
 }
 
-/* line 251, ../sass/app.scss */
+/* line 270, ../sass/app.scss */
 ul {
   margin: 0px;
   padding: 0px;
 }
 
-/* line 256, ../sass/app.scss */
+/* line 275, ../sass/app.scss */
 .modal {
   position: absolute;
   top: 60px;
@@ -261,18 +268,18 @@ ul {
   overflow-y: scroll;
   overflow-x: hidden;
 }
-/* line 268, ../sass/app.scss */
+/* line 287, ../sass/app.scss */
 .modal.hidden {
   top: 100%;
 }
 
-/* line 274, ../sass/app.scss */
+/* line 293, ../sass/app.scss */
 #playlist,
 #search {
   display: block;
   text-align: center;
 }
-/* line 278, ../sass/app.scss */
+/* line 297, ../sass/app.scss */
 #playlist ul:not(.no-border) li,
 #search ul:not(.no-border) li {
   text-align: left;
@@ -283,30 +290,30 @@ ul {
   margin: 0px;
   border-bottom: 1px solid #636363;
 }
-/* line 286, ../sass/app.scss */
+/* line 305, ../sass/app.scss */
 #playlist ul:not(.no-border) li.subtitle,
 #search ul:not(.no-border) li.subtitle {
   color: #fff;
   font-weight: 400;
 }
-/* line 289, ../sass/app.scss */
+/* line 308, ../sass/app.scss */
 #playlist ul:not(.no-border) li.subtitle:not(.disabled),
 #search ul:not(.no-border) li.subtitle:not(.disabled) {
   border-bottom-color: #84bd00;
 }
-/* line 292, ../sass/app.scss */
+/* line 311, ../sass/app.scss */
 #playlist ul:not(.no-border) li.subtitle:before,
 #search ul:not(.no-border) li.subtitle:before {
   display: inline-block;
   position: absolute;
   right: 12px;
 }
-/* line 298, ../sass/app.scss */
+/* line 317, ../sass/app.scss */
 #playlist ul:not(.no-border) li.disabled,
 #search ul:not(.no-border) li.disabled {
   color: #666;
 }
-/* line 300, ../sass/app.scss */
+/* line 319, ../sass/app.scss */
 #playlist ul:not(.no-border) li.disabled:after,
 #search ul:not(.no-border) li.disabled:after {
   float: right;
@@ -314,17 +321,17 @@ ul {
   padding-right: 23px;
   opacity: 0.7;
 }
-/* line 306, ../sass/app.scss */
+/* line 325, ../sass/app.scss */
 #playlist ul:not(.no-border) li.disabled.subtitle:before,
 #search ul:not(.no-border) li.disabled.subtitle:before {
   display: none;
 }
-/* line 310, ../sass/app.scss */
+/* line 329, ../sass/app.scss */
 #playlist ul:not(.no-border) li:last-child,
 #search ul:not(.no-border) li:last-child {
   border-bottom: none;
 }
-/* line 313, ../sass/app.scss */
+/* line 332, ../sass/app.scss */
 #playlist ul:not(.no-border) li a,
 #search ul:not(.no-border) li a {
   display: block;
@@ -336,7 +343,7 @@ ul {
   text-overflow: ellipsis;
   width: calc(100% - 55px);
 }
-/* line 323, ../sass/app.scss */
+/* line 342, ../sass/app.scss */
 #playlist ul:not(.no-border) li a img,
 #search ul:not(.no-border) li a img {
   position: absolute;
@@ -344,7 +351,7 @@ ul {
   height: 26px;
   width: 26px;
 }
-/* line 330, ../sass/app.scss */
+/* line 349, ../sass/app.scss */
 #playlist ul:not(.no-border) li span.explicit,
 #search ul:not(.no-border) li span.explicit {
   position: absolute;
@@ -358,7 +365,7 @@ ul {
   text-transform: uppercase;
 }
 
-/* line 346, ../sass/app.scss */
+/* line 365, ../sass/app.scss */
 #playlist div {
   text-align: left;
   box-sizing: border-box;
@@ -366,23 +373,23 @@ ul {
   padding: 0px 12px 8px 12px;
   border-bottom: 1px solid #636363;
 }
-/* line 352, ../sass/app.scss */
+/* line 371, ../sass/app.scss */
 #playlist div ul {
   display: inline-block;
   float: right;
 }
-/* line 355, ../sass/app.scss */
+/* line 374, ../sass/app.scss */
 #playlist div ul li {
   display: inline-block;
   padding: 1px 3px 1px 10px;
   font-size: 1.2em;
 }
-/* line 359, ../sass/app.scss */
+/* line 378, ../sass/app.scss */
 #playlist div ul li.active {
   color: #84bd00;
 }
 
-/* line 367, ../sass/app.scss */
+/* line 386, ../sass/app.scss */
 form {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -391,24 +398,24 @@ form {
   padding: 10px;
   border: none;
 }
-/* line 375, ../sass/app.scss */
+/* line 394, ../sass/app.scss */
 form p {
   padding: 4px 0px 4px 0px;
 }
-/* line 378, ../sass/app.scss */
+/* line 397, ../sass/app.scss */
 form p.sub {
   padding-top: 0px;
   margin-top: 0px;
   font-size: 0.8em;
   color: #636363;
 }
-/* line 386, ../sass/app.scss */
+/* line 405, ../sass/app.scss */
 form fieldset {
   border: none;
   padding: 0px;
 }
-/* line 392, ../sass/app.scss */
-form input[type="textfield"],
+/* line 411, ../sass/app.scss */
+form input[type="text"],
 form input[type="password"] {
   position: relative;
   -webkit-box-sizing: border-box;
@@ -419,36 +426,36 @@ form input[type="password"] {
   border: 1px solid #fff;
   outline: none;
   margin: 7px 0px 15px 0px;
-  font-size: 0.9em;
+  font-size: 0.80em;
 }
-/* line 404, ../sass/app.scss */
-form input[type="textfield"].error,
+/* line 431, ../sass/app.scss */
+form input[type="text"].error,
 form input[type="password"].error {
   border: 1px solid red;
   background-color: #ffdede;
 }
 /* line 19, ../sass/app.scss */
-form input[type="textfield"].error::-webkit-input-placeholder,
+form input[type="text"].error::-webkit-input-placeholder,
 form input[type="password"].error::-webkit-input-placeholder {
   color: #f80000;
 }
 /* line 22, ../sass/app.scss */
-form input[type="textfield"].error:-moz-placeholder,
+form input[type="text"].error:-moz-placeholder,
 form input[type="password"].error:-moz-placeholder {
   color: #f80000;
 }
 /* line 25, ../sass/app.scss */
-form input[type="textfield"].error::-moz-placeholder,
+form input[type="text"].error::-moz-placeholder,
 form input[type="password"].error::-moz-placeholder {
   color: #f80000;
 }
 /* line 28, ../sass/app.scss */
-form input[type="textfield"].error:-ms-input-placeholder,
+form input[type="text"].error:-ms-input-placeholder,
 form input[type="password"].error:-ms-input-placeholder {
   color: #f80000;
 }
 
-/* line 412, ../sass/app.scss */
+/* line 439, ../sass/app.scss */
 ul.controls {
   left: 0px;
   position: absolute;
@@ -458,18 +465,18 @@ ul.controls {
   background-color: #000;
   width: 100%;
 }
-/* line 421, ../sass/app.scss */
+/* line 448, ../sass/app.scss */
 ul.controls li {
   display: inline-block;
   text-align: center;
   width: 25%;
   float: left;
 }
-/* line 426, ../sass/app.scss */
+/* line 453, ../sass/app.scss */
 ul.controls li.middle {
   width: 50%;
 }
-/* line 430, ../sass/app.scss */
+/* line 457, ../sass/app.scss */
 ul.controls li a {
   color: #fff;
   text-decoration: none;
@@ -478,21 +485,25 @@ ul.controls li a {
   height: 55px;
   font-size: 27px;
 }
-/* line 440, ../sass/app.scss */
+/* line 464, ../sass/app.scss */
+ul.controls li a.disabled {
+  opacity: 0.3;
+}
+/* line 470, ../sass/app.scss */
 ul.controls li .stop,
 ul.controls li .play {
   color: #fff;
 }
-/* line 446, ../sass/app.scss */
+/* line 476, ../sass/app.scss */
 ul.controls.disabled li {
   opacity: 0.3;
 }
-/* line 448, ../sass/app.scss */
+/* line 478, ../sass/app.scss */
 ul.controls.disabled li a {
   cursor: not-allowed;
 }
 
-/* line 456, ../sass/app.scss */
+/* line 486, ../sass/app.scss */
 .floater {
   position: absolute;
   width: 100%;
@@ -507,24 +518,24 @@ ul.controls.disabled li a {
   padding: 13px;
   border-top: 2px solid #84bd00;
 }
-/* line 470, ../sass/app.scss */
+/* line 500, ../sass/app.scss */
 .floater.active {
   top: 50%;
 }
-/* line 473, ../sass/app.scss */
+/* line 503, ../sass/app.scss */
 .floater.active.btn0 {
   top: 100%;
 }
-/* line 477, ../sass/app.scss */
+/* line 507, ../sass/app.scss */
 .floater.active.btn1 {
   top: 80%;
 }
-/* line 481, ../sass/app.scss */
+/* line 511, ../sass/app.scss */
 .floater.active.btn2 {
   top: auto;
   bottom: 0px;
 }
-/* line 487, ../sass/app.scss */
+/* line 517, ../sass/app.scss */
 .floater span.close {
   display: inline-block;
   position: absolute;
@@ -532,12 +543,12 @@ ul.controls.disabled li a {
   color: #333;
   font-size: 18pt;
 }
-/* line 495, ../sass/app.scss */
+/* line 525, ../sass/app.scss */
 .floater ul {
   padding: 0px;
   margin: 37px 0px 10px 0px;
 }
-/* line 499, ../sass/app.scss */
+/* line 529, ../sass/app.scss */
 .floater ul li {
   box-sizing: border-box;
   list-style-type: none;
@@ -551,18 +562,18 @@ ul.controls.disabled li a {
   border-radius: 24px;
   text-align: center;
 }
-/* line 511, ../sass/app.scss */
+/* line 541, ../sass/app.scss */
 .floater ul li:last-child {
   margin-bottom: 0px;
 }
-/* line 515, ../sass/app.scss */
+/* line 545, ../sass/app.scss */
 .floater ul li a {
   text-transform: uppercase;
   color: inherit;
   padding: 0px;
 }
 
-/* line 524, ../sass/app.scss */
+/* line 554, ../sass/app.scss */
 input {
   position: relative;
   padding: 10px;
@@ -570,7 +581,7 @@ input {
   display: block;
 }
 
-/* line 531, ../sass/app.scss */
+/* line 561, ../sass/app.scss */
 #scrubber {
   position: absolute;
   width: 100%;
@@ -579,7 +590,7 @@ input {
   background-color: rgba(0, 0, 0, 0.65);
   transition: opacity 0.2s linear;
 }
-/* line 539, ../sass/app.scss */
+/* line 569, ../sass/app.scss */
 #scrubber span {
   position: relative;
   margin: 13px;
@@ -589,7 +600,7 @@ input {
   background-color: rgba(255, 255, 255, 0.8);
   box-shadow: inset -1px -1px 2px 0px rgba(0, 0, 0, 0.3);
 }
-/* line 548, ../sass/app.scss */
+/* line 578, ../sass/app.scss */
 #scrubber span:before {
   content: "";
   display: inline-block;
@@ -602,67 +613,67 @@ input {
   border-radius: 10px;
   transition: right 0.1s ease-in-out;
 }
-/* line 561, ../sass/app.scss */
+/* line 591, ../sass/app.scss */
 #scrubber span.progress0:before {
   left: -5px;
   right: auto;
 }
-/* line 566, ../sass/app.scss */
+/* line 596, ../sass/app.scss */
 #scrubber span.progress100:before {
   left: auto;
   right: 0%;
 }
-/* line 572, ../sass/app.scss */
+/* line 602, ../sass/app.scss */
 #scrubber span.progress10:before {
   left: auto;
   right: calc(90% - 10px);
 }
-/* line 572, ../sass/app.scss */
+/* line 602, ../sass/app.scss */
 #scrubber span.progress20:before {
   left: auto;
   right: calc(80% - 10px);
 }
-/* line 572, ../sass/app.scss */
+/* line 602, ../sass/app.scss */
 #scrubber span.progress30:before {
   left: auto;
   right: calc(70% - 10px);
 }
-/* line 572, ../sass/app.scss */
+/* line 602, ../sass/app.scss */
 #scrubber span.progress40:before {
   left: auto;
   right: calc(60% - 10px);
 }
-/* line 572, ../sass/app.scss */
+/* line 602, ../sass/app.scss */
 #scrubber span.progress50:before {
   left: auto;
   right: calc(50% - 10px);
 }
-/* line 572, ../sass/app.scss */
+/* line 602, ../sass/app.scss */
 #scrubber span.progress60:before {
   left: auto;
   right: calc(40% - 10px);
 }
-/* line 572, ../sass/app.scss */
+/* line 602, ../sass/app.scss */
 #scrubber span.progress70:before {
   left: auto;
   right: calc(30% - 10px);
 }
-/* line 572, ../sass/app.scss */
+/* line 602, ../sass/app.scss */
 #scrubber span.progress80:before {
   left: auto;
   right: calc(20% - 10px);
 }
-/* line 572, ../sass/app.scss */
+/* line 602, ../sass/app.scss */
 #scrubber span.progress90:before {
   left: auto;
   right: calc(10% - 10px);
 }
-/* line 579, ../sass/app.scss */
+/* line 609, ../sass/app.scss */
 #scrubber.hidden {
   opacity: 0;
 }
 
-/* line 585, ../sass/app.scss */
+/* line 615, ../sass/app.scss */
 .alert {
   display: block;
   position: absolute;
@@ -673,7 +684,7 @@ input {
   top: 0px;
   left: 0px;
 }
-/* line 596, ../sass/app.scss */
+/* line 626, ../sass/app.scss */
 .alert .alert-controls {
   box-sizing: border-box;
   position: absolute;
@@ -688,29 +699,29 @@ input {
   border: 1px solid #4d4d4d;
   border-top: 4px solid #84bd00;
 }
-/* line 610, ../sass/app.scss */
+/* line 640, ../sass/app.scss */
 .error .alert .alert-controls {
   border-top-color: #780000;
 }
-/* line 614, ../sass/app.scss */
+/* line 644, ../sass/app.scss */
 .alert .alert-controls span {
   float: right;
   margin: 10px -10px;
   font-size: 17pt;
 }
-/* line 620, ../sass/app.scss */
+/* line 650, ../sass/app.scss */
 .alert .alert-controls p {
   padding-bottom: 5px;
   text-shadow: none;
   color: #fff;
 }
-/* line 626, ../sass/app.scss */
+/* line 656, ../sass/app.scss */
 .alert .alert-controls button {
   display: block;
   margin: 10px auto 10px auto;
   width: 100%;
 }
-/* line 634, ../sass/app.scss */
+/* line 664, ../sass/app.scss */
 .alert.error .alert-controls {
   border-top-color: #de0000;
 }

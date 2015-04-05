@@ -21,7 +21,7 @@ define([
             // default name for the zone
             name:       'Unknown Zone',
 
-            // seleced (this is a ui feature)
+            // selected (this is a ui feature)
             selected:   true, 
 
             // the playlist associated with the room

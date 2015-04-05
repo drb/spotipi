@@ -105,7 +105,11 @@ define([
             });
 
             socket.on('track:stop', function() {
-                self.model.set('playing', false);
+                self.model.set('track', false, 'playing', false);
+            });
+
+            socket.on('playlist:updated', function(playlists) {
+                self.model.trigger('playlist:updated', playlists);
             });
 
 			// default constructor for sub views

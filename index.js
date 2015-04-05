@@ -31,12 +31,136 @@ var spotipi = (function(){
 		// speaker instance
 		speakerOutput,
 
+		// playlist manager - simple utility for managing playlists
+		playlistManager = (function(){
+
+			function getZone (zoneId, callback) {
+
+				databases.playlists
+					.find({ zone: zoneId })
+					.sort({ ts: -1 })
+					.exec(callback);
+			}
+
+
+			/**
+			 * save
+			 *
+			 * write the new playlist 
+			 */
+			function save (zoneId, playlist) {
+
+				databases
+					.playlists
+					.update(
+						{ zone: zoneId }, 
+						{ zone: zoneId, playlist: playlist }, 
+						{ upsert: true },
+						function(err, response) {
+
+						}
+					);
+			}
+
+
+			/**
+			 * getList
+			 *
+			 * get the playlist assigned to a zone
+			 */
+			function getList (zoneId, callback) {
+
+				getZone(zoneId, callback);
+			}
+
+			/**
+			 * add
+			 *
+			 * add track to playlist
+			 */
+			function add (zoneId, track, callback) {
+
+				console.log("adding", track.uri)
+
+				databases
+					.playlists
+					.update(
+						{ zone: zoneId, 'track.uri': track.uri }, 
+						{ zone: zoneId, track: track, ts: new Date().getTime() }, 
+						{ upsert: true },
+						function(err, response) {
+							emitter(zoneId);
+						}
+					);
+			}
+
+
+			/**
+			 * remove
+			 *
+			 * remove track from playlist
+			 */
+			function remove (zoneId, track, callback) {
+
+				databases
+					.playlists
+					.remove(
+						{ zone: zoneId, 'track.uri': track.uri }, 
+						{},
+						function(err, response) {
+							emitter(zoneId);
+						}
+					);
+			}
+
+
+			/**
+			 * replace
+			 *
+			 * replace playlist with track
+			 */
+			function replace (zoneId, track, callback) {
+
+				databases
+					.playlists
+					.remove(
+						{ zone: zoneId }, 
+						{},
+						function(err, response) {
+							add(zoneId, track, function(){
+								emitter(zoneId);
+							});
+						}
+					);
+			}
+
+
+			/**
+			 * emitter
+			 *
+			 * emits new playlist to all clients
+			 */
+			function emitter (zoneId) {
+
+				getZone(zoneId, function(err, response) {
+					io.emit('playlist:updated', response);
+				});
+				
+			}
+
+			return {
+				add: 		add,
+				remove: 	remove,
+				replace: 	replace,
+				getList: 	getList
+			};
+		})(),
+
 		// local cache of the track playing now
 		nowPlaying = {
 			uri: false,
 			track: false
 		};
-
 
 	/**
 	 * start
@@ -95,9 +219,6 @@ var spotipi = (function(){
 
 		speakerOutput.on('close', function() {
 			// console.log("closed...");
-
-			// send track back to client
-			io.emit("track:stop");
 
 			// kill the speaker instance
 			speakerOutput = null;
@@ -358,6 +479,10 @@ var spotipi = (function(){
 
 						} else {
 
+							track.uri = uri;
+
+							console.log('playing uri', track.uri);
+
 							try {
 								console.log('Playing: %s - %s', track.artist[0].name, track.name);	
 							} catch (e) {
@@ -370,10 +495,18 @@ var spotipi = (function(){
 							// reference to playing track
 							nowPlaying.track = track;
 
+							//
+							playlistManager.add('YCb343BnzDcSGTIw', track, function (err, playlist) {
+								console.log("added to playlist");
+							});
+
 							// play() returns a readable stream of MP3 audio data
 							track.play()
 							.pipe(new lame.Decoder())
 							.pipe(speakerOutput)
+							// .on('flush', function(){
+							// 	console.log('flushing track instance...');
+							// })
 							.on('finish', function () {
 								instance.disconnect();
 							});
@@ -414,10 +547,15 @@ var spotipi = (function(){
 	 **/
 	function stopTrack() {
 
-		console.log("stopping track...");
+		if (nowPlaying.track) {
+			console.log("stopping track...", nowPlaying.uri);
+		}
 
 		nowPlaying.uri = false;
 		nowPlaying.track = false;
+
+		// kill track on all sockets
+		io.emit('track:stop');
 
 		if (speakerOutput) {
 			speakerOutput.end();
@@ -463,6 +601,8 @@ var spotipi = (function(){
 				sendNowPlaying();
 				// send the playlists
 				sendPlaylists();
+				//
+				playTrack('spotify:track:1FTSo4v6BOZH9QxKc3MbVM');
 			} else {
 				// modal links through to login page
 				showError("Application has no credentials. Click OK to setup your Spotify account.", {

@@ -30,13 +30,13 @@ $error-red:				#780000;
     }
 }
 
-* {
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	-o-user-select: none;
-	user-select: none;
-}
+// * {
+// 	-webkit-user-select: none;
+// 	-moz-user-select: none;
+// 	-ms-user-select: none;
+// 	-o-user-select: none;
+// 	user-select: none;
+// }
 
 a, button {
 	cursor: pointer;
@@ -194,28 +194,47 @@ button {
 
 	h2, 
 	h3 {
-		margin: 10px 10px 0px 10px;
+		margin: 0px 0px 0px 0px; 
 		padding: 8px;
-		display: table;
+		// display: table;
 		color: #fff;
+
 	}
 
 	h2 {
-		font-size: 35px;
-		background-color: $spotipi-green;
+		font-size: 28px;
+		// background-color: $spotipi-green;
+		border-top: 3px solid $spotipi-green;
+		background-color: rgba(0, 0, 0, 0.75);
 		
 	}
 	h3 {
+		border-top: 1px solid #333;
+		border-bottom: 2px solid #fff;
 		clear: both;
-		font-size: 25px;
-		background-color: rgba(0, 0, 0, 0.75);
+		font-size: 21px;
+		background-color: rgba(0, 0, 0, 0.65);
 		margin-top: 0px;
 		font-weight: 200;
 		font-style: italic;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 
 	span {
 		display: none;
+	}
+
+	.cover {
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		margin: 10px;
+		display: block;
+		height: 100%;
+		background-repeat: no-repeat;
+		background-position: top center;
+		background-size: contain;
 	}
 
 	&.disabled {
@@ -388,7 +407,7 @@ form {
 		padding: 0px;
 	}
 
-	input[type="textfield"],
+	input[type="text"],
 	input[type="password"] {
 		position: relative;
 		-webkit-box-sizing: border-box;
@@ -399,7 +418,15 @@ form {
 		border:1px solid #fff;;
 		outline: none;
 		margin: 7px 0px 15px 0px;
-		font-size: 0.9em;
+		font-size: 0.80em;
+
+		// input, input:before, input:after {
+		// 	-webkit-user-select: initial;
+		// 	-khtml-user-select: initial;
+		// 	-moz-user-select: initial;
+		// 	-ms-user-select: initial;
+		// 	user-select: initial;
+		// } 
 
 		&.error {
 			@include placeholderText($error-red);
@@ -426,7 +453,7 @@ ul.controls {
 		&.middle {
 			width: 50%;
 		}
-
+		
 		a {
 			color: #fff;
 			text-decoration: none;
@@ -434,6 +461,9 @@ ul.controls {
 			width: 100%;
 			height: 55px;
 			font-size: 27px;
+			&.disabled {
+				opacity: 0.3;
+			}
 		}
 
 		.stop, 

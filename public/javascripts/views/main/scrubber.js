@@ -14,6 +14,7 @@ define([
         tagName:    'div',
         id:         'scrubber',
         className:  'hidden', 
+        updater:    null,
 
         events: {
             'mousemove span':   'setX',
@@ -25,7 +26,7 @@ define([
 
     		this.model = options.model;
             
-            this.listenTo(this.model, 'change:playing', this.toggle);
+            this.listenTo(this.model, 'change:track', this.toggle);
     	},
 
         //
@@ -54,19 +55,27 @@ define([
         },
 
         moveScrubber: function (el) {
+            
             $(el.currentTarget).removeClass().addClass('progress' + (this.model.get('scrubberPosition')));
         },
 
 
         toggle: function () {
 
-            var playing = this.model.get('playing');
+            var playing = this.model.get('track');
 
-            // if (playing) {
-            //     this.$el.removeClass('hidden');
-            // } else {
-            //     this.$el.addClass('hidden');
-            // }
+            if (playing) {
+
+                this.$el.removeClass('hidden');
+                this.updater = setInterval(this.updatePosition, 1000);
+            } else {
+
+                this.$el.addClass('hidden');
+
+                if (this.updater) {
+                    clearInterval(this.updater);
+                }
+            }
         }
 
     });

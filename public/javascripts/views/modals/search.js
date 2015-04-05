@@ -21,10 +21,14 @@ define([
     	id: 		'search',
 
     	events: {
-    		'keyup input': 'delaySearch',
+            // do search after delay
+    		'keyup input':            'delaySearch',
 
             // search results
-            'click .track, .album, .artist': 'showOptions'
+            'click .track, .album':   'showOptions',
+
+            // expand artists
+            'click .artist':          'expandArtist'
     	},
 
     	/*
@@ -75,7 +79,6 @@ define([
                 options.tag = tag;
                 this.model.trigger('show:floater', options);    
             }
-            
         },
         
 
@@ -167,6 +170,13 @@ define([
             		playlists: playlists
         	   }
             });
+        },
+
+
+
+        expandArtist: function () {
+            
+            console.log("expand artist albums");
         },
 
 

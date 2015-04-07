@@ -181,13 +181,14 @@ define([
         expandArtist: function (el) {
             
             var artist      = el.currentTarget.getAttribute('data-id'),
-                expanded    = el.currentTarget.getAttribute('data-expanded') || false;
+                $el         = $(el.currentTarget).closest('li'),
+                expanded    = $el.hasClass('expanded');
             
             if (expanded) {
-                $(el).removeAttr('data-expanded');
+                $el.removeClass('expanded');
                 this.$el.find('li.artist-expanded').remove();
             } else {
-                $(el).attr('data-expanded', true);
+                $el.addClass('expanded');
                 this.model.get('socket').emit('search:artist', artist);
             }
         },
@@ -200,6 +201,7 @@ define([
                 template    = Handlebars.default.compile($('#tpl-search-expanded').text());
 
             // remove any old expanded items
+            
 
             // append 
             this.$el.find('li#artist-' + artist).after(template({types: types}));

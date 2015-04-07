@@ -149,21 +149,25 @@
 
 		<li class="artist-expanded artist-{{artistId}}">
 			<ul>
+				<li class="type">ALBUMS</li>
 				{{#types.album}}
 					<li>
 						<a class="track" href="javascript:void(0);" data-uri="{{uri}}">
 							<img src="{{images.1.url}}" />
-							<span>{{name}}</span>
+							<span class="title">{{name}}</span>
+							<!--<div class="label">Parlophone / 1990{{foo}}</div>-->
 						</a>
 					</li>
 				{{/types.album}}
 			</ul>
 			<ul>
+				<li class="type">SINGLES</li>
 				{{#types.single}}
 					<li>
 						<a class="track" href="javascript:void(0);" data-uri="{{uri}}">
 							<img src="{{images.1.url}}" />
-							<span>{{name}}</span>
+							<span class="title">{{name}}</span>
+							<!--<div class="label">Parlophone / 1990{{foo}}</div>-->
 						</a>
 					</li>
 				{{/types.single}}

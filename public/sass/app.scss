@@ -326,6 +326,9 @@ ul {
 					display:none;
 				}
 			}
+			&.expanded {
+				border-bottom: none;
+			}
 			&:last-child {
 				border-bottom: none;
 			}
@@ -368,38 +371,61 @@ ul {
 				clear: both;
 				overflow: hidden;
 
-				li {
+				li.type {
+					text-align: left;
+					color: lighten($border-grey, 10%);
+					font-size: 0.9em;
+					width: 100%;
+					clear: both;
+					padding: 20px 10px 10px 10px;
+				}
+
+				li:not(.type) {
 					-webkit-box-sizing: border-box;
 					box-sizing: border-box;
 					font-size: 0.75em;
 					display: block;
-					padding-left:8px;
-					width: calc(33.333% - 4px);
+					width: 33.333333%;
 					float: left;
 					border: none;
+					margin-top: 8px;
+					padding: 0px 4px 0px 4px;
 
 					&:nth-child(3n+3) {
-						width: 33.333%;
+						padding-right: 4px;
 					}
 
 					a {
 						color: #fff;
 						text-decoration: none;
 						text-align: left;
+						position:relative;
+						width: 100%;
+						display: block;
+
 						img {
-							display: inline-block;
+							display: block;
 							width: 100%;
 						}
-						span {
-							margin: 0px;
-							white-space: nowrap;
-			  				overflow: hidden;
-			  				text-overflow: ellipsis;
+						span.title {
 							display: block;
+							padding: 3px;
+							background-color: darken($border-grey, 10%);
+							margin: 0px;
 							min-height: 20px;
 							text-align: left;
 							color: inherit;
 							min-height: 70px;
+						}
+						div.label {
+							position: absolute;
+							color: #e4e4e4;
+							text-transform: uppercase;
+							display: block;
+							text-align: left;
+							bottom: 3px;
+							left: 3px;
+							font-size: 0.6em;
 						}
 					}	
 				}

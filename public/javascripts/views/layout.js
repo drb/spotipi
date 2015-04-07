@@ -88,6 +88,11 @@ define([
                 self.model.trigger('search:results', results);
             });
 
+            // socket has recieved results for artist search
+            socket.on('search:results:artist', function(results) {
+                self.model.trigger('search:results:artist', results);
+            });
+
             // room list has updated
             socket.on('rooms:updated', function(rooms) {
 

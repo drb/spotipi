@@ -293,8 +293,8 @@ ul {
 #search {
 	display: block;
 	text-align: center;
-	ul:not(.no-border) {
-		li {
+	ul.scrollable:not(.no-border) {
+		> li:not(.artist-expanded) {
 			text-align: left;
 			font-size: 16px;
 			width: 100%;
@@ -357,6 +357,54 @@ ul {
 				font-size: 9px;
 				text-transform: uppercase;
 			}
+		}
+
+		li.artist-expanded {
+			display: block;
+			ul {
+				margin: 0px;
+				display: block;
+				height: auto;
+				clear: both;
+				overflow: hidden;
+
+				li {
+					-webkit-box-sizing: border-box;
+					box-sizing: border-box;
+					font-size: 0.75em;
+					display: block;
+					padding-left:8px;
+					width: calc(33.333% - 4px);
+					float: left;
+					border: none;
+
+					&:nth-child(3n+3) {
+						width: 33.333%;
+					}
+
+					a {
+						color: #fff;
+						text-decoration: none;
+						text-align: left;
+						img {
+							display: inline-block;
+							width: 100%;
+						}
+						span {
+							margin: 0px;
+							white-space: nowrap;
+			  				overflow: hidden;
+			  				text-overflow: ellipsis;
+							display: block;
+							min-height: 20px;
+							text-align: left;
+							color: inherit;
+							min-height: 70px;
+						}
+					}	
+				}
+			}
+			
 		}
 	}
 }

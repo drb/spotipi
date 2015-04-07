@@ -44,12 +44,16 @@ define([
             this.listenTo(this.model,   'search:results',   this.foundResults);
             this.listenTo(this.model,   'change:search', 	this.render);
             this.listenTo(this.model,   'show:playlist show:rooms track:play show:home', this.hide);
+            this.listenTo(this.model,   'search:results:artist', this.populateExpanded);
         },
 
 
         /**
-         *
-         */
+        * showOptions
+        * 
+        * @param  {el}
+        * @return {none}
+        */  
         showOptions: function (el) {
 
             var options = {
@@ -174,12 +178,32 @@ define([
 
 
 
-        expandArtist: function () {
+        expandArtist: function (el) {
             
-            console.log("expand artist albums");
+            var artist      = el.currentTarget.getAttribute('data-id'),
+                expanded    = el.currentTarget.getAttribute('data-expanded') || false;
+            
+            if (expanded) {
+                $(el).removeAttr('data-expanded');
+                this.$el.find('li.artist-expanded').remove();
+            } else {
+                $(el).attr('data-expanded', true);
+                this.model.get('socket').emit('search:artist', artist);
+            }
         },
 
 
+        populateExpanded: function (data) {
+
+            var artist      = data.artistId,
+                types       = data.types,
+                template    = Handlebars.default.compile($('#tpl-search-expanded').text());
+
+            // remove any old expanded items
+
+            // append 
+            this.$el.find('li#artist-' + artist).after(template({types: types}));
+        },
 
         /**
          *

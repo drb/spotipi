@@ -8,6 +8,7 @@
 var spotipi = (function(){
 
 	var port    	= 3000,
+		_ 			= require('underscore'),
 		express 	= require('express'),
 		app 		= express(),
 		path 		= require('path'),
@@ -30,6 +31,8 @@ var spotipi = (function(){
 
 		// speaker instance
 		speakerOutput,
+
+		markets 	= ['GB'],
 
 		// playlist manager - simple utility for managing playlists
 		playlistManager = (function(){
@@ -132,6 +135,16 @@ var spotipi = (function(){
 							});
 						}
 					);
+			}
+
+
+			function getPlaying (zoneId, callback) {
+
+				var zones = databases.zones.find({zoneId: zoneId}, function(err, zone){
+
+
+					callback(err, zone);
+				});
 			}
 
 
@@ -394,6 +407,7 @@ var spotipi = (function(){
 
 		var requests 	= 0,
 			types  		= ['track', 'artist', 'playlist'],
+			evt 		= 'search:results',
 			lookup 		= {
 				uri: 'https://api.spotify.com/v1/search',
 				headers: {
@@ -404,7 +418,8 @@ var spotipi = (function(){
 					q: 		searchObj.term,
 					limit: 	searchObj.limit,
 					type: 	null,
-					offset: 0
+					offset: 0,
+					market: markets.join('')
 				}
 			},
 			results = {
@@ -441,6 +456,56 @@ var spotipi = (function(){
 				}
 			});
 		});
+	}
+
+
+	function searchArtist (artistId) {
+
+		var lookup = {
+				uri: 'https://api.spotify.com/v1/artists/' + artistId + '/albums',
+				headers: {
+					'Accept': 'application/json'
+				},
+				json: true,
+				qs: {
+					album_type: ['album', 'single'].join(','),
+					market: markets.join(''),
+					offset: 	0
+				}
+			};
+
+		request(lookup, function(err, response, body) {
+			if (err) {
+				showError(err);
+			} else {
+				if (body.hasOwnProperty('error')) {
+					showError(body.error.message);
+				} else {
+
+					var types = _.groupBy(body.items, 'album_type');
+
+					// toFile('artist.search.json', JSON.stringify(types, null, "\t\t"));
+
+					socket.emit('search:results:artist', {
+						artistId: artistId,
+						types: types
+					});		
+				}
+				
+			}
+		});
+	}
+
+
+	function toFile (filename, content) {
+
+		var fs = require('fs');
+		fs.writeFile(filename, content, function(err) {
+		    if(err) {
+		        return console.log(err);
+		    }
+		    console.log("The file %s was saved!", filename);
+		}); 
 	}
 
 
@@ -577,7 +642,8 @@ var spotipi = (function(){
 			'room:remove': 		zoneRemove,
 			'room:edit': 		zoneEdit,
 			'search:generic': 	searchGeneric,
-			'search:spotify': 	searchGeneric,
+			// 'search:spotify': 	searchGeneric,
+			'search:artist': 	searchArtist,
 			'track:play': 		playTrack,
 			'track:stop': 		stopTrack
 		};
@@ -602,7 +668,7 @@ var spotipi = (function(){
 				// send the playlists
 				sendPlaylists();
 				//
-				playTrack('spotify:track:1FTSo4v6BOZH9QxKc3MbVM');
+				//playTrack('spotify:track:1FTSo4v6BOZH9QxKc3MbVM');
 			} else {
 				// modal links through to login page
 				showError("Application has no credentials. Click OK to setup your Spotify account.", {

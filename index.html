@@ -97,10 +97,10 @@
 		<ul class="scrollable">
 
 			<!-- artists -->
-			<li class="result-artist subtitle icon-circle-down{{#unless artists.length}} disabled{{/unless}}">Artists {{#if artists.length}}({{artists.length}}){{/if}}</li>
+			<li class="search-result result-artist subtitle icon-circle-down{{#unless artists.length}} disabled{{/unless}}">Artists {{#if artists.length}}({{artists.length}}){{/if}}</li>
 			{{#each artists}}
-				<li>
-					<a class="artist" href="javascript:void(0);" data-uri="{{uri}}">
+				<li id="artist-{{id}}">
+					<a class="artist" href="javascript:void(0);" data-id="{{id}}">
 						{{name}}
 						{{#if images.2.url}}<img src="{{images.2.url}}" />{{/if}}
 					</a>
@@ -109,7 +109,7 @@
 
 
 			<!-- albums
-			<li class="result-album subtitle icon-circle-down{{#unless albums.length}} disabled{{/unless}}">Albums {{#if albums.length}}({{albums.length}}){{/if}}</li>
+			<li class="search-result result-album subtitle icon-circle-down{{#unless albums.length}} disabled{{/unless}}">Albums {{#if albums.length}}({{albums.length}}){{/if}}</li>
 			{{#each albums}}
 				<li>
 					<a class="album" href="javascript:void(0);" data-uri="{{uri}}">
@@ -121,7 +121,7 @@
 
 
 			<!-- tracks -->
-			<li class="result-track subtitle icon-circle-down{{#unless tracks.length}} disabled{{/unless}}">Tracks {{#if tracks.length}}({{tracks.length}}){{/if}}</li>
+			<li class="search-result result-track subtitle icon-circle-down{{#unless tracks.length}} disabled{{/unless}}">Tracks {{#if tracks.length}}({{tracks.length}}){{/if}}</li>
 			{{#each tracks}}
 				<li>
 					<a class="track" href="javascript:void(0);" data-uri="{{uri}}">
@@ -133,7 +133,7 @@
 
 
 			<!-- playlist -->
-			<li class="result-track subtitle icon-circle-down{{#unless playlists.length}} disabled{{/unless}}">Playlists {{#if playlist.length}}({{playlists.length}}){{/if}}</li>
+			<li class="search-result result-track subtitle icon-circle-down{{#unless playlists.length}} disabled{{/unless}}">Playlists {{#if playlist.length}}({{playlists.length}}){{/if}}</li>
 			{{#each playlists}}
 				<li>
 					<a class="track" href="javascript:void(0);" data-uri="{{uri}}">
@@ -143,6 +143,32 @@
 				</li>
 			{{/each}}
 		</ul>
+	</script>
+
+	<script type="x-template" id="tpl-search-expanded">
+
+		<li class="artist-expanded artist-{{artistId}}">
+			<ul>
+				{{#types.album}}
+					<li>
+						<a class="track" href="javascript:void(0);" data-uri="{{uri}}">
+							<img src="{{images.1.url}}" />
+							<span>{{name}}</span>
+						</a>
+					</li>
+				{{/types.album}}
+			</ul>
+			<ul>
+				{{#types.single}}
+					<li>
+						<a class="track" href="javascript:void(0);" data-uri="{{uri}}">
+							<img src="{{images.1.url}}" />
+							<span>{{name}}</span>
+						</a>
+					</li>
+				{{/types.single}}
+			</ul>
+		</li>
 	</script>
 
 	<script type="x-template" id="tpl-rooms">

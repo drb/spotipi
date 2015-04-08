@@ -661,7 +661,12 @@ ul.controls.disabled li a {
   top: auto;
   bottom: 0px;
 }
-/* line 603, ../sass/app.scss */
+/* line 602, ../sass/app.scss */
+.floater.active.btn3 {
+  top: auto;
+  bottom: 0px;
+}
+/* line 608, ../sass/app.scss */
 .floater span.close {
   display: inline-block;
   position: absolute;
@@ -669,12 +674,12 @@ ul.controls.disabled li a {
   color: #333;
   font-size: 18pt;
 }
-/* line 611, ../sass/app.scss */
+/* line 616, ../sass/app.scss */
 .floater ul {
   padding: 0px;
   margin: 37px 0px 10px 0px;
 }
-/* line 615, ../sass/app.scss */
+/* line 620, ../sass/app.scss */
 .floater ul li {
   box-sizing: border-box;
   list-style-type: none;
@@ -688,18 +693,18 @@ ul.controls.disabled li a {
   border-radius: 24px;
   text-align: center;
 }
-/* line 627, ../sass/app.scss */
+/* line 632, ../sass/app.scss */
 .floater ul li:last-child {
   margin-bottom: 0px;
 }
-/* line 631, ../sass/app.scss */
+/* line 636, ../sass/app.scss */
 .floater ul li a {
   text-transform: uppercase;
   color: inherit;
   padding: 0px;
 }
 
-/* line 640, ../sass/app.scss */
+/* line 645, ../sass/app.scss */
 input {
   position: relative;
   padding: 10px;
@@ -707,7 +712,7 @@ input {
   display: block;
 }
 
-/* line 647, ../sass/app.scss */
+/* line 652, ../sass/app.scss */
 #scrubber {
   position: absolute;
   width: 100%;
@@ -716,7 +721,7 @@ input {
   background-color: rgba(0, 0, 0, 0.65);
   transition: opacity 0.2s linear;
 }
-/* line 655, ../sass/app.scss */
+/* line 660, ../sass/app.scss */
 #scrubber span {
   position: relative;
   margin: 13px;
@@ -726,7 +731,7 @@ input {
   background-color: rgba(255, 255, 255, 0.8);
   box-shadow: inset -1px -1px 2px 0px rgba(0, 0, 0, 0.3);
 }
-/* line 664, ../sass/app.scss */
+/* line 669, ../sass/app.scss */
 #scrubber span:before {
   content: "";
   display: inline-block;
@@ -739,67 +744,522 @@ input {
   border-radius: 10px;
   transition: right 0.1s ease-in-out;
 }
-/* line 677, ../sass/app.scss */
+/* line 682, ../sass/app.scss */
 #scrubber span.progress0:before {
   left: -5px;
   right: auto;
 }
-/* line 682, ../sass/app.scss */
+/* line 687, ../sass/app.scss */
 #scrubber span.progress100:before {
   left: auto;
   right: 0%;
 }
-/* line 688, ../sass/app.scss */
+/* line 694, ../sass/app.scss */
+#scrubber span.progress1:before {
+  left: auto;
+  right: calc(99% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress2:before {
+  left: auto;
+  right: calc(98% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress3:before {
+  left: auto;
+  right: calc(97% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress4:before {
+  left: auto;
+  right: calc(96% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress5:before {
+  left: auto;
+  right: calc(95% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress6:before {
+  left: auto;
+  right: calc(94% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress7:before {
+  left: auto;
+  right: calc(93% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress8:before {
+  left: auto;
+  right: calc(92% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress9:before {
+  left: auto;
+  right: calc(91% - 10px);
+}
+/* line 694, ../sass/app.scss */
 #scrubber span.progress10:before {
   left: auto;
   right: calc(90% - 10px);
 }
-/* line 688, ../sass/app.scss */
+/* line 694, ../sass/app.scss */
+#scrubber span.progress11:before {
+  left: auto;
+  right: calc(89% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress12:before {
+  left: auto;
+  right: calc(88% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress13:before {
+  left: auto;
+  right: calc(87% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress14:before {
+  left: auto;
+  right: calc(86% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress15:before {
+  left: auto;
+  right: calc(85% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress16:before {
+  left: auto;
+  right: calc(84% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress17:before {
+  left: auto;
+  right: calc(83% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress18:before {
+  left: auto;
+  right: calc(82% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress19:before {
+  left: auto;
+  right: calc(81% - 10px);
+}
+/* line 694, ../sass/app.scss */
 #scrubber span.progress20:before {
   left: auto;
   right: calc(80% - 10px);
 }
-/* line 688, ../sass/app.scss */
+/* line 694, ../sass/app.scss */
+#scrubber span.progress21:before {
+  left: auto;
+  right: calc(79% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress22:before {
+  left: auto;
+  right: calc(78% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress23:before {
+  left: auto;
+  right: calc(77% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress24:before {
+  left: auto;
+  right: calc(76% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress25:before {
+  left: auto;
+  right: calc(75% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress26:before {
+  left: auto;
+  right: calc(74% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress27:before {
+  left: auto;
+  right: calc(73% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress28:before {
+  left: auto;
+  right: calc(72% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress29:before {
+  left: auto;
+  right: calc(71% - 10px);
+}
+/* line 694, ../sass/app.scss */
 #scrubber span.progress30:before {
   left: auto;
   right: calc(70% - 10px);
 }
-/* line 688, ../sass/app.scss */
+/* line 694, ../sass/app.scss */
+#scrubber span.progress31:before {
+  left: auto;
+  right: calc(69% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress32:before {
+  left: auto;
+  right: calc(68% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress33:before {
+  left: auto;
+  right: calc(67% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress34:before {
+  left: auto;
+  right: calc(66% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress35:before {
+  left: auto;
+  right: calc(65% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress36:before {
+  left: auto;
+  right: calc(64% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress37:before {
+  left: auto;
+  right: calc(63% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress38:before {
+  left: auto;
+  right: calc(62% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress39:before {
+  left: auto;
+  right: calc(61% - 10px);
+}
+/* line 694, ../sass/app.scss */
 #scrubber span.progress40:before {
   left: auto;
   right: calc(60% - 10px);
 }
-/* line 688, ../sass/app.scss */
+/* line 694, ../sass/app.scss */
+#scrubber span.progress41:before {
+  left: auto;
+  right: calc(59% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress42:before {
+  left: auto;
+  right: calc(58% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress43:before {
+  left: auto;
+  right: calc(57% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress44:before {
+  left: auto;
+  right: calc(56% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress45:before {
+  left: auto;
+  right: calc(55% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress46:before {
+  left: auto;
+  right: calc(54% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress47:before {
+  left: auto;
+  right: calc(53% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress48:before {
+  left: auto;
+  right: calc(52% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress49:before {
+  left: auto;
+  right: calc(51% - 10px);
+}
+/* line 694, ../sass/app.scss */
 #scrubber span.progress50:before {
   left: auto;
   right: calc(50% - 10px);
 }
-/* line 688, ../sass/app.scss */
+/* line 694, ../sass/app.scss */
+#scrubber span.progress51:before {
+  left: auto;
+  right: calc(49% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress52:before {
+  left: auto;
+  right: calc(48% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress53:before {
+  left: auto;
+  right: calc(47% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress54:before {
+  left: auto;
+  right: calc(46% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress55:before {
+  left: auto;
+  right: calc(45% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress56:before {
+  left: auto;
+  right: calc(44% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress57:before {
+  left: auto;
+  right: calc(43% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress58:before {
+  left: auto;
+  right: calc(42% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress59:before {
+  left: auto;
+  right: calc(41% - 10px);
+}
+/* line 694, ../sass/app.scss */
 #scrubber span.progress60:before {
   left: auto;
   right: calc(40% - 10px);
 }
-/* line 688, ../sass/app.scss */
+/* line 694, ../sass/app.scss */
+#scrubber span.progress61:before {
+  left: auto;
+  right: calc(39% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress62:before {
+  left: auto;
+  right: calc(38% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress63:before {
+  left: auto;
+  right: calc(37% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress64:before {
+  left: auto;
+  right: calc(36% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress65:before {
+  left: auto;
+  right: calc(35% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress66:before {
+  left: auto;
+  right: calc(34% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress67:before {
+  left: auto;
+  right: calc(33% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress68:before {
+  left: auto;
+  right: calc(32% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress69:before {
+  left: auto;
+  right: calc(31% - 10px);
+}
+/* line 694, ../sass/app.scss */
 #scrubber span.progress70:before {
   left: auto;
   right: calc(30% - 10px);
 }
-/* line 688, ../sass/app.scss */
+/* line 694, ../sass/app.scss */
+#scrubber span.progress71:before {
+  left: auto;
+  right: calc(29% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress72:before {
+  left: auto;
+  right: calc(28% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress73:before {
+  left: auto;
+  right: calc(27% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress74:before {
+  left: auto;
+  right: calc(26% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress75:before {
+  left: auto;
+  right: calc(25% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress76:before {
+  left: auto;
+  right: calc(24% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress77:before {
+  left: auto;
+  right: calc(23% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress78:before {
+  left: auto;
+  right: calc(22% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress79:before {
+  left: auto;
+  right: calc(21% - 10px);
+}
+/* line 694, ../sass/app.scss */
 #scrubber span.progress80:before {
   left: auto;
   right: calc(20% - 10px);
 }
-/* line 688, ../sass/app.scss */
+/* line 694, ../sass/app.scss */
+#scrubber span.progress81:before {
+  left: auto;
+  right: calc(19% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress82:before {
+  left: auto;
+  right: calc(18% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress83:before {
+  left: auto;
+  right: calc(17% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress84:before {
+  left: auto;
+  right: calc(16% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress85:before {
+  left: auto;
+  right: calc(15% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress86:before {
+  left: auto;
+  right: calc(14% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress87:before {
+  left: auto;
+  right: calc(13% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress88:before {
+  left: auto;
+  right: calc(12% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress89:before {
+  left: auto;
+  right: calc(11% - 10px);
+}
+/* line 694, ../sass/app.scss */
 #scrubber span.progress90:before {
   left: auto;
   right: calc(10% - 10px);
 }
-/* line 695, ../sass/app.scss */
+/* line 694, ../sass/app.scss */
+#scrubber span.progress91:before {
+  left: auto;
+  right: calc(9% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress92:before {
+  left: auto;
+  right: calc(8% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress93:before {
+  left: auto;
+  right: calc(7% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress94:before {
+  left: auto;
+  right: calc(6% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress95:before {
+  left: auto;
+  right: calc(5% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress96:before {
+  left: auto;
+  right: calc(4% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress97:before {
+  left: auto;
+  right: calc(3% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress98:before {
+  left: auto;
+  right: calc(2% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress99:before {
+  left: auto;
+  right: calc(1% - 10px);
+}
+/* line 694, ../sass/app.scss */
+#scrubber span.progress100:before {
+  left: auto;
+  right: calc(0% - 10px);
+}
+/* line 701, ../sass/app.scss */
 #scrubber.hidden {
   opacity: 0;
 }
 
-/* line 701, ../sass/app.scss */
+/* line 707, ../sass/app.scss */
 .alert {
   display: block;
   position: absolute;
@@ -810,7 +1270,7 @@ input {
   top: 0px;
   left: 0px;
 }
-/* line 712, ../sass/app.scss */
+/* line 718, ../sass/app.scss */
 .alert .alert-controls {
   box-sizing: border-box;
   position: absolute;
@@ -825,29 +1285,29 @@ input {
   border: 1px solid #4d4d4d;
   border-top: 4px solid #84bd00;
 }
-/* line 726, ../sass/app.scss */
+/* line 732, ../sass/app.scss */
 .error .alert .alert-controls {
   border-top-color: #780000;
 }
-/* line 730, ../sass/app.scss */
+/* line 736, ../sass/app.scss */
 .alert .alert-controls span {
   float: right;
   margin: 10px -10px;
   font-size: 17pt;
 }
-/* line 736, ../sass/app.scss */
+/* line 742, ../sass/app.scss */
 .alert .alert-controls p {
   padding-bottom: 5px;
   text-shadow: none;
   color: #fff;
 }
-/* line 742, ../sass/app.scss */
+/* line 748, ../sass/app.scss */
 .alert .alert-controls button {
   display: block;
   margin: 10px auto 10px auto;
   width: 100%;
 }
-/* line 750, ../sass/app.scss */
+/* line 756, ../sass/app.scss */
 .alert.error .alert-controls {
   border-top-color: #de0000;
 }

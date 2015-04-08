@@ -598,6 +598,11 @@ ul.controls {
 			top: auto;
 			bottom: 0px; 
 		}
+
+		&.btn3 {
+			top: auto;
+			bottom: 0px; 
+		}
 	}
 
 	span.close {
@@ -684,7 +689,8 @@ input {
 			right: 0%;
 		}
 
-		@each $size in 10, 20, 30, 40, 50, 60, 70, 80, 90 {
+		//@each $size in 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95 {
+		@for $size from 1 through 100 {
 	        &.progress#{$size}:before {
 	        	left: auto;
 	        	right: calc(#{100-$size}% - 10px);

@@ -15,7 +15,9 @@ define([
         className:  'floater',
 
         events: {
+            //
             'click .close': 'hide',
+
             // options events
             'click .play-track, .queue-track, .play-album, .replace-playlist':  'passThru'
         },
@@ -89,6 +91,8 @@ define([
         show: function (options) {
             
             this.options = options;
+
+            console.log(this.options);
 
             this.render();
             this.$el.addClass('active');

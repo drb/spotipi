@@ -233,6 +233,10 @@
 			{{#if options.cueTrack}}
 				<li><a class="queue-track">Play Next</a></li>
 			{{/if}}
+
+			{{#if options.cueAlbum}}
+				<li><a class="queue-album">Queue Album</a></li>
+			{{/if}}
 		</ul>
 	</script>
 
@@ -248,6 +252,9 @@
 	<script type="x-template" id="tpl-album">
 		<div>
 			Album / Tracks: {{tracks.length}}
+			<ul class="no-border playlist-options">
+				<li class="close icon-cancel-circle"></li>
+			</ul>
 			<p>
 				<button class="play-album standard" data-uri="{{albumId}}">
 					<span class="icon-play"></span>
@@ -256,11 +263,10 @@
 			</p>
 		</div>
 		<ul class="scrollable">
-			<li>
 			{{#tracks}}
 				<li class="search-result">
 					<a class="track no-art" href="javascript:void(0);" data-uri="{{uri}}">
-						{{track_number}} / {{name}} {{#explicit}}<span class="explicit">EXPLICIT</span>{{/explicit}}
+						{{track_number}} / {{name}} / Disc #{{disc_number}}{{#explicit}}<span class="explicit">EXPLICIT</span>{{/explicit}}
 					</a>
 				</li>
 			{{/tracks}}

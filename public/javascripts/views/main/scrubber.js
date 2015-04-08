@@ -11,20 +11,24 @@ define([
 
     return Backbone.View.extend({
 
-        tagName:    'div',
-        id:         'scrubber',
-        className:  'hidden', 
-        updater:    null,
+        tagName:        'div',
+        id:             'scrubber',
+        className:      'hidden', 
+        updater:        null,
+
+        duration:       0,
+        scrubStarted:   0,
 
         events: {
-            'mousemove span':   'setX',
-            'click span':       'moveScrubber'
+            //'mousemove span':   'setX',
+            //'click span':       'moveScrubber'
         },
 
         //
     	initialize: function (options) {
 
-    		this.model = options.model;
+            this.duration     = 0;
+    		this.model        = options.model;
             
             this.listenTo(this.model, 'change:track', this.toggle);
     	},
@@ -60,14 +64,34 @@ define([
         },
 
 
+        updatePosition: function () {
+
+            var progress = (new Date().getTime() - +this.scrubStarted),
+                position = Math.round((progress/this.duration) * 100);
+
+            this.model.set('scrubberPosition', position);
+
+            $('#scrubber span').removeClass().addClass('progress' + (this.model.get('scrubberPosition')));
+        },
+
+
         toggle: function () {
 
-            var playing = this.model.get('track');
+            var self = this,
+                playing = this.model.get('track');
 
-            if (playing) {
+            this.duration = playing.duration;
+
+            if (playing !== false) {
 
                 this.$el.removeClass('hidden');
-                this.updater = setInterval(this.updatePosition, 1000);
+
+                this.scrubStarted = new Date().getTime();
+                this.updater = setInterval(function() {
+                    self.updatePosition();
+                }, 1000);
+
+                // console.log("started track", this.duration, this.scrubStarted);
             } else {
 
                 this.$el.addClass('hidden');

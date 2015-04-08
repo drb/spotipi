@@ -21,11 +21,14 @@ define([
 
         events: {
 
+            // closes album list
+            'click .close':           'showSearch',
+
             // search results
             'click .track':           'showOptions',
 
             // search results
-            'click .album':           'showOptions'
+            'click .play-album':      'showOptions'
         },
 
 
@@ -36,14 +39,14 @@ define([
 
     		this.model = config.model;
 
-            this.listenTo(this.model, 'show:playlist show:rooms track:play show:home', this.hide);
+            this.listenTo(this.model, 'show:playlist show:search show:rooms track:play show:home', this.hide);
             this.listenTo(this.model, 'search:results:album', this.populateAlbum);
     	},
 
 
         checkSingleton: function () {
 
-            $('.album').remove();
+            $('div.album').remove();
         },
 
 
@@ -52,8 +55,12 @@ define([
             this.checkSingleton();
             this.render(data);
             this.show();
+        },
 
-            console.log('populateAlbum', data);
+
+        showSearch: function () {
+
+            this.model.trigger('show:search');
         },
 
 

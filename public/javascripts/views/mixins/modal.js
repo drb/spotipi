@@ -56,7 +56,8 @@ define([
                     playTrack:      0,
                     playAlbum:      0,
                     cueTrack:       0,
-                    replaceQueue:   0
+                    replaceQueue:   0,
+                    cueAlbum:       0
                 },
                 $el = $(el.currentTarget),
                 tag = $el.attr('data-uri');
@@ -66,17 +67,15 @@ define([
                 options.cueTrack = 1;
             }
 
-            if ($el.hasClass('album')) {
+            if ($el.hasClass('play-album')) {
                 options.replaceQueue = 1;
-                options.playAlbum = 1;
+                options.playAlbum   = 1;
+                options.cueAlbum    = 1;
             }
 
-            if ($el.hasClass('artist')) {
-                
-            }
+            options.tag = tag;
 
             if (!_.isEmpty(options)) {
-                options.tag = tag;
                 this.model.trigger('show:floater', options);    
             }
         },

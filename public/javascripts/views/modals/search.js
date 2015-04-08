@@ -3,13 +3,17 @@ define([
     // dependencies
     'jquery', 'underscore', 'backbone', 'handlebars',
     // mixins
-    'views/mixins/modal' 
+    'views/mixins/modal',
+    // views
+    'views/modals/album'
 
 ], function (
     // dependencies
     $, _, Backbone, Handlebars,
     // mixins
-    ModalView
+    ModalView,
+    // views
+    AlbumView
 ) {
 
     'use strict';
@@ -25,10 +29,13 @@ define([
     		'keyup input':            'delaySearch',
 
             // search results
-            'click .track, .album':   'showOptions',
+            'click .track':           'showOptions',
 
             // expand artists
-            'click .artist':          'expandArtist'
+            'click .artist':          'expandArtist',
+
+            // expand album
+            'click .album':           'expandAlbum'
     	},
 
     	/*
@@ -40,50 +47,15 @@ define([
     		this.delaySearch;
             this.defaultResultLimit = 10;
 
-            this.listenTo(this.model,   'show:search', 	    this.show);
-            this.listenTo(this.model,   'search:results',   this.foundResults);
-            this.listenTo(this.model,   'change:search', 	this.render);
-            this.listenTo(this.model,   'show:playlist show:rooms track:play show:home', this.hide);
-            this.listenTo(this.model,   'search:results:artist', this.populateExpanded);
+            this.listenTo(this.model,   'show:search', 	            this.show);
+            this.listenTo(this.model,   'search:results',           this.foundResults);
+            this.listenTo(this.model,   'change:search', 	        this.render);
+            this.listenTo(this.model,   'search:results:artist',    this.populateExpanded);
+            this.listenTo(this.model,   'show:playlist show:rooms track:play show:home show:album', this.hide);
         },
 
 
-        /**
-        * showOptions
-        * 
-        * @param  {el}
-        * @return {none}
-        */  
-        showOptions: function (el) {
-
-            var options = {
-                    playTrack:      0,
-                    playAlbum:      0,
-                    cueTrack:       0,
-                    replaceQueue:   0
-                },
-                $el = $(el.currentTarget),
-                tag = $el.attr('data-uri');
-
-            if ($el.hasClass('track')) {
-                options.playTrack = 1;
-                options.cueTrack = 1;
-            }
-
-            if ($el.hasClass('album')) {
-                options.replaceQueue = 1;
-                options.playAlbum = 1;
-            }
-
-            if ($el.hasClass('artist')) {
-                
-            }
-
-            if (!_.isEmpty(options)) {
-                options.tag = tag;
-                this.model.trigger('show:floater', options);    
-            }
-        },
+        
         
 
         /**
@@ -168,10 +140,10 @@ define([
             		searchTerm: this.model.get('searchTerm'),
 
             		// artist data
-            		artists: artists,
-            		albums: albums,
-            		tracks: tracks,
-            		playlists: playlists
+            		artists:      artists,
+            		albums:       albums,
+            		tracks:       tracks,
+            		playlists:    playlists
         	   }
             });
         },
@@ -180,7 +152,7 @@ define([
 
         expandArtist: function (el) {
             
-            var artist      = el.currentTarget.getAttribute('data-id'),
+            var artistId    = el.currentTarget.getAttribute('data-id'),
                 $el         = $(el.currentTarget).closest('li'),
                 expanded    = $el.hasClass('expanded');
             
@@ -189,7 +161,7 @@ define([
                 this.$el.find('li.artist-expanded').remove();
             } else {
                 $el.addClass('expanded');
-                this.model.get('socket').emit('search:artist', artist);
+                this.model.get('socket').emit('search:artist', artistId);
             }
         },
 
@@ -200,12 +172,28 @@ define([
                 types       = data.types,
                 template    = Handlebars.default.compile($('#tpl-search-expanded').text());
 
-            // remove any old expanded items
-            
-
             // append 
             this.$el.find('li#artist-' + artist).after(template({types: types}));
         },
+
+
+        /**
+         * expandAlbum
+         *
+         * 
+         * @return {[type]}
+         */
+        expandAlbum: function (el) {
+
+            var albumId     = el.currentTarget.getAttribute('data-id'),
+                slideView   = new AlbumView({model: this.model});
+
+            if (albumId) {
+                this.model.trigger('show:album');
+                this.model.get('socket').emit('search:album', albumId);
+            }
+        },
+
 
         /**
          *

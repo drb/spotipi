@@ -497,6 +497,43 @@ var spotipi = (function(){
 	}
 
 
+	function searchAlbum (albumId) {
+
+		console.log('album id', albumId);
+
+		var lookup = {
+				uri: 'https://api.spotify.com/v1/albums/' + albumId + '/tracks',
+				headers: {
+					'Accept': 'application/json'
+				},
+				json: true,
+				qs: {
+					market: markets.join(''),
+					offset: 	0
+				}
+			};
+
+		request(lookup, function(err, response, body) {
+			if (err) {
+				showError(err);
+			} else {
+				if (body.hasOwnProperty('error')) {
+					showError(body.error.message);
+				} else {
+
+					// toFile('album.search.json', JSON.stringify(body, null, "\t\t"));
+
+					socket.emit('search:results:album', {
+						albumId: albumId,
+						tracks: body.items
+					});		
+				}
+				
+			}
+		});
+	}
+
+
 	function toFile (filename, content) {
 
 		var fs = require('fs');
@@ -642,7 +679,7 @@ var spotipi = (function(){
 			'room:remove': 		zoneRemove,
 			'room:edit': 		zoneEdit,
 			'search:generic': 	searchGeneric,
-			// 'search:spotify': 	searchGeneric,
+			'search:album': 	searchAlbum,
 			'search:artist': 	searchArtist,
 			'track:play': 		playTrack,
 			'track:stop': 		stopTrack

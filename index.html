@@ -66,7 +66,7 @@
 	<script type="x-template" id="tpl-playlist">
 		<div>
 			{{room.name}} / Tracks: {{room.playlist.length}}
-			<ul class="no-border" id="playlist-options">
+			<ul class="no-border playlist-options">
 				<li class="control-shuffle icon-shuffle{{#if model.shuffle}} active{{/if}}"></li>
 				<li class="control-loop icon-loop{{#if model.loop}} active{{/if}}"></li>
 			</ul>
@@ -150,24 +150,29 @@
 		<li class="artist-expanded artist-{{artistId}}">
 			<ul>
 				<li class="type">ALBUMS</li>
+				{{^if types.album.length}}
+					<li class="subtitle">No albums found</li>
+				{{/if}}
 				{{#types.album}}
 					<li>
-						<a class="track" href="javascript:void(0);" data-uri="{{uri}}">
+						<a class="album" data-id="{{id}}" data-name={{name}}>
 							<img src="{{images.1.url}}" />
 							<span class="title">{{name}}</span>
-							<!--<div class="label">Parlophone / 1990{{foo}}</div>-->
 						</a>
 					</li>
 				{{/types.album}}
 			</ul>
+			<!-- singles can have multiple tracks, so treat as an album -->
 			<ul>
 				<li class="type">SINGLES</li>
+				{{^if types.single.length}}
+					<li class="subtitle">No singles found</li>
+				{{/if}}
 				{{#types.single}}
 					<li>
-						<a class="track" href="javascript:void(0);" data-uri="{{uri}}">
+						<a class="album" data-id="{{id}}">
 							<img src="{{images.1.url}}" />
 							<span class="title">{{name}}</span>
-							<!--<div class="label">Parlophone / 1990{{foo}}</div>-->
 						</a>
 					</li>
 				{{/types.single}}
@@ -238,6 +243,28 @@
 			<p>{{message}}</p>
 			<button class="confirm">OK</button>
 		</div>
+	</script>
+
+	<script type="x-template" id="tpl-album">
+		<div>
+			Album / Tracks: {{tracks.length}}
+			<p>
+				<button class="play-album standard" data-uri="{{albumId}}">
+					<span class="icon-play"></span>
+					Play Album
+				</button>
+			</p>
+		</div>
+		<ul class="scrollable">
+			<li>
+			{{#tracks}}
+				<li class="search-result">
+					<a class="track no-art" href="javascript:void(0);" data-uri="{{uri}}">
+						{{track_number}} / {{name}} {{#explicit}}<span class="explicit">EXPLICIT</span>{{/explicit}}
+					</a>
+				</li>
+			{{/tracks}}
+		</ul>
 	</script>
 </head>
 <body>

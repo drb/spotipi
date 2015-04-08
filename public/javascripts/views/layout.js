@@ -47,6 +47,8 @@ define([
 
     return Backbone.View.extend({
 
+        model: null,
+
     	initialize: function (options) {
 
     		var constr,
@@ -91,6 +93,12 @@ define([
             // socket has recieved results for artist search
             socket.on('search:results:artist', function(results) {
                 self.model.trigger('search:results:artist', results);
+            });
+
+            // socket has recieved results for album search
+            socket.on('search:results:album', function(results) {
+                console.log("album results", results);
+                self.model.trigger('search:results:album', results);
             });
 
             // room list has updated
@@ -149,7 +157,6 @@ define([
 				subView.render();
 			}, this);
     	},
-
 
         /**
          * 

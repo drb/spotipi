@@ -83,8 +83,6 @@ var spotipi = (function(){
 			 */
 			function add (zoneId, track, callback) {
 
-				console.log("adding", track.uri)
-
 				databases
 					.playlists
 					.update(
@@ -141,8 +139,6 @@ var spotipi = (function(){
 			function getPlaying (zoneId, callback) {
 
 				var zones = databases.zones.find({zoneId: zoneId}, function(err, zone){
-
-
 					callback(err, zone);
 				});
 			}
@@ -231,10 +227,15 @@ var spotipi = (function(){
 		});
 
 		speakerOutput.on('close', function() {
-			// console.log("closed...");
+			console.log("closed...");
 
 			// kill the speaker instance
 			speakerOutput = null;
+
+			// nowPlaying = {
+			// 	uri: false,
+			// 	track: false
+			// };
 
 			// start the next track, if there is one
 			getMediaStream();
@@ -611,6 +612,11 @@ var spotipi = (function(){
 							// })
 							.on('finish', function () {
 								instance.disconnect();
+
+								nowPlaying = {
+									uri: false,
+									track: false
+								};
 							});
 						}
 					});
@@ -682,7 +688,11 @@ var spotipi = (function(){
 			'search:album': 	searchAlbum,
 			'search:artist': 	searchArtist,
 			'track:play': 		playTrack,
-			'track:stop': 		stopTrack
+			'track:stop': 		stopTrack,
+			// playlist functions
+			'track:queue': 		playlistManager.add,
+			'album:queue': 		playlistManager.add,
+			'album:replace':  	playlistManager.replace
 		};
 
 		socket = sock;

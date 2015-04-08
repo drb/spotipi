@@ -19,6 +19,8 @@ define([
         duration:       0,
         scrubStarted:   0,
 
+        // these events are disabled at the moent, as syncing the audio stream with random
+        // times along the track is a pain in the arse
         events: {
             //'mousemove span':   'setX',
             //'click span':       'moveScrubber'
@@ -42,7 +44,6 @@ define([
     	},
 
         /**
-         **/
         setX: function (el) {
 
             var scrubberPosition = this.model.get('scrubberPosition') || 0,
@@ -61,13 +62,20 @@ define([
         moveScrubber: function (el) {
             
             $(el.currentTarget).removeClass().addClass('progress' + (this.model.get('scrubberPosition')));
-        },
+        }, **/
 
 
+        /**
+         * updatePosition
+         *
+         * moves the scrubber position
+         * 
+         * @return {[type]}
+         */
         updatePosition: function () {
 
-            var progress = (new Date().getTime() - +this.scrubStarted),
-                position = Math.round((progress/this.duration) * 100);
+            var progress = parseInt(new Date().getTime() - this.scrubStarted),
+                position = Math.round((progress / this.duration) * 100);
 
             this.model.set('scrubberPosition', position);
 
@@ -75,6 +83,13 @@ define([
         },
 
 
+        /**
+         * toggle
+         *
+         * toggles the visible state, and starts the updater to move the scrubber
+         * 
+         * @return {[type]}
+         */
         toggle: function () {
 
             var self = this,
@@ -91,7 +106,6 @@ define([
                     self.updatePosition();
                 }, 1000);
 
-                // console.log("started track", this.duration, this.scrubStarted);
             } else {
 
                 this.$el.addClass('hidden');
@@ -101,6 +115,5 @@ define([
                 }
             }
         }
-
     });
 });

@@ -19,6 +19,8 @@ define([
         className:  'album modal hidden',
         id:         'album',
 
+        tracks:     [],
+
         events: {
 
             // closes album list
@@ -70,6 +72,9 @@ define([
             var albumId = data.albumId,
                 tracks  = data.tracks,
                 template = Handlebars.default.compile($('#tpl-album').text());
+
+            // set tracks
+            this.tracks = tracks;
 
 			this.$el.html(template({tracks: tracks}));
             

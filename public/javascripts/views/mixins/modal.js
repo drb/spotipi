@@ -1,10 +1,10 @@
 
 define([
     // dependencies
-    'backbone'
+    'backbone', 'underscore'
 ], function (
     // dependencies
-    Backbone
+    Backbone, _
 ) {
 
     'use strict';
@@ -60,21 +60,28 @@ define([
                     cueAlbum:       0
                 },
                 $el = $(el.currentTarget),
-                tag = $el.attr('data-uri');
+                data = $el.attr('data-uri');
 
+            // track clicked
             if ($el.hasClass('track')) {
                 options.playTrack = 1;
                 options.cueTrack = 1;
+
+                options.data = data;
             }
 
+            // album clicked
             if ($el.hasClass('play-album')) {
                 options.replaceQueue = 1;
                 options.playAlbum   = 1;
                 options.cueAlbum    = 1;
+
+                if (this.tracks) {
+                    options.data = this.tracks;    
+                }
             }
 
-            options.tag = tag;
-
+            // show floater
             if (!_.isEmpty(options)) {
                 this.model.trigger('show:floater', options);    
             }

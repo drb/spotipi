@@ -48,8 +48,6 @@ define([
             var template = Handlebars.default.compile($('#tpl-playlist').text()),
                 playlist = this.getRoomPlaylist();
 
-            console.log("redner playlist");
-
             this.$el
                 .empty()
                 .html(template({model: this.model.toJSON(), room: playlist}));

@@ -1,0 +1,31 @@
+<li class="artist-expanded artist-{{artistId}}">
+	<ul>
+		<li class="type">ALBUMS</li>
+		{{^if types.album.length}}
+			<li class="subtitle">No albums found</li>
+		{{/if}}
+		{{#types.album}}
+			<li>
+				<a class="album" data-id="{{id}}" data-name={{name}}>
+					<img src="{{images.1.url}}" />
+					<span class="title">{{name}}</span>
+				</a>
+			</li>
+		{{/types.album}}
+	</ul>
+	<!-- singles can have multiple tracks, so treat as an album -->
+	<ul>
+		<li class="type">SINGLES</li>
+		{{^if types.single.length}}
+			<li class="subtitle">No singles found</li>
+		{{/if}}
+		{{#types.single}}
+			<li>
+				<a class="album" data-id="{{id}}">
+					<img src="{{images.1.url}}" />
+					<span class="title">{{name}}</span>
+				</a>
+			</li>
+		{{/types.single}}
+	</ul>
+</li>

@@ -31,7 +31,7 @@ define([
 
     	render: function () {
 
-    		var template = Handlebars.default.compile($('#tpl-header').text()),
+    		var template = Handlebars.default.compile(this.model.get('templates').byName('tpl-header')),
                 connected = this.model.get('connected');
 
 			this.$el.html(template({connected: connected, isReady: this.model.isReady()}));

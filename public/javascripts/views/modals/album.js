@@ -71,7 +71,7 @@ define([
 
             var albumId = data.albumId,
                 tracks  = data.tracks,
-                template = Handlebars.default.compile($('#tpl-album').text());
+                template = Handlebars.default.compile(this.model.get('templates').byName('tpl-album'));
 
             // set tracks
             this.tracks = tracks;

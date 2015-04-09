@@ -38,7 +38,7 @@ define([
         //
     	render: function () {
 
-    		var template = Handlebars.default.compile($('#tpl-scrubber').text());
+    		var template = Handlebars.default.compile(this.model.get('templates').byName('tpl-scrubber'));
 			this.$el.html(template(this.model.toJSON()));
 			$('#container').append(this.$el);
     	},

@@ -9,16 +9,18 @@ var spotipi = (function(){
 
 	var port    	= 3000,
 		_ 			= require('underscore'),
+		fs 			= require('fs'),
 		express 	= require('express'),
 		app 		= express(),
 		path 		= require('path'),
 		server 		= require('http').Server(app),
 		io 			= require('socket.io')(server),
 		lame 		= require('lame'),
-		request 	= require('request'), 
+		request 	= require('request'),
+		dive 		= require('dive'),
 
 		// libs
-		Datastore 	= require('nedb'), 
+		Datastore 	= require('nedb'),
 		Speaker 	= require('speaker'),
 		Spotify 	= require('spotify-web'),
 
@@ -178,27 +180,62 @@ var spotipi = (function(){
 	 **/
 	function start () {
 
+		var directory = __dirname;
+
 		// setup databases 
 		databases.zones 	= new Datastore({ filename: 'db/zones', 	autoload: true }),
 		databases.auth 		= new Datastore({ filename: 'db/auth', 		autoload: true }),
 		databases.playlists = new Datastore({ filename: 'db/playlists', autoload: true }),
 
 		// sets the public directory so we can load the scripts
-		app.use(express.static(path.join(__dirname, 'public')));
+		app.use(express.static(path.join(directory, 'public')));
 
 		// single route
 		app.get('/', function (req, res) {
-			res.sendFile(__dirname + '/index.html');
+			res.sendFile(path.join(directory, 'index.html'));
 		});
 
+		// template loader - iterates over the template directory and returns a key for
+		// each template.* file found
+		app.get('/templates.json', function (req, res) {
+
+			// collate the files
+			var files = [],
+				filename,
+				content;
+
+			// iterate over the templates
+			dive(
+				path.join(directory, 'templates'),
+				{
+					all:false,
+					files: true
+				},
+				// parse and push the files
+				function(err, dir) {
+					// get the file's name
+					filename = _.last(dir.split('/')).replace(/\.html/ig, '');
+					// load the template body
+					content = fs.readFileSync(dir, 'utf-8');
+					// add to object
+					files.push({name: filename, content: content});
+				},
+				// done parsing, outout the data
+				function () {
+					res.json(files);
+				}
+			);
+		});
+
+		// set the app to listen on port defined above
 		server.listen(port);
 
 		// when a ne client connects, set up the connection listeners
 		io.on('connection', connection);
 
 		// attempts to output an ip address clients can connect to
-		require('dns').lookup(require('os').hostname(), function (err, add, fam) {
-			console.log('Point a browser at http://' + add + ':' + port);
+		require('dns').lookup(require('os').hostname(), function (err, address, fam) {
+			console.log('Point a browser/phone at http://' + address + ':' + port);
 		});
 	}
 
@@ -535,9 +572,55 @@ var spotipi = (function(){
 	}
 
 
+
+	function searchPlaylist (userId, playlistId) {
+
+		console.log('playlist id', playlistId, 'uerid', userId);
+
+		var lookup = {
+				uri: 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + playlistId + '/tracks',
+				headers: {
+					'Accept': 'application/json'
+				},
+				json: true,
+				qs: {
+					market: 	markets.join(''),
+					limit: 		100,
+					offset: 	0
+				}
+			};
+
+		request(lookup, function(err, response, body) {
+			if (err) {
+				showError(err);
+			} else {
+				if (body.hasOwnProperty('error')) {
+					showError(body.error.message);
+				} else {
+
+					// toFile('album.search.json', JSON.stringify(body, null, "\t\t"));
+
+					socket.emit('search:results:album', {
+						playlistId: playlistId,
+						userId: userId,
+						tracks: body.items
+					});		
+				}
+				
+			}
+		});
+	}
+
+	/**
+	 * toFile
+	 *
+	 * utility to write out API responses to disk for inspection
+	 * 
+	 * @param  {String} filename [description]
+	 * @param  {String} content  [description]
+	 */
 	function toFile (filename, content) {
 
-		var fs = require('fs');
 		fs.writeFile(filename, content, function(err) {
 		    if(err) {
 		        return console.log(err);
@@ -600,7 +683,7 @@ var spotipi = (function(){
 
 							//
 							playlistManager.add('YCb343BnzDcSGTIw', track, function (err, playlist) {
-								console.log("added to playlist");
+								console.log("added track to playlist");
 							});
 
 							// play() returns a readable stream of MP3 audio data
@@ -680,15 +763,24 @@ var spotipi = (function(){
 	function connection (sock) {
 
 		var routes = {
+			// add a new account
 			'account:add': 		accountAdd,
+
+			// zone management
 			'room:add': 		zoneAdd,
 			'room:remove': 		zoneRemove,
 			'room:edit': 		zoneEdit,
+
+			// search activities
 			'search:generic': 	searchGeneric,
 			'search:album': 	searchAlbum,
+			'search:playlist': 	searchPlaylist,
 			'search:artist': 	searchArtist,
+
+			// track play/stop
 			'track:play': 		playTrack,
 			'track:stop': 		stopTrack,
+
 			// playlist functions
 			'track:queue': 		playlistManager.add,
 			'album:queue': 		playlistManager.add,
@@ -714,8 +806,6 @@ var spotipi = (function(){
 				sendNowPlaying();
 				// send the playlists
 				sendPlaylists();
-				//
-				//playTrack('spotify:track:1FTSo4v6BOZH9QxKc3MbVM');
 			} else {
 				// modal links through to login page
 				showError("Application has no credentials. Click OK to setup your Spotify account.", {

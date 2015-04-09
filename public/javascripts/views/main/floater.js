@@ -75,10 +75,10 @@ define([
         **/
     	render: function () {
 
-    		var template = Handlebars.default.compile($('#tpl-floater').text()),
+    		var template = Handlebars.default.compile(this.model.get('templates').byName('tpl-floater')),
                 keys = _.filter(this.options, function(option){
                     return option === 1;
-                }).length
+                }).length;
 
 			this.$el.html(template({keys: keys, options: this.options}));
 
@@ -94,8 +94,6 @@ define([
         show: function (options) {
             
             this.options = options;
-
-            console.log(this.options);
 
             this.render();
             this.$el.addClass('active');

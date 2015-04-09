@@ -1,0 +1,31 @@
+<p>Rooms ({{rooms.length}})</p>
+<ul>
+	{{#each rooms}}
+		<li data-id="{{_id}}" data-name="{{name}}">
+			<label class="room-edit">{{name}}</label>
+			<span class="room-remove icon-cancel-circle"></span> 
+			<!--<span class="playing {{#if playing}}icon-pause2{{/if}}{{^if playing}}icon-play2{{/if}}"></span>-->
+			<section class="now-playing {{^if playing}}paused{{/if}}" style="background-image:url('{{track.artwork}}');">
+				{{#if playlist.length}}
+					<p>{{track.artist}}</p>
+					<p>{{track.name}}</p>
+				{{/if}}
+				{{^if playlist.length}}
+					<p>Playlist is empty</p>
+				{{/if}}
+			</section>
+		</li>
+	{{/each}}
+</ul>
+{{^if rooms.length}}
+	<button class="room-add standard">
+		<span class="icon-home"></span>
+		Add Room
+	</button>
+{{/if}}
+{{#if rooms.length}}
+	<button class="standard disabled">
+		<span class="icon-cancel-circle"></span>
+		1 Zone Maximum!
+	</button>
+{{/if}}

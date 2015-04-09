@@ -45,7 +45,7 @@ define([
          */
         render: function () {
 
-            var template = Handlebars.default.compile($('#tpl-playlist').text()),
+            var template = Handlebars.default.compile(this.model.get('templates').byName('tpl-playlist')),
                 playlist = this.getRoomPlaylist();
 
             this.$el

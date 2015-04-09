@@ -79,7 +79,7 @@ define([
          */
         render: function () {
 
-            var template = Handlebars.default.compile($('#tpl-login').text());
+            var template = Handlebars.default.compile(this.model.get('templates').byName('tpl-login'));
 
             this.$el
                 .empty()

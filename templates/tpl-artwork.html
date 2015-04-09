@@ -1,0 +1,8 @@
+<h2>{{model.track.artist.0.name}}</h2>
+<h3>{{model.track.name}}</h3>
+{{^if model.track}}
+	<span class="icon-spotify"></span>
+{{/if}}
+{{#if model.track}}
+	<div class="cover" data-artwork="{{model.track.album.cover.0.uri}}"></div>
+{{/if}}

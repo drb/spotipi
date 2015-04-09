@@ -31,7 +31,7 @@ define([
         //
     	render: function () {
 
-    		var template = Handlebars.default.compile($('#tpl-controls').text());
+    		var template = Handlebars.default.compile(this.model.get('templates').byName('tpl-controls'));
 
 			this.$el.html(template(this.model.toJSON()));
 

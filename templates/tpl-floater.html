@@ -1,0 +1,22 @@
+<span class="close icon-cancel-circle">&nbsp;</span>
+<ul>
+	{{#if options.playTrack}}
+		<li><a class="play-track">Play track</a></li>
+	{{/if}}
+
+	{{#if options.playAlbum}}
+		<li><a class="play-album">Play album</a></li>
+	{{/if}}
+
+	{{#if options.replaceQueue}}
+		<li><a class="replace-playlist">Replace playlist</a></li>
+	{{/if}}
+
+	{{#if options.cueTrack}}
+		<li><a class="queue-track">Play Next</a></li>
+	{{/if}}
+
+	{{#if options.cueAlbum}}
+		<li><a class="queue-album">Queue Album</a></li>
+	{{/if}}
+</ul>

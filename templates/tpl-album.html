@@ -1,0 +1,21 @@
+<div>
+	Album / Tracks: {{tracks.length}}
+	<ul class="no-border playlist-options">
+		<li class="close icon-cancel-circle"></li>
+	</ul>
+	<p>
+		<button class="play-album standard" data-uri="{{albumId}}">
+			<span class="icon-play"></span>
+			Play Album
+		</button>
+	</p>
+</div>
+<ul class="scrollable">
+	{{#tracks}}
+		<li class="search-result">
+			<a class="track no-art" href="javascript:void(0);" data-uri="{{uri}}">
+				{{track_number}} / {{name}} / Disc #{{disc_number}}{{#explicit}}<span class="explicit">EXPLICIT</span>{{/explicit}}
+			</a>
+		</li>
+	{{/tracks}}
+</ul>

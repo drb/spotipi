@@ -116,7 +116,7 @@ define([
          */
     	render: function () {
 
-    		var template = Handlebars.default.compile($('#tpl-rooms').text()),
+    		var template = Handlebars.default.compile(this.model.get('templates').byName('tpl-rooms')),
                 connected = this.model.get('connected');
 
             //

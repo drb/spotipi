@@ -29,7 +29,7 @@ define([
         //
     	render: function () {
 
-    		var template = Handlebars.default.compile($('#tpl-artwork').text()),
+    		var template = Handlebars.default.compile(this.model.get('templates').byName('tpl-artwork')),
                 connected = this.model.get('connected');
 
             //

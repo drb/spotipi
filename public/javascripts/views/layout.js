@@ -52,12 +52,15 @@ define([
     	initialize: function (options) {
 
     		var constr,
-                self = this,
-    			socket = options.socket;
+                self        = this,
+                templates   = options.templates,
+    			socket      = options.socket;
 
 			// now playing 
     		this.model = new PlayerModel();
     		this.model.set({
+                //
+                templates: templates,
                 //
     			socket: socket,
                 //
@@ -97,7 +100,6 @@ define([
 
             // socket has recieved results for album search
             socket.on('search:results:album', function(results) {
-                console.log("album results", results);
                 self.model.trigger('search:results:album', results);
             });
 

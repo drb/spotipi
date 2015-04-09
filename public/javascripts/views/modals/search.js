@@ -170,7 +170,7 @@ define([
 
             var artist      = data.artistId,
                 types       = data.types,
-                template    = Handlebars.default.compile($('#tpl-search-expanded').text());
+                template    = Handlebars.default.compile(this.model.get('templates').byName('tpl-search-expanded'));
 
             // append 
             this.$el.find('li#artist-' + artist).after(template({types: types}));
@@ -200,7 +200,7 @@ define([
          */
         render: function () {
 
-        	var template = Handlebars.default.compile($('#tpl-search').text());
+        	var template = Handlebars.default.compile(this.model.get('templates').byName('tpl-search'));
 
 			this.$el
 				.html(template(this.model.get('search')));

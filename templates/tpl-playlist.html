@@ -1,0 +1,18 @@
+<div>
+	{{room.name}} / Tracks: {{room.playlist.length}}
+	<ul class="no-border playlist-options">
+		<li class="control-shuffle icon-shuffle{{#if model.shuffle}} active{{/if}}"></li>
+		<li class="control-loop icon-loop{{#if model.loop}} active{{/if}}"></li>
+	</ul>
+</div>
+<ul class="scrollable">
+	{{#if playlist.length}}
+		{{#each playlist}}
+			<li>
+				<a class="track" href="javascript:void(0);" data-uri="{{uri}}">{{artist}} / {{name}}</a>
+			</li>
+		{{/each}}
+	{{else}}
+		<li class="disabled">No tracks in playlist.</li>
+	{{/if}}
+</ul>

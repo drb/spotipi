@@ -1,5 +1,5 @@
 /**
- *
+ * Setup the external libs, and application code
  **/
 require.config({
 	baseUrl: 'javascripts',
@@ -43,10 +43,4 @@ function ($, _, Backbone, IO, App) {
 	// start the app
     var socket 	= IO(),
     	app 	= new App(socket);
-
-    // 
-    socket.emit("hello:me", {
-		me: localStorage.getItem('auth') || false
-	});
-	
 });

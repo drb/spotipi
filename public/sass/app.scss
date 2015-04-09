@@ -405,14 +405,24 @@ ul {
 						color: #fff;
 						text-decoration: none;
 						text-align: left;
-						position:relative;
+						position: relative;
 						width: 100%;
 						display: block;
 
-						img {
-							display: block;
-							width: 100%;
+						// ensures album art that doesn't have 1:1 size is displayed in same-sized grid
+						.album-art {
+
+							position: relative;
+						    overflow: hidden;
+						    padding-bottom: 100%;
+
+							img {
+								width: 100%;
+								height: 100%;
+								position: absolute;
+							}	
 						}
+						
 						span.title {
 							display: block;
 							padding: 3px;

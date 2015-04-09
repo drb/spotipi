@@ -5,7 +5,6 @@ define([
 
     return Backbone.Model.extend({
 
-
         /**
          * defaults object
          */

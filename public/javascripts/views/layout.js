@@ -47,8 +47,13 @@ define([
 
     return Backbone.View.extend({
 
-        model: null,
 
+        /**
+         * [initialize description]
+         * 
+         * @param  {[type]} options [description]
+         * @return {[type]}         [description]
+         */
     	initialize: function (options) {
 
     		var constr,
@@ -59,11 +64,14 @@ define([
 			// now playing 
     		this.model = new PlayerModel();
     		this.model.set({
-                //
-                templates: templates,
-                //
-    			socket: socket,
-                //
+
+                // template cache
+                templates:  templates,
+
+                // socket
+    			socket:     socket,
+
+                // ui collections
                 search:     new SearchCollection(),
                 rooms:      new RoomsCollection()
     		});
@@ -161,7 +169,9 @@ define([
     	},
 
         /**
+         * onClose
          * 
+         * @return {[type]} [description]
          */
     	onClose: function () {}
     });

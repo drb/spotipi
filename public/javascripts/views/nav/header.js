@@ -12,7 +12,7 @@ define([
     return Backbone.View.extend({
 
     	events: {
-            'click h1.home':       'home',
+            'click h1.home':      'home',
     		'click a.playlist':   'playlist',
     		'click a.search':     'search',
             'click a.rooms':      'rooms'

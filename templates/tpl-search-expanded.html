@@ -7,7 +7,9 @@
 		{{#types.album}}
 			<li>
 				<a class="album" data-id="{{id}}" data-name={{name}}>
-					<img src="{{images.1.url}}" />
+					<div class="album-art">
+						<img src="{{images.1.url}}" />
+					</div>
 					<span class="title">{{name}}</span>
 				</a>
 			</li>
@@ -22,7 +24,9 @@
 		{{#types.single}}
 			<li>
 				<a class="album" data-id="{{id}}">
-					<img src="{{images.1.url}}" />
+					<div class="album-art">
+						<img src="{{images.1.url}}" />
+					</div>
 					<span class="title">{{name}}</span>
 				</a>
 			</li>

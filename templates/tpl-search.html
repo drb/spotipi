@@ -49,7 +49,7 @@
 	<li class="search-result result-track subtitle icon-circle-down{{#unless playlists.length}} disabled{{/unless}}">Playlists {{#if playlist.length}}({{playlists.length}}){{/if}}</li>
 	{{#each playlists}}
 		<li>
-			<a class="track" href="javascript:void(0);" data-uri="{{uri}}">
+			<a class="playlist" href="javascript:void(0);" data-id="{{id}}" data-user="{{owner.id}}">
 				{{name}}
 				<img src="{{images.0.url}}" />
 			</a>

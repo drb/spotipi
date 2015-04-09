@@ -264,18 +264,16 @@ var spotipi = (function(){
 		});
 
 		speakerOutput.on('close', function() {
-			console.log("closed...");
+
+			console.log("speaker closed...", nowPlaying);
 
 			// kill the speaker instance
 			speakerOutput = null;
 
-			// nowPlaying = {
-			// 	uri: false,
-			// 	track: false
-			// };
-
-			// start the next track, if there is one
-			getMediaStream();
+			if (nowPlaying.track === false) {
+				// start the next track, if there is one
+				getMediaStream();
+			}
 		});
 	}
 
@@ -478,7 +476,7 @@ var spotipi = (function(){
 
 				requests++;
 
-				console.log("got %s results for %s", type, searchObj.term);
+				// console.log("got %s results for %s", type, searchObj.term);
 
 				if (!err) {
 					results[type] = body[type + 's'].items;
@@ -487,6 +485,7 @@ var spotipi = (function(){
 				// have all requests completed? doesn't matter if they errored
 				if (requests === types.length) {
 					try {
+						// toFile('generic.search.json', JSON.stringify(results, null, "\t\t"));
 						socket.emit('search:results', results);	
 					} catch (e) {
 						console.error(e);
@@ -573,11 +572,11 @@ var spotipi = (function(){
 
 
 
-	function searchPlaylist (userId, playlistId) {
+	function searchPlaylist (data) {
 
-		console.log('playlist id', playlistId, 'uerid', userId);
-
-		var lookup = {
+		var userId = data.userId,
+			playlistId = data.playlistId,
+			lookup = {
 				uri: 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + playlistId + '/tracks',
 				headers: {
 					'Accept': 'application/json'
@@ -690,11 +689,17 @@ var spotipi = (function(){
 							track.play()
 							.pipe(new lame.Decoder())
 							.pipe(speakerOutput)
-							// .on('flush', function(){
-							// 	console.log('flushing track instance...');
-							// })
+							.on('flush', function(){
+								console.log('flushing track instance...');
+							})
 							.on('finish', function () {
+
+								console.log("track has finished");
+
 								instance.disconnect();
+
+								// send stop track event back to client
+								io.emit("track:stop");
 
 								nowPlaying = {
 									uri: false,

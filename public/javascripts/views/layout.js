@@ -124,11 +124,17 @@ define([
             });
 
             socket.on('track:play', function(track) {
-                self.model.set({'track': track, 'playing': true});
+                self.model.set({
+                    'track': track, 
+                    'playing': true
+                });
             });
 
             socket.on('track:stop', function() {
-                self.model.set('track', false, 'playing', false);
+                self.model.set({
+                    'track': false, 
+                    'playing': false
+                });
             });
 
             socket.on('playlist:updated', function(playlists) {

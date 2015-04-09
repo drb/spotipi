@@ -26,16 +26,16 @@ define([
 
     	events: {
             // do search after delay
-    		'keyup input':            'delaySearch',
+    		'keyup input':                  'delaySearch',
 
             // search results
-            'click .track':           'showOptions',
+            'click .track':                 'showOptions',
 
             // expand artists
-            'click .artist':          'expandArtist',
+            'click .artist, .playlist':     'expandPassThru',
 
             // expand album
-            'click .album':           'expandAlbum'
+            'click .album':                 'expandAlbum'
     	},
 
     	/*
@@ -149,6 +149,20 @@ define([
         },
 
 
+        expandPassThru: function (el) {
+
+            var $el = $(el.currentTarget);
+
+            if ($el.hasClass('artist')) {
+                // artist search
+                this.expandArtist(el);
+            } else if ($el.hasClass('playlist')) {
+                // playlist search
+                this.expandPlaylist(el);
+            }
+        },
+
+
 
         expandArtist: function (el) {
             
@@ -162,6 +176,26 @@ define([
             } else {
                 $el.addClass('expanded');
                 this.model.get('socket').emit('search:artist', artistId);
+            }
+        },
+
+
+        expandPlaylist: function (el) {
+            
+            var playlistId  = el.currentTarget.getAttribute('data-id'),
+                userName    = el.currentTarget.getAttribute('data-user'),
+                $el         = $(el.currentTarget).closest('li'),
+                expanded    = $el.hasClass('expanded');
+            
+            if (expanded) {
+                $el.removeClass('expanded');
+                this.$el.find('li.artist-expanded').remove();
+            } else {
+                $el.addClass('expanded');
+                this.model.get('socket').emit('search:playlist', {
+                    userId: userName,
+                    playlistId: playlistId
+                });
             }
         },
 

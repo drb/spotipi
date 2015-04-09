@@ -77,7 +77,7 @@ define([
         //
     	render: function () {
 
-    		var template = Handlebars.default.compile($('#tpl-alert').text());
+    		var template = Handlebars.default.compile(this.model.get('templates').byName('tpl-alert'));
             
 			this.$el.html(template({ message: this.message }));
             

@@ -31,7 +31,7 @@ This loads all the prerequisites from `package.json`
 
 ### Run Spotipi
 
-`node index.js`
+`node spotipi.js`
 
 Once the code initializes it will output a path you can connect to with a mobile device or browser. The default port is 3000.
 
@@ -45,7 +45,7 @@ Install the module globally
 
 Start instance
 
-`forever start index.js`
+`forever start spotipi.js`
 
 Check instance is alive
 

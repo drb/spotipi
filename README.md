@@ -9,7 +9,7 @@ Spotify player for distributed Raspberry Pi devices.
 
 `git clone https://github.com/drb/spotipi.git <target_dir>`
 
-### [Optional] Install Node.js if not already installed
+### Install Node.js if not already installed
 
 `sudo apt-get install curl`
 
@@ -21,7 +21,7 @@ Spotify player for distributed Raspberry Pi devices.
 
 [There is a better guide for this process here.]( https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager#debian-and-ubuntu-based-linux-distributions)
 
-### [Optional] Debian/Ubuntu needs alsa.h header file (ALSA backend is default option).
+### [optional... but important] Debian/Ubuntu needs alsa.h header file (ALSA backend is default option).
 
 `sudo apt-get install libasound2-dev`
 

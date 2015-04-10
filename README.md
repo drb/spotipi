@@ -35,19 +35,25 @@ This loads all the prerequisites from `package.json`
 
 Once the code initializes it will output a path you can connect to with a mobile device or browser. The default port is 3000.
 
-### Keep alive in background
+### Keep alive in background & starting/stopping
 
 There are a few ways to do this - forever is an NPM module that will spawn an instance of the server in the background and restart it when the process inevitably crashes.
 
-Install the module globally
+Install the module globally:
 
 `sudo npm install -g forever`
 
-Start instance
+Start instance:
+
+*if you started the process earlier using `node spotipi.js`, kill it now; otherwise you won't be able to start it using forever.*
 
 `forever start spotipi.js`
 
-Check instance is alive
+Check instance is alive:
 
-`forever list` - this will output the process.
+`forever list` - this will output the process - take a note of the pid's index that is listed between [parens] i.e. [0] spotipi.js
+
+Kill instance:
+
+`forever stop <pid_index>`
 

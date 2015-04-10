@@ -70,7 +70,7 @@ var spotipi = (function(){
 
 			/**
 			 * getList
-			 *
+			 *ggq 
 			 * get the playlist assigned to a zone
 			 */
 			function getList (zoneId, callback) {
@@ -313,7 +313,7 @@ var spotipi = (function(){
 	function sendNowPlaying () {
 
 		if (nowPlaying.track) {
-			socket.emit('track:play', nowPlaying.track);
+			io.emit('track:play', nowPlaying.track);
 		}
 	}
 
@@ -379,11 +379,16 @@ var spotipi = (function(){
 	function accountAdd (auth) {
 
 		// update or insert new account
-		databases.auth.update({ tag: 'spotify' }, { auth: auth, tag: 'spotify' }, { upsert: true }, function (err, doc) {
+		databases.auth.update({ tag: 'spotify' }, { $set: {auth: auth, tag: 'spotify'} }, { upsert: true }, function (err, doc) {
 
 			if (err) {
 				showError('Failed to add Spotify details.', {});
 			} else {
+
+				// send back the credentials status
+				socket.emit('app:setup', doc);
+
+				// send the rooms
 				sendZones();
 			}
 		});
@@ -804,6 +809,10 @@ var spotipi = (function(){
 		// check the application has some setup details
 		spotifyEnabled(function(err, credentials) {
 
+			// send back the credentials to indicate we're logged in
+			socket.emit('app:setup', !!credentials);
+
+			// send all the other stuff
 			if (!err && credentials) {
 				// send rooms initially
 				sendZones();

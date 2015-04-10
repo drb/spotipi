@@ -71,7 +71,7 @@ define([
         	}
 
         	this.delaySearch = setTimeout(function() {
-        		self.doSearch(searchTerm);
+        		self.delaySearchDebounce(searchTerm);
         	}, 600);
         },
 
@@ -79,7 +79,7 @@ define([
         /**
    		 * 
 		**/
-        doSearch: function (searchTerm) {
+        delaySearchDebounce: function (searchTerm) {
 
         	var eventType = 'search:generic',
                 limit = this.defaultResultLimit;
@@ -90,7 +90,7 @@ define([
 
 			if (searchTerm && searchTerm.length > 0) {
 
-				$('.search-placholder').text("Searching...");	
+				$('li.subtitle').text("Searching...");	
 
 				if (searchTerm.indexOf('spotify:') > -1) {
 					eventType = 'search:spotify';
@@ -118,7 +118,7 @@ define([
 					'searching': false
 				}, { unset: true });
 
-				$('.search-placholder').text("No results.");	
+				$('li.subtitle').text("No results.");	
 			}
         },
 

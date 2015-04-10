@@ -84,10 +84,10 @@ define([
                 self.model.set('connected', false);
             });
 
-            // sets the redirect url
-            socket.on('config:init', function(config) {
-                self.model.set(config);
-            });
+            // fired when the socket connects
+            socket.on('app:setup', function(credentials) {
+                self.model.set('authed', credentials);
+            });            
 
             //
             socket.on('error:generic', function (error) {

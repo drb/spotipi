@@ -34,7 +34,11 @@ define([
     		var template = Handlebars.default.compile(this.model.get('templates').byName('tpl-header')),
                 connected = this.model.get('connected');
 
-			this.$el.html(template({connected: connected, isReady: this.model.isReady()}));
+			this.$el.html(template({
+                connected: connected,
+                isReady: this.model.isReady(),
+                isLoggedIn: this.model.isLoggedIn()
+            }));
 
             if (connected) {
                 this.$el.removeClass('disabled');
@@ -72,7 +76,7 @@ define([
 
         rooms: function () {
 
-            if (this.model.get('connected')) {
+            if (this.model.get('connected') && this.model.isLoggedIn()) {
                 this.model.trigger('show:rooms');
             }
         }

@@ -22,6 +22,9 @@ define([
             // loop mode on?
             loop: false,
 
+            // is the app authed?
+            authed: false,
+
             rooms:      null,
             playlist:   null,
             search:     null,
@@ -38,7 +41,8 @@ define([
         /**
          * triggerAndEmit
          *
-         * triggers and socket.emits the same event with the same data
+         * triggers on the model, and socket.emits the 
+         * same event with the same data
          */
         triggerAndEmit: function (evt, data) {
 
@@ -60,6 +64,11 @@ define([
             this.set('ready', ready);
 
             return ready;
+        },
+
+        isLoggedIn: function () {
+
+            return this.get('authed');
         },
 
         getArtNowPlaying: function () {

@@ -31,7 +31,7 @@ define([
 
             ModalView.prototype.initialize.apply(this, arguments);
 
-            this.listenTo(this.model, 'show:rooms', this.hide);
+            this.listenTo(this.model, 'rooms:updated', this.hide);
             this.listenTo(this.model, 'spotify:auth', this.show);
 
             this.delegateEvents();

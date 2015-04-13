@@ -11,8 +11,8 @@ define([
     'use strict';
     return Backbone.Collection.extend({
 
+        // set model
         model: TrackModel
-
     });
 
 });

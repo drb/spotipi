@@ -120,6 +120,8 @@ define([
                 roomsCollection.reset();
                 roomsCollection.add(rooms);
 
+                // console.log(roomsCollection.models);
+
                 self.model.trigger('rooms:updated');
             });
 

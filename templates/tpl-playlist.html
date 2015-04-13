@@ -1,8 +1,8 @@
 <div>
-	{{room.name}} / Tracks: {{room.playlist.length}}
+	{{room.name}} / Tracks: {{playlist.length}}
 	<ul class="no-border playlist-options">
-		<li class="control-shuffle icon-shuffle{{#if model.shuffle}} active{{/if}}"></li>
-		<li class="control-loop icon-loop{{#if model.loop}} active{{/if}}"></li>
+		<li class="control-shuffle icon-shuffle{{#if room.shuffle}} active{{/if}}"></li>
+		<li class="control-loop icon-loop{{#if room.loop}} active{{/if}}"></li>
 	</ul>
 </div>
 <ul class="scrollable">

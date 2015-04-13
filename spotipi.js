@@ -278,7 +278,11 @@ var spotipi = (function(){
 	}
 
 
-	
+	/**
+	 * sendZones
+	 *
+	 * returns the zones in bulk
+	 **/
 	function sendZones () {
 
 		// all clients get sent updated rooms
@@ -321,7 +325,7 @@ var spotipi = (function(){
 	/**
 	 * spotifyEnabled
 	 *
-	 * returns the configured zones
+	 * returns the credentials added status
 	 **/
 	function spotifyEnabled (callback) {
 
@@ -432,7 +436,26 @@ var spotipi = (function(){
 		var _id 	= zoneData.id,
 			name 	= zoneData.name;
 
-		databases.zones.update({_id: _id}, {name: name}, function (err) {
+		databases.zones.update({_id: _id}, { $set: { name: name }}, function (err) {
+			sendZones();
+		});
+	}
+
+
+
+	/**
+	 * zonePropertiesEdit
+	 *
+	 * edit the properties belonging to a configured zone
+	 **/
+	function zonePropertiesEdit (zoneData) {
+
+		var _id 		= zoneData.id,
+			property 	= {};
+
+		property[zoneData.properties.keyName] = zoneData.properties.keyValue;
+
+		databases.zones.update({_id: _id}, { $set: property }, function (err) {
 			sendZones();
 		});
 	}
@@ -501,6 +524,11 @@ var spotipi = (function(){
 	}
 
 
+	/**
+	 * searchArtist
+	 *
+	 * searches artists for albums and singles
+	 **/
 	function searchArtist (artistId) {
 
 		var lookup = {
@@ -539,9 +567,13 @@ var spotipi = (function(){
 	}
 
 
-	function searchAlbum (albumId) {
 
-		console.log('album id', albumId);
+	/**
+	 * searchAlbum
+	 *
+	 * returns data for an album
+	 **/
+	function searchAlbum (albumId) {
 
 		var lookup = {
 				uri: 'https://api.spotify.com/v1/albums/' + albumId + '/tracks',
@@ -577,6 +609,12 @@ var spotipi = (function(){
 
 
 
+	/**
+	 * searchPlaylist
+	 *
+	 * drills into playlists - requires special authorisation that is
+	 * not yet supported
+	 **/
 	function searchPlaylist (data) {
 
 		var userId = data.userId,
@@ -780,6 +818,7 @@ var spotipi = (function(){
 			'room:add': 		zoneAdd,
 			'room:remove': 		zoneRemove,
 			'room:edit': 		zoneEdit,
+			'room:edit:props': 	zonePropertiesEdit,
 
 			// search activities
 			'search:generic': 	searchGeneric,
@@ -799,6 +838,8 @@ var spotipi = (function(){
 
 		socket = sock;
 
+		// console.log("client connected", sock.id);
+
 		// setup socket event listeners
 		for (var route in routes) {
 			if (routes.hasOwnProperty(route)) {
@@ -808,6 +849,8 @@ var spotipi = (function(){
 
 		// check the application has some setup details
 		spotifyEnabled(function(err, credentials) {
+
+			// console.log("client is authed?", err, !!credentials);
 
 			// send back the credentials to indicate we're logged in
 			socket.emit('app:setup', !!credentials);

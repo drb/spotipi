@@ -21,6 +21,8 @@ define([
 
         tracks:     [],
 
+        data:       {},
+
         events: {
 
             // closes album list
@@ -54,8 +56,10 @@ define([
 
         populateAlbum: function (data) {
 
+            this.data = data;
+
             this.checkSingleton();
-            this.render(data);
+            this.render();
             this.show();
         },
 
@@ -67,14 +71,11 @@ define([
 
 
         //
-    	render: function (data) {
+    	render: function () {
 
-            var albumId = data.albumId,
-                tracks  = data.tracks,
+            var albumId = this.data.albumId,
+                tracks  = this.data.tracks,
                 template = Handlebars.default.compile(this.model.get('templates').byName('tpl-album'));
-
-            // set tracks
-            this.tracks = tracks;
 
 			this.$el.html(template({tracks: tracks}));
             

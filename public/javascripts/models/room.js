@@ -25,7 +25,13 @@ define([
             selected:   true, 
 
             // the playlist associated with the room
-            playlist:   new PlaylistCollection()
+            playlist:   new PlaylistCollection(),
+
+            //
+            shuffle:    false,
+
+            //
+            loop:       false
         }
     });
 });

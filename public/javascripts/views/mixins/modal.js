@@ -11,8 +11,11 @@ define([
 
     return Backbone.View.extend({
 
+        data: {},
+
     	initialize: function (options) {
 
+            this.data       = {};
     		this.hidden 	= true;
     		this.model 		= options.model;
     	},
@@ -52,6 +55,8 @@ define([
         */  
         showOptions: function (el) {
 
+            
+
             var options = {
                     playTrack:      0,
                     playAlbum:      0,
@@ -77,9 +82,11 @@ define([
                 options.cueAlbum    = 1;
 
                 if (this.tracks) {
-                    options.data = this.tracks;    
+                    options.data = this.data;    
                 }
             }
+
+            console.log('dat incoing', options);
 
             // show floater
             if (!_.isEmpty(options)) {

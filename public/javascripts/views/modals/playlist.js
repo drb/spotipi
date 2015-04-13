@@ -37,7 +37,6 @@ define([
             this.listenTo(this.model, 'show:playlist',                      this.show);
             this.listenTo(this.model, 'show:rooms show:search show:home',   this.hide);
             this.listenTo(this.model, 'rooms:updated playlist:updated',     this.render);
-            this.listenTo(this.model, 'track:play',                         this.addToList);
         },
 
         /**
@@ -46,60 +45,37 @@ define([
         render: function () {
 
             var template = Handlebars.default.compile(this.model.get('templates').byName('tpl-playlist')),
-                playlist = this.getRoomPlaylist();
+                room = this.model.getActiveRoom(true),
+                playlist = this.model.getRoomPlaylist();
 
             this.$el
                 .empty()
-                .html(template({model: this.model.toJSON(), room: playlist}));
+                .html(template({
+                    model:      this.model.toJSON(),
+                    room:       room,
+                    playlist:   playlist
+                }));
 
             $('#container').append(this.$el);
         },
 
 
-        addToList: function (track) {
-
-            // grab the active room and get the playlist
-            var playlist = this.model.get('rooms').findWhere({selected: true});
-
-            if (playlist) {
-                playlist.get('playlist').add(track);
-                this.render();
-            }
-        },
-
-
-        /**
-         * getRoomPlaylist
-         *
-         */
-        getRoomPlaylist: function () {
-
-            // grab the active room and get the playlist
-            var playlist = this.model.get('rooms').findWhere({selected: true});
-
-            // 
-            return (playlist ? playlist.toJSON() : {});
-        },
-
-
         toggleLoop: function() {
 
-            var loop = this.model.get('loop');
+            var room = this.model.getActiveRoom();
 
-            this.model
-                .set('loop', !loop)
-                .syncToLocal();
+            room.set('loop', !room.get('loop'));
+            this.model.syncToServer();
 
             this.render();
         },
 
         toggleShuffle: function() {
 
-            var shuffle = this.model.get('shuffle');
+            var room = this.model.getActiveRoom();
 
-            this.model
-                .set('shuffle', !shuffle)
-                .syncToLocal();
+            room.set('shuffle', !room.get('shuffle'));
+            this.model.syncToServer();
 
             this.render();
         }

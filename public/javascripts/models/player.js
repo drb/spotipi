@@ -16,12 +16,6 @@ define([
         	// actual socket connection to server
         	socket: null,
 
-            // shuffle mode on?
-            shuffle: false,
-
-            // loop mode on?
-            loop: false,
-
             // is the app authed?
             authed: false,
 
@@ -35,7 +29,7 @@ define([
 
         initialize: function () {
 
-            this.syncFromLocal();
+            // this.syncFromLocal();
         },
 
         /**
@@ -81,26 +75,71 @@ define([
         	return track.album.cover[0];
         },
 
-        syncFromLocal: function () {
+        // syncFromLocal: function () {
 
-            var keys = storage.all();
+        //     var keys = storage.all();
             
-            _.each(_.keys(keys), function(item) {
-                try {
-                    this.set(item, storage.get(item));
-                } catch (e) {}
-            }, this);
-        },
+        //     _.each(_.keys(keys), function(item) {
+        //         try {
+        //             this.set(item, storage.get(item));
+        //         } catch (e) {}
+        //     }, this);
+        // },
 
-        syncToLocal: function () {
+        syncToServer: function () {
 
-            var syncItems = ['loop', 'shuffle'];
+            var syncItems = ['loop', 'shuffle'],
+                room = this.getActiveRoom();
 
-            _.each(syncItems, function(item) {
-                storage.set(item, this.get(item));
-            }, this);
+
+            if (room) {
+
+                _.each(syncItems, function(item) {
+
+                    // emit for each property
+                    this.get('socket').emit(
+                        'room:edit:props', 
+                        {
+                            id: room.id,
+                            properties: {
+                                keyName: item, 
+                                keyValue: room.get(item)
+                            }
+                        }
+                    );
+                }, this);
+            }
             
             return this;
+        },
+
+
+        getActiveRoom: function (asJSON) {
+
+            var room = this.get('rooms').findWhere({
+                selected: true
+            });
+
+            if (room) {
+                return (asJSON === true ? room.toJSON() : room);    
+            } else {
+                return {};
+            }
+        },
+
+
+        getRoomPlaylist: function () {
+
+            var room;
+
+            if (this.get('rooms').length) {
+                room = this.getActiveRoom(true);   
+                if (room && _.has(room, 'playlist')) {
+                    return room['playlist'] || [];
+                }
+            } else {
+                return [];
+            }
         },
 
 

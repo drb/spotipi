@@ -2,7 +2,7 @@
  * Setup the external libs, and application code
  **/
 require.config({
-	baseUrl: 'javascripts',
+	baseUrl: 'js',
 	shim: {
 		underscore: {
 			exports: '_'

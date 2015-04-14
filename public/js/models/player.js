@@ -27,10 +27,7 @@ define([
         	track: false
         },
 
-        initialize: function () {
-
-            // this.syncFromLocal();
-        },
+        initialize: function () {},
 
         /**
          * triggerAndEmit
@@ -75,22 +72,11 @@ define([
         	return track.album.cover[0];
         },
 
-        // syncFromLocal: function () {
-
-        //     var keys = storage.all();
-            
-        //     _.each(_.keys(keys), function(item) {
-        //         try {
-        //             this.set(item, storage.get(item));
-        //         } catch (e) {}
-        //     }, this);
-        // },
 
         syncToServer: function () {
 
             var syncItems = ['loop', 'shuffle'],
                 room = this.getActiveRoom();
-
 
             if (room) {
 
@@ -128,14 +114,16 @@ define([
         },
 
 
-        getRoomPlaylist: function () {
+        getRoomPlaylist: function (asJSON) {
 
-            var room;
+            var room,
+                playlist;
 
             if (this.get('rooms').length) {
                 room = this.getActiveRoom(true);   
                 if (room && _.has(room, 'playlist')) {
-                    return room['playlist'] || [];
+                    playlist = room.get('playlist');
+                    return (asJSON ? playlist.toJSON() : playlist) || [];
                 }
             } else {
                 return [];

@@ -27,7 +27,7 @@ define([
 
             this.message = {
                 message: ""
-            }
+            };
     	},
 
 
@@ -68,8 +68,8 @@ define([
 
             this.$el.removeClass('error');
 
-            this.message    = error.message;
-            this.callback   = error.config.callback;
+            this.message    = message.message;
+            this.callback   = message.config.callback;
 
             this.render();
         },

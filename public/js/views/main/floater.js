@@ -45,7 +45,20 @@ define([
             var button  = el.currentTarget,
                 action  = button.className,
                 socket  = this.model.get('socket'),
-                data    = this.options.data;
+                data    = this.options.data || {};
+
+            // if we were just sent a URI we need to create a proper request object
+            if (!_.isObject(data)) {
+                data = {
+                    uri: data
+                };
+            }
+
+            // set the room context
+            data.zoneId = this.model.getActiveRoom().get('_id');
+
+            // track request
+            console.log(data);
 
             switch (action) {
                 case 'play-track':

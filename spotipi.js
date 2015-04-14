@@ -154,7 +154,10 @@ var spotipi = (function(){
 			function emitter (zoneId) {
 
 				getZone(zoneId, function(err, response) {
-					io.emit('playlist:updated', response);
+					io.emit('playlist:updated', {
+						zone: zoneId,
+						playlist: response
+					});
 				});
 				
 			}
@@ -169,8 +172,9 @@ var spotipi = (function(){
 
 		// local cache of the track playing now
 		nowPlaying = {
-			uri: false,
-			track: false
+			uri: 	false,
+			track: 	false,
+			zoneId: false
 		};
 
 	/**
@@ -285,7 +289,8 @@ var spotipi = (function(){
 	 **/
 	function sendZones () {
 
-		// all clients get sent updated rooms
+		// all clients get sent updated zone data
+		// this affects playlists too
 		databases.zones.find({}, function(err, rooms) {
 			io.emit('rooms:updated', rooms);
 		});
@@ -407,6 +412,7 @@ var spotipi = (function(){
 	function zoneAdd (zone) {
 
 		databases.zones.insert({name: zone}, function (err, doc) {
+			// send back current zones
 			sendZones();
 		});
 	}
@@ -420,7 +426,12 @@ var spotipi = (function(){
 	function zoneRemove (zoneId) {
 
 		databases.zones.remove({_id: zoneId}, function (err) {
+			// send back current zones
 			sendZones();
+			// kill all clients if they're playing a track. the zone no longer exists!
+			// @todo this should only kill zones in use, but since we only support 1 we
+			// can do this safely
+			io.emit('track:stop');
 		});
 	}
 
@@ -437,6 +448,7 @@ var spotipi = (function(){
 			name 	= zoneData.name;
 
 		databases.zones.update({_id: _id}, { $set: { name: name }}, function (err) {
+			// send back current zones
 			sendZones();
 		});
 	}
@@ -680,7 +692,8 @@ var spotipi = (function(){
 	 **/
 	function getMediaStream() {
 
-		var uri = nowPlaying.uri;
+		var uri = nowPlaying.uri,
+			zoneId = nowPlaying.zoneId;
 
 		if (!uri) {
 			io.emit('track:stop');
@@ -724,7 +737,7 @@ var spotipi = (function(){
 							nowPlaying.track = track;
 
 							//
-							playlistManager.add('YCb343BnzDcSGTIw', track, function (err, playlist) {
+							playlistManager.add(zoneId, {name: "the beatles", id: Math.random().toString()}, function (err, playlist) {
 								console.log("added track to playlist");
 							});
 
@@ -737,16 +750,18 @@ var spotipi = (function(){
 							})
 							.on('finish', function () {
 
-								console.log("track has finished");
+								console.log("track instance has finished playing");
 
 								instance.disconnect();
 
 								// send stop track event back to client
 								io.emit("track:stop");
 
+								// reset the now playing cache
 								nowPlaying = {
-									uri: false,
-									track: false
+									uri: 	false,
+									track: 	false,
+									zoneId: false
 								};
 							});
 						}
@@ -762,13 +777,17 @@ var spotipi = (function(){
 	 *
 	 * attempt to play the requested track
 	 **/
-	function playTrack(uri) {
+	function playTrack(trackData) {
 
-		console.log("playing track", uri);
+		var uri = trackData.uri,
+			zoneId = trackData.zoneId;
+
+		console.log("playing track:uri %s on zone %s", uri, zoneId);
 
 		setupSpeaker();
 
-		nowPlaying.uri = uri;
+		nowPlaying.uri 		= uri;
+		nowPlaying.zoneId 	= zoneId;
 
 		if (speakerOutput) {
 			speakerOutput.end();
@@ -790,8 +809,9 @@ var spotipi = (function(){
 			console.log("stopping track...", nowPlaying.uri);
 		}
 
-		nowPlaying.uri = false;
-		nowPlaying.track = false;
+		nowPlaying.uri 		= false;
+		nowPlaying.track 	= false;
+		nowPlaying.zoneId 	= false;
 
 		// kill track on all sockets
 		io.emit('track:stop');

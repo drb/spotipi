@@ -81,7 +81,7 @@ define([
 
             var room = $(el.currentTarget).closest('li').attr('data-id');
 
-            if (room) {
+            if (room && confirm("Are you sure you want to remove this zone?")) {
                 this.model
                     .get('socket')
                     .emit('room:remove', room);

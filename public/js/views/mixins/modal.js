@@ -86,7 +86,7 @@ define([
                 }
             }
 
-            console.log('dat incoing', options);
+            console.log('data incoming', options);
 
             // show floater
             if (!_.isEmpty(options)) {

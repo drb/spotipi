@@ -139,8 +139,15 @@ define([
                 });
             });
 
-            socket.on('playlist:updated', function(playlists) {
-                self.model.trigger('playlist:updated', playlists);
+            socket.on('playlist:updated', function(data) {
+
+                var room = self.model.get('rooms').get(data.zone),
+                    playlist = room.get('playlist');
+
+                playlist.reset();
+                playlist.add(data);
+
+                self.model.trigger('playlist:updated');
             });
 
 			// default constructor for sub views

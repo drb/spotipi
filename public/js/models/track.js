@@ -13,11 +13,6 @@ define([
             name:       'Some Song',
             artist:     'Some Band',
             playing:    false
-        },
-
-
-        play: function() {
-            this.trigger('play:me', this.get('id'));
         }
     });
 });

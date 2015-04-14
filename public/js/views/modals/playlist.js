@@ -46,7 +46,9 @@ define([
 
             var template = Handlebars.default.compile(this.model.get('templates').byName('tpl-playlist')),
                 room = this.model.getActiveRoom(true),
-                playlist = this.model.getRoomPlaylist();
+                playlist = this.model.getRoomPlaylist(true);
+
+            console.log('room playlist', playlist.toJSON());
 
             this.$el
                 .empty()

@@ -34,6 +34,7 @@ define([
             }
 
             this.hidden = !this.hidden;
+            this.model.trigger('show:modal');
 
             $(this.$el).animate({ scrollTop: 0 }, "fast");
         },
@@ -55,8 +56,6 @@ define([
         */  
         showOptions: function (el) {
 
-            
-
             var options = {
                     playTrack:      0,
                     playAlbum:      0,
@@ -69,10 +68,16 @@ define([
 
             // track clicked
             if ($el.hasClass('track')) {
+
                 options.playTrack = 1;
                 options.cueTrack = 1;
 
-                options.data = data;
+                options.data = {
+                    uri: data,
+                    track:{
+
+                    }
+                };
             }
 
             // album clicked

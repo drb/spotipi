@@ -32,7 +32,7 @@ define([
             this.options    = {};
 
             this.listenTo(this.model, 'show:floater', this.show);
-            this.listenTo(this.model, 'show:error', this.hide);
+            this.listenTo(this.model, 'show:error show:modal', this.hide);
     	},
 
 
@@ -58,7 +58,7 @@ define([
             data.zoneId = this.model.getActiveRoom().get('_id');
 
             // track request
-            console.log(data);
+            console.log('passThru data', data);
 
             switch (action) {
                 case 'play-track':

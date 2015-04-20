@@ -120,10 +120,10 @@ define([
                 playlist;
 
             if (this.get('rooms').length) {
-                room = this.getActiveRoom(true);   
-                if (room && _.has(room, 'playlist')) {
+                room = this.getActiveRoom();   
+                if (room) {
                     playlist = room.get('playlist');
-                    return (asJSON ? playlist.toJSON() : playlist) || [];
+                    return (asJSON ? playlist.toJSON() : playlist);
                 }
             } else {
                 return [];

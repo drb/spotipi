@@ -141,11 +141,29 @@ define([
 
             socket.on('playlist:updated', function(data) {
 
-                var room = self.model.get('rooms').get(data.zone),
-                    playlist = room.get('playlist');
+                var zones = _.uniq(_.pluck(data, 'zone')),
+                    playlist,
+                    playlistItems, 
+                    room;
 
-                playlist.reset();
-                playlist.add(data);
+                for (var i = 0; i < zones.length; i++) {
+
+                    room = self.model.get('rooms').get(zones[i]);
+
+                    if (room) {
+
+                        playlist = room.get('playlist');
+
+                        playlistItems = _.pluck(_.filter(data, function(item){
+                            return item.zone === zones[i];
+                        }), 'track');
+
+                        playlist.reset();
+                        playlist.add(playlistItems);
+
+                        console.log(room.toJSON(), 'playlist in zome', playlist.toJSON());
+                    }
+                }
 
                 self.model.trigger('playlist:updated');
             });

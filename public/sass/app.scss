@@ -643,6 +643,11 @@ ul.controls {
 				margin-bottom: 0px;
 			}
 
+			&.disabled {
+				background-opacity: 0.4;
+				opacity: 0.2;
+			}
+
 			a {
 				text-transform: uppercase;
 				color: inherit;

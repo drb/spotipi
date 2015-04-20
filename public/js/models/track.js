@@ -9,10 +9,17 @@ define([
          * defaults object
          */
         defaults: {
-            id:         '123',
-            name:       'Some Song',
-            artist:     'Some Band',
-            playing:    false
+
+            // 
+            id:         undefined,
+            title:      'A Song',
+            artist:     'A Band',
+
+            //
+            playing:    false,
+
+            //
+            ts:         new Date().getTime()
         }
     });
 });

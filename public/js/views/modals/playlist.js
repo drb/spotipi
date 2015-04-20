@@ -48,7 +48,7 @@ define([
                 room = this.model.getActiveRoom(true),
                 playlist = this.model.getRoomPlaylist(true);
 
-            console.log('room playlist', playlist.toJSON());
+            console.log('view room playlist', playlist);
 
             this.$el
                 .empty()

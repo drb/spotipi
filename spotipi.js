@@ -109,12 +109,12 @@ var spotipi = (function() {
 		// set the app to listen on port defined above
 		server.listen(port);
 
-		// when a ne client connects, set up the connection listeners
+		// when a new client connects, set up the connection listeners
 		io.on('connection', connection);
 
 		// attempts to output an ip address clients can connect to
 		require('dns').lookup(require('os').hostname(), function (err, address, fam) {
-			console.log('Point a browser/phone at http://' + address + ':' + port);
+			console.log('Point a browser/phone at http://%s:%s', address, port);
 		});
 	}
 
@@ -122,7 +122,7 @@ var spotipi = (function() {
 	/**
 	 * setupSpeaker
 	 *
-	 * setsup the local speaker on the device
+	 * setup the local speaker on the device
 	 **/
 	function setupSpeaker () {
 
@@ -610,8 +610,6 @@ var spotipi = (function() {
 
 							// reference to playing track
 							nowPlaying.track = track;
-
-							
 
 							// play() returns a readable stream of MP3 audio data
 							track.play()

@@ -19,7 +19,7 @@ define([
         defaults: {
             
             // default name for the zone
-            name:       'Unknown Zone',
+            name:       'Default Zone',
 
             // selected (this is a ui feature)
             selected:   true, 

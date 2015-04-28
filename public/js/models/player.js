@@ -11,20 +11,20 @@ define([
         defaults: {
 
             // socket connected?
-            connected: false,
+            connected:  false,
 
         	// actual socket connection to server
-        	socket: null,
+        	socket:     null,
 
             // is the app authed?
-            authed: false,
+            authed:     false,
 
             rooms:      null,
             playlist:   null,
             search:     null,
 
         	// currently playing information
-        	track: false
+        	track:      false
         },
 
         initialize: function () {},

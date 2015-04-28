@@ -16,6 +16,7 @@ define([
 
         // return collection ordered by the time they were added
         comparator: function(item) {
+            
             return item.get("ts");
         }
     });

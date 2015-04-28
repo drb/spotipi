@@ -8,7 +8,7 @@ define([
 ], function (
     // dependencies
     $, _, Backbone,
-    //
+    // collections
     TemplatesCollection,
     // views
     Layout

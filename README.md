@@ -3,7 +3,7 @@ Spotify player for distributed Raspberry Pi devices.
 
 ### Installation
 
-*Assumption: You are using a Raspberry Pi 2 running the latest RaspianOS (Debian). This is my setup & it works. Anything else you're on your own.*
+*Assumption: You are using a Raspberry Pi 2 running the latest Raspbian OS (Debian). This is my setup & it works. Anything else you're on your own.*
 
 ### Pull down code
 
